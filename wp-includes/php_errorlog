@@ -1,0 +1,19 @@
+[06-Jan-2017 00:20:14 CST6CDT] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/registration-functions.php on line 7
+[18-Jan-2017 04:04:47 CST6CDT] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/registration-functions.php on line 7
+[21-Mar-2017 19:28:47 CST6CDT] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/registration-functions.php on line 7
+[04-Apr-2018 16:36:13 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/rss.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-includes/rss.php on line 19
+[04-Apr-2018 17:57:39 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/rss.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-includes/rss.php on line 19
+[05-Apr-2018 16:24:55 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/rss.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-includes/rss.php on line 19
+[05-Apr-2018 19:26:24 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function _deprecated_file() in /home/sarda133/public_html/wp-includes/rss.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-includes/rss.php on line 19

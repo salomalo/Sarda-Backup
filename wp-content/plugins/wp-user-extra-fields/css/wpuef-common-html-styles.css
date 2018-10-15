@@ -1,0 +1,44 @@
+.wpuef_label.wpuef_required:after { content:" *";  color:red;}
+.wpuef_label {
+  clear: both;
+  display: block;
+}
+.woocommerce form .form-row select, .woocommerce-page form .form-row select.picker__select--year
+{
+	/* width:35%; */
+	width: 100%; 
+	padding: 0;
+}
+/* .form-row select.picker__select--month
+{
+	width:25%;
+	padding: 0;
+} */
+/* .woocommerce form .form-row select.wpuef_country_selector
+{
+	width: 100%;
+} */
+.form-row.form-row-first {
+  clear: both;
+}
+.description.wpuef_description, .wpuef_description
+{
+  clear: both;
+  display: block;
+}
+
+.wpuef_field_row
+{
+	display:block;
+	clear:both;
+}
+.woocommerce .form-row-wide textarea.wpuef_input_textarea {
+    clear: both;
+    display: block;
+}
+.wpuef_preloader_image
+{
+	display:none;
+	margin-left: 15px;
+    width: 16px;
+}

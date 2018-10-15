@@ -1,0 +1,12 @@
+[24-May-2018 15:51:59 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php on line 17
+[24-May-2018 15:52:48 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php on line 17
+[24-May-2018 15:53:32 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sarda133/public_html/wp-content/themes/twentysixteen/index.php on line 17

@@ -1,0 +1,538 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: stop bad bots\n"
+"POT-Creation-Date: 2018-08-28 16:59-0000\n"
+"PO-Revision-Date: 2018-08-28 16:59-0000\n"
+"Last-Translator: Bill <sergiominozzi@gmail.com>\n"
+"Language-Team: Bill Minozzi <sergiominozzi@gmail.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.11\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_x;_nx;_e;esc_attr_e\n"
+"X-Poedit-SearchPath-0: f:\\wordpress\\stopbadbots\\trunk\n"
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:15
+msgid "Stop Bad Bots from stealing you."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:16
+msgid "Read the StartUp guide at Stop Bad Bots Settings page."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:19
+msgid "Visit the"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:21
+msgid "plugin site"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:23
+msgid "for more details, video and online guide."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:26
+msgid "Overview"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:50
+msgid "Bots per page"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:63
+msgid "Detected Bot on "
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:64
+msgid "Bot was detected and blocked."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:66
+msgid "Date"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:67
+msgid "User Agent"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:68
+msgid "Robot IP Address"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:69
+msgid "String Found:"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:71
+msgid "eMail sent by Stop Bad Bots Plugin."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:72
+msgid "You can stop emails at the Notifications Settings Tab."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:74
+msgid "Dashboard => Stop Bad Bots => Stop Bad Bots."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:259
+msgid "Stop Bad Bots Plugin was activated!"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:262
+msgid "For details and help, take a look at Stop Bad Bots at your left menu"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:266
+msgid "or click here"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:292
+msgid "Add new bad bot to the bad bots Table."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:294
+msgid "Bad Bot Nickname:"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:304
+msgid ""
+"In addiction to default system table, you can add one or more string to the "
+"default table."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:307
+msgid "Example: SpiderBot (no case sensitive)"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:309
+msgid "Just a piece of the name is enough."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:311
+msgid ""
+"For example, if you put \"bot\" will block all bots with the string bot at "
+"user agent name."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:314
+msgid ""
+"Attention: In this case, you will block also google bot because their name "
+"is GoogleBot."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:318
+msgid "Do not use special characters."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:321
+msgid "Add one bad bot each time. The table don't accept duplicate nicknames."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:327
+msgid "Bot included at table!"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:333
+msgid ""
+"Fail to include bot! Check bot nickname and remember Duplicates are not "
+"allowed. "
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:906
+msgid "It is time to get automatic"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:912
+msgid "You don't need reinstall the plugin."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:917
+#: f:\wordpress\stopbadbots\trunk/settings/page-builders.php:541
+msgid "Learn More"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/functions/functions.php:921
+msgid "Dismiss"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:9
+msgid "Open the General Settings Tab and click over Yes  (to begin to block)."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:12
+msgid ""
+"You can also add  Bad Bots at bad bots table. Please, read instructions "
+"under the label My Black List."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:15
+msgid ""
+"At eMail Settings tab, you can customize your contact email or left blank to "
+"use your WordPress eMail."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:18
+msgid ""
+"At Notification Settings Tab, you can record your option by receive or not "
+"email alerts about bots attempts."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:21
+msgid "At Memory CheckUp tab, you can know your memory status."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:28
+msgid "Please, read this:"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:31
+msgid "Maybe not all bots are bad for you. You need manage the bots table."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:34
+msgid ""
+"Open the page Bad Bots Table  (under Stop Bad Bots Menu) and take a look at "
+"Default Bad Bots List. If you wish, you can turn off some. (Just check, Bulk "
+"Actions, Apply). Our plugin will create a table with more than 2500 Bots."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:35
+msgid ""
+"You can see how many times each bot was blocked at the column Num Blocked. "
+"Click the title (Num Blocked) to order by."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:37
+msgid "Check the bot's table frequently, especially in the first days."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:38
+msgid ""
+"Confirm if you want block all that bots. Maybe you want unblock Baidu, "
+"Yandex, Seznam or another search engine in your language or some social "
+"sites or some usefull bot for you."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:41
+msgid ""
+"If you use RSS FEED services, probably they have their bot to read your "
+"feeds."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:42
+msgid "Remember to deactivate their bot."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:43
+msgid "Same thing if you create some smartphone APP."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:44
+msgid ""
+"StopBadBots it is a powerfull tool. Then, like all powerfull tools it is "
+"necessary to use carefully."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:48
+msgid ""
+"Note: If you use the plugin WPFastestCache, deactivate the bot named \"test"
+"\" at Bad Bots Table. (Dashboard => Stop Bad Bots => Bad Bots Table)"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:50
+msgid ""
+"If you need more info about each bot, visit our site www.StopBadBots.com "
+"(page Bots Table)"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:55
+msgid "Remember to click Save Changes before to left each tab."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:58
+msgid "You don't need create any robots.txt or htaccess file. "
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:61
+msgid "The Plugin doesn't block main Google, Yahoo and Bing (Microsoft)."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:64
+msgid ""
+"Visit the plugin site for more details, video, online guide and bot's "
+"details."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:68
+msgid "OnLine Guide"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:70
+msgid "Faq Page"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:72
+msgid "Support Page"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/guide/guide.php:74
+msgid "Troubleshooting Page"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/activated-manager.php:123
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:107
+msgid "Hi, my name is Bill Minozzi, and I am developer of"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/activated-manager.php:132
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:114
+msgid "Thank You!"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/activated-manager.php:135
+msgid "Yes, Submit"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/activated-manager.php:137
+msgid "Skip"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:106
+msgid ""
+"If you have a moment, Please, let us know you and why you are deactivating."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:112
+msgid ""
+"If you Kindly tell us the reason so we can improve it and maybe give some "
+"support by email to you."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:116
+msgid "type here yours sugestions ..."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:118
+msgid "(In this case, we are unable to email you)"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:120
+msgid "Yes, Submit and Deactivate"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:122
+msgid "Cancel Deactivation"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback-last.php:123
+msgid "No, Just Deactivate it"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:131
+msgid "Bill Minozzi"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:135
+msgid "Hello, my name is Bill Minozzi, and I am developer of"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:138
+#: f:\wordpress\stopbadbots\trunk/settings/page-builders.php:457
+msgid ""
+"If you like this product, please write a few words about it. It will help "
+"other people find this useful plugin more quickly.<br><b>Thank you!</b>"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:140
+#: f:\wordpress\stopbadbots\trunk/settings/page-builders.php:463
+msgid "Rate or Share"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:141
+msgid "No, dismiss"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:142
+msgid "or"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/feedback/feedback.php:143
+msgid "Remind me later"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:21
+msgid "Nickname"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:22
+msgid "Name"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:23
+msgid "Status"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:24
+msgid "Num Blocked"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:36
+msgid "botnickname"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:37
+msgid "botname"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:39
+msgid "botblocked"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:80
+msgid "Change Status"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:93
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:106
+msgid "deactivate"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/class-sbb-list-table.php:105
+msgid "Activate"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/includes/list-tables/page.php:16
+msgid "Search Nickname"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:8
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:27
+msgid "Block all Bots included at Bad Bots Table?"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:10
+msgid ""
+"You need only check yes or no below. All Bad Bots enabled at Bad Bots Table "
+"will be blocked."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:12
+msgid ""
+"To manage the bots individually, go to Bad Bots Table (Dashboard=> Stop Bad "
+"Bots =>Bad Bots Table)."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:14
+msgid "Then click SAVE CHANGES."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:17
+msgid "Participate in the Real-Time Bad Bots Security Network?"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:19
+msgid ""
+"Enabling this feature causes your site to anonymously share data with Stop "
+"Bad Bots on Bad Bots visits. In return your WordPress site receives updates "
+"at your Bad Bots Table with new Bad Bots Names."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:21
+msgid ""
+"No personally identifiable data is sent by this option and we also do not "
+"associate any of the data we do receive with your specific website. The data "
+"is aggregated on a real-time platform to determine which Bots are currently "
+"engaged in negative activity and need to be blocked by our community."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:22
+msgid "Instructions"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:29
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:38
+msgid "yes"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:30
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:39
+msgid "no"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:36
+msgid ""
+"Participate in the Real-Time Bad Bots Security Network (to receive bot's "
+"table updates)?"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:67
+msgid "Fill out the email address to send messages."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:69
+msgid ""
+"Left Blank to use your default WordPress email. Then, click save changes."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:79
+msgid "Do you want receive email alerts for each bot attempt?"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:81
+msgid "If you under brute force attack, you will receive a lot of emails."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:83
+msgid ""
+"You can see the bots attacks info at Bad Bots Table. (column Num Blocked)."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:84
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:95
+msgid "Notifications"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:89
+msgid "Alert me by email each Bots Attempts"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:97
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:99
+msgid "Memory Checkup"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:104
+msgid "Get Premium and receive, automatically, weekly updates."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:106
+msgid "Help us to keep the bot database updated."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:108
+msgid "Visit our Premium Page for more details."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:110
+msgid "Premium Page"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/settings/options/plugin_options_tabbed.php:113
+msgid ""
+"Paste below the Item Purchase Code received by email from us when you bought "
+"the premium version."
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/stopbadbots.php:58
+msgid "Stop Bad Bots: Could not load the localization file (Language file)"
+msgstr ""
+
+#: f:\wordpress\stopbadbots\trunk/stopbadbots.php:60
+msgid ""
+"Please, take a look in our site, the online Guide, item => Plugin Language"
+msgstr ""

@@ -1,0 +1,96 @@
+# Copyright (C) 2018 Theme My Login Redirection
+# This file is distributed under the same license as the Theme My Login Redirection package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Theme My Login Redirection 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/theme-my-login-redirection\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2018-06-22T19:25:41-04:00\n"
+"PO-Revision-Date: 2018-06-22T19:25:41-04:00\n"
+"X-Domain: theme-my-login-redirection\n"
+
+#: tml-redirection.php:92
+#: tml-redirection.php:146
+msgid "Redirection"
+msgstr ""
+
+#: admin.php:58
+msgid "Untitled Rule"
+msgstr ""
+
+#: admin.php:75
+msgid "Add New"
+msgstr ""
+
+#: admin.php:100
+msgid "Title"
+msgstr ""
+
+#: admin.php:104
+#: admin.php:107
+msgid "Log In"
+msgstr ""
+
+#: admin.php:108
+#: admin.php:124
+msgid "Default"
+msgstr ""
+
+#: admin.php:110
+#: admin.php:126
+msgid "Referer"
+msgstr ""
+
+#: admin.php:113
+#: admin.php:129
+msgid "Custom"
+msgstr ""
+
+#: admin.php:120
+#: admin.php:123
+msgid "Log Out"
+msgstr ""
+
+#: admin.php:136
+msgid "Roles"
+msgstr ""
+
+#: admin.php:146
+msgid "Delete"
+msgstr ""
+
+#: admin.php:187
+msgid "Rule deleted."
+msgstr ""
+
+#: admin.php:194
+msgid "Rule added."
+msgstr ""
+
+#: admin.php:215
+msgid "Redirection Rules"
+msgstr ""
+
+#. Plugin Name of the plugin
+msgid "Theme My Login Redirection"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://thememylogin.com/extensions/redirection"
+msgstr ""
+
+#. Description of the plugin
+msgid "Adds redirection support to Theme My Login."
+msgstr ""
+
+#. Author of the plugin
+msgid "Theme My Login"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://thememylogin.com"
+msgstr ""

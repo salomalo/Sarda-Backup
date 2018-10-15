@@ -1,0 +1,131 @@
+/* Header Section */
+
+/*************** ADD CUSTOM CSS HERE.   ***************/
+
+@media only screen and (max-width: 480px) {
+  /*************** ADD MOBILE ONLY CSS HERE  ***************/
+
+  .mfp-close {
+    left: 0;
+  }
+  .mfp-content {
+    vertical-align: top;
+    .sidebar-menu {
+      padding-top: 0px;
+      .mega-menu-wrap {
+        width: 100% !important;
+        a.mega-menu-link {
+          text-align: right !important;
+          border-bottom: solid 1px @primary !important;
+          padding-right: 30px !important;
+        }
+        span.mega-indicator {
+          display: none !important;
+        }
+        ul.mega-sub-menu {
+          a.mega-menu-link {
+            border: none !important;
+          }
+        }
+      }
+    }
+  }
+  div.mobile-sidebar {
+    text-align: center;
+    .mobile-logo img {
+      position: relative;
+      top: -30px;
+      width: 250px;
+      height: auto;
+    }
+    div.mobile-logo-center {
+      -webkit-box-align:center;
+      -webkit-box-pack:center;
+      display:-webkit-box;
+    }
+  }
+  img.cart-img-icon {
+    height: 25px;
+  }
+}
+
+/*************** ADD DESKTOP CSS HERE  ***************/
+ul.nav-sidebar {
+  border-top: solid 1px @primary !important;
+}
+
+.header-inner {
+  .flex-left, .flex-right {
+    height: 100%;
+  }
+}
+
+img.cart-img-icon {
+  height: 25px;
+  position: relative;
+}
+
+.header-top-text-left, .header-bottom-text-left, .header-top-text-right, .header-bottom-text-right {
+  font-family: futura pt, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: @primary;
+  text-transform: uppercase;
+  img {
+    height: 30px;
+    width: 30px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+  }
+}
+div.header-top-text-right, div.header-bottom-text-right {
+  text-align: right;
+  a {
+    padding-left: 12px;
+  }
+  a:hover { color: @rollover; }
+  img {
+    margin-right: -8px;
+  }
+}
+div.header-top-text-left, div.header-bottom-text-left {
+  text-align: left;
+  a {
+    padding-right: 12px;
+  }
+  a:hover { color: @rollover; }
+  img {
+    margin-left: -8px;
+  }
+}
+div.header-bottom-text-left {
+  margin-top: 123px;
+  i.fa {
+    font-size: 20px;
+  }
+}
+div.header-bottom-text-right {
+  margin-top: 112px;
+}
+
+div.header-bottom-text-right, div.header-bottom-text-left {
+  font-size:15px;
+}
+span.header-cart-title {
+  font-family: futura pt, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: @primary;
+}
+
+span.woocommerce-Price-amount.amount {
+  display: none;
+}
+.header-top-text-left {
+  margin-top: 15px;
+}
+.header-top-text-right {
+  margin-top: 14px;
+}
