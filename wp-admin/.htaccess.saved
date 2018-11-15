@@ -1,0 +1,28 @@
+<IfModule mod_dtimeout.c>
+<Files ~ ".php">
+SetEnvIf Request_URI "admin.php" DynamicTimeout=300
+</Files>
+</IfModule>
+
+#<Files admin-ajax.php>
+#    Order allow,deny
+#    Allow from all
+#    Satisfy any 
+#</Files>
+#AuthName "wp-admin"
+#AuthUserFile "/home/sarda133/.htpasswds/public_html/wp-admin/passwd"
+
+
+allow from 77.104.146.35
+allow from 37.60.252.242
+
+<IfModule mod_dtimeout.c>
+<Files ~ ".php">
+SetEnvIf Request_URI "index.php" DynamicTimeout=300
+SetEnvIf Request_URI "admin-ajax.php" DynamicTimeout=300
+</Files>
+</IfModule>
+
+LimitRequestBody 99999999999
+SubstituteMaxLineLength 30M
+
