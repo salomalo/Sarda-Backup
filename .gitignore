@@ -31,3 +31,5 @@ wp-content/plugins/hello.php
 
 node_modules
 env.php
+
+*.sql
