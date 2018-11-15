@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model;
+
+use ACP\Export\Model;
 
 /**
  * Exportability model for outputting the column's output value
  *
  * @since 4.1
  */
-class ACP_Export_Model_Disabled extends ACP_Export_Model {
+class Disabled extends Model {
 
 	public function is_active() {
 		return false;

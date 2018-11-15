@@ -192,7 +192,7 @@ class wordfenceHash {
 	public function getSuspectedFiles() {
 		return array_keys($this->suspectedFiles);
 	}
-	public function run($engine){ //base path and 'only' is a list of files and dirs in the base that are the only ones that should be processed. Everything else in base is ignored. If only is empty then everything is processed.
+	public function run($engine){ //base path and 'only' is a list of files and dirs in the bast that are the only ones that should be processed. Everything else in base is ignored. If only is empty then everything is processed.
 		if($this->totalForks > 1000){
 			throw new Exception("Wordfence file scanner detected a possible infinite loop. Exiting on file: " . $this->stoppedOnFile);
 		}
@@ -309,10 +309,7 @@ class wordfenceHash {
 					
 					$this->_checkForTimeout($file, $indexedFiles);
 					if ($this->_shouldHashFile($file)) {
-						$resolvedFile = realpath($file);
-						if ($resolvedFile) {
-							$indexedFiles[] = substr($resolvedFile, $this->striplen);
-						}
+						$indexedFiles[] = $relativeFile;
 					}
 					else {
 						wordfence::status(4, 'info', "Skipping unneeded hash: {$file}");
@@ -442,7 +439,7 @@ class wordfenceHash {
 		}
 		
 		wfUtils::beginProcessingFile($file);
-		$wfHash = self::hashFile($realFile);
+		$wfHash = self::wfHash($realFile);
 		$this->engine->scanController()->incrementSummaryItem(wfScanner::SUMMARY_SCANNED_FILES);
 		if ($wfHash) {
 			$md5 = strtoupper($wfHash[0]);
@@ -686,7 +683,7 @@ class wordfenceHash {
 			$this->engine->checkForKill();
 		}
 	}
-	public static function hashFile($file) {
+	public static function wfHash($file){
 		$fp = @fopen($file, "rb");
 		if (!$fp) {
 			return false;

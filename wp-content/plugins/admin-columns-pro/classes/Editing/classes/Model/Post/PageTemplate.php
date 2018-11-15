@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
+
+use AC;
+use ACP\Editing\Model;
 
 /**
- * @property AC_Column_Post_PageTemplate $column
+ * @property AC\Column\Post\PageTemplate $column
  */
-class ACP_Editing_Model_Post_PageTemplate extends ACP_Editing_Model {
+class PageTemplate extends Model {
 
-	public function __construct( AC_Column_Post_PageTemplate $column ) {
+	public function __construct( AC\Column\Post\PageTemplate $column ) {
 		parent::__construct( $column );
 	}
 

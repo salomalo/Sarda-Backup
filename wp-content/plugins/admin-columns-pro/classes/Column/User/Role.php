@@ -1,29 +1,33 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Export;
 
 /**
  * @since 4.0
  */
-class ACP_Column_User_Role extends AC_Column_User_Role
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class Role extends AC\Column\User\Role
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_User_Roles( $this );
+		return new Sorting\Model\User\Roles( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Role( $this );
+		return new Editing\Model\User\Role( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Role( $this );
+		return new Filtering\Model\User\Role( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_User_Role( $this );
+		return new Export\Model\User\Role( $this );
 	}
 
 }

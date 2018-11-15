@@ -42,6 +42,22 @@ class WF_ProdImpExpCsv_Exporter {
         $export_shortcodes = !empty($_POST['v_export_do_shortcode']) ? true : false;
         $export_images_zip = !empty($_POST['v_export_images_zip']) ? true : false;
 
+        $new_profile = !empty($_POST['new_profile']) ? $_POST['new_profile'] : '';
+
+        if ($new_profile !== '') {
+
+            $mapped = array();
+            if (!empty($export_columns)) {
+                foreach ($export_columns as $key => $value) {
+                    $mapped[$key] = $user_columns_name[$key];
+                }
+            }
+
+            $export_profile_array = get_option('xa_prod_csv_export_mapping');
+            $export_profile_array[$new_profile] = $mapped;
+            update_option('xa_prod_csv_export_mapping', $export_profile_array);
+        }
+
         if (!empty($_POST['auto_export_profile'])) {
             $export_profile_array = get_option('xa_prod_csv_export_mapping');
             $user_columns_name = array();

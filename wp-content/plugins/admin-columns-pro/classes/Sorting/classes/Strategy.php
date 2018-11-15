@@ -1,25 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting;
 
-abstract class ACP_Sorting_Strategy extends ACP_Strategy {
+use ACP;
+
+abstract class Strategy extends ACP\Strategy {
 
 	/**
-	 * @var ACP_Sorting_Model
+	 * @var Model
 	 */
 	protected $model;
 
 	/**
-	 * @param ACP_Sorting_Model $model
+	 * @param Model $model
 	 */
-	public function __construct( ACP_Sorting_Model $model ) {
+	public function __construct( Model $model ) {
 		$this->model = $model;
 	}
 
 	/**
-	 * @return ACP_Sorting_Model
+	 * @return Model
 	 */
 	public function get_model() {
 		return $this->model;
@@ -41,11 +41,6 @@ abstract class ACP_Sorting_Strategy extends ACP_Strategy {
 	 */
 	abstract public function get_results( array $data = array() );
 
-	/**
-	 * @param array $data
-	 *
-	 * @return mixed
-	 */
 	abstract public function manage_sorting();
 
 	/**

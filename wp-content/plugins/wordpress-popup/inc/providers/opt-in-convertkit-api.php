@@ -5,22 +5,22 @@
  * @class Opt_In_ConvertKit_Api
  **/
 class Opt_In_ConvertKit_Api {
-
+	
 	private $_api_key;
 	private $_api_secret;
 	private $_endpoint = 'https://api.convertkit.com/v3/';
-
+	
 	/**
 	 * Constructs class with required data
 	 *
 	 * Opt_In_ConvertKit_Api constructor.
 	 * @param $api_key
 	 */
-	public function __construct( $api_key, $api_secret = '' ) {
+	function __construct( $api_key, $api_secret = '' ) {
 		$this->_api_key = $api_key;
 		$this->_api_secret = $api_secret;
 	}
-
+	
 	/**
 	 * Sends request to the endpoint url with the provided $action
 	 *
@@ -31,7 +31,7 @@ class Opt_In_ConvertKit_Api {
 	 */
 	private function _request( $verb = "GET", $action, $args = array() ){
 		$url = trailingslashit( $this->_endpoint )  . $action;
-
+		
 		$_args = array(
 			"method" => $verb,
 			"headers" =>  array(
@@ -43,11 +43,11 @@ class Opt_In_ConvertKit_Api {
 		if( "GET" === $verb ){
 			$url .= ( "?" . http_build_query( $args ) );
 		}else{
-			$_args['body'] = wp_json_encode( $args['body'] );
+			$_args['body'] = json_encode( $args['body'] );
 		}
 
 		$res = wp_remote_request( $url, $_args );
-
+		
 		if ( !is_wp_error( $res ) && is_array( $res ) ) {
 
 			if( $res['response']['code'] <= 204 )
@@ -93,7 +93,7 @@ class Opt_In_ConvertKit_Api {
 			'api_key' => $this->_api_key
 		) )->forms;
 	}
-
+	
 	/**
 	 * Retrieves ConvertKit form's custom fields as array of objects
 	 *
@@ -104,7 +104,7 @@ class Opt_In_ConvertKit_Api {
 			'api_key' => $this->_api_key
 		) )->custom_fields;
 	}
-
+	
 	/**
 	 * Add new custom fields to subscription
 	 *
@@ -141,7 +141,7 @@ class Opt_In_ConvertKit_Api {
 	 *
 	 * @return (object) Returns data of existing subscriber if exist otherwise false.
 	 **/
-	public function is_subscriber( $email ) {
+	function is_subscriber( $email ) {
 		$url = 'subscribers';
 		$args = array(
 			'api_key' => $this->_api_key,

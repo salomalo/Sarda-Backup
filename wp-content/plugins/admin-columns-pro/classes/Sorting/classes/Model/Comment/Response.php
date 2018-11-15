@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Comment;
 
-class ACP_Sorting_Model_Comment_Response extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Response extends Model {
 
 	public function get_sorting_vars() {
 		add_filter( 'comments_clauses', array( $this, 'comments_clauses_callback' ) );

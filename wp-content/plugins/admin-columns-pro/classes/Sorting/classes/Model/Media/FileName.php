@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-class ACP_Sorting_Model_Media_FileName extends ACP_Sorting_Model_Meta {
+use AC;
+use ACP\Sorting\Model;
+
+class FileName extends Model\Meta {
 
 	public function get_sorting_vars() {
 		$ids = $this->strategy->get_results( parent::get_sorting_vars() );
 
-		$query = new AC_Meta_QueryColumn( $this->column );
+		$query = new AC\Meta\QueryColumn( $this->column );
 		$query->select( 'id, meta_value' )
 		      ->where_in( $ids );
 

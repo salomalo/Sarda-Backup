@@ -2845,59 +2845,60 @@ prdctfltr_filter_terms_init(curr);
 							var products = $(prdctfltr.ajax_class+':first');
 						}
 
-						if ( u(response.loop_start) && $(response.loop_start).find('.pl-loops').length>0 && products.find('.pl-loops').length>0 ) {
-							products = products.find('.pl-loops:first');
-						}
+if ( u(response.loop_start) && $(response.loop_start).find('.pl-loops').length>0 ) {
+	//products = $('.'+$(response.loop_start)[0].lastChild.className.split(' ')[0]);
+	products = products.find('.pl-loops:first');
+}
 
-						if ( u(response.loop_start) && $(response.loop_start).find('.pl-loops').length>0 && products.is('.pl-loops') && products.data('isotope') ) {
-							if ( typeof response.offset == 'undefined' ) {
-								products.isotope( 'remove', products.data('isotope').element.children );
-														}
+if ( u(response.loop_start) && $(response.loop_start).find('.pl-loops').length>0 && products.data('isotope') ) {
+	if ( typeof response.offset == 'undefined' ) {
+		products.isotope( 'remove', products.data('isotope').element.children );
+								}
 
-							products.isotope( 'insert', obj3.find(prdctfltr.ajax_product_class) );
-							var container = products;
-							container.imagesLoaded( function() {
-								products.isotope('layout');
-								$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-							} );
+	products.isotope( 'insert', obj3.find(prdctfltr.ajax_product_class) );
+	var container = products;
+	container.imagesLoaded( function() {
+		products.isotope('layout');
+		$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
+	} );
+}
+else {
+						if ( obj3.length<1 ) {
+							products.empty();
+							$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
 						}
 						else {
-							if ( obj3.length<1 ) {
-								products.empty();
-								$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-							}
-							else {
-								if ( typeof response.offset == 'undefined' ) {
-									if ( obj3.find(prdctfltr.ajax_product_class).length > 0 || obj3.find(prdctfltr.ajax_category_class).length > 0 ) {
-										pf_animate_products( products, obj3, 'replace' );
-										$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-										setTimeout( function() {
-											pf_get_scroll(products, 0);
-										}, 200 );
-									}
-									else {
-										products.empty().append(obj3);
-										$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-										setTimeout( function() {
-											pf_get_scroll(products, 0);
-										}, 200 );
-									}
+							if ( typeof response.offset == 'undefined' ) {
+								if ( obj3.find(prdctfltr.ajax_product_class).length > 0 || obj3.find(prdctfltr.ajax_category_class).length > 0 ) {
+									pf_animate_products( products, obj3, 'replace' );
+									$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
+									setTimeout( function() {
+										pf_get_scroll(products, 0);
+									}, 200 );
 								}
 								else {
-									if ( obj3.find(prdctfltr.ajax_product_class).length > 0 || obj3.find(prdctfltr.ajax_category_class).length > 0 ) {
-										pf_animate_products( products, obj3, historyActive===false?'append':'replace' );
-										$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-										setTimeout( function() {
-											pf_get_scroll(products, response.offset);
-										}, 200 );
-									}
-									else {
-										$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
-									}
-									response.products = $('<div></div>').append(products.clone().removeAttr('style').removeClass('prdctfltr_faded')).html();
+									products.empty().append(obj3);
+									$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
+									setTimeout( function() {
+										pf_get_scroll(products, 0);
+									}, 200 );
 								}
 							}
+							else {
+								if ( obj3.find(prdctfltr.ajax_product_class).length > 0 || obj3.find(prdctfltr.ajax_category_class).length > 0 ) {
+									pf_animate_products( products, obj3, historyActive===false?'append':'replace' );
+									$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
+									setTimeout( function() {
+										pf_get_scroll(products, response.offset);
+									}, 200 );
+								}
+								else {
+									$('.prdctfltr_faded').fadeTo(200,1).removeClass('prdctfltr_faded');
+								}
+								response.products = $('<div></div>').append(products.clone().removeAttr('style').removeClass('prdctfltr_faded')).html();
+							}
 						}
+}
 					}
 				}
 				else if ( n == 'pagination' ) {

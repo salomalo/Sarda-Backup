@@ -1,24 +1,24 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty;
+
+use AC;
 
 /**
  * @since 4.0
  */
-class ACP_ThirdParty_Addon {
+class Addon {
 
 	public function __construct() {
 
 		// bbPress
-		new ACP_ThirdParty_bbPress_Addon();
+		new bbPress\Addon();
 
 		// Yoast SEO
-		new ACP_ThirdParty_YoastSeo_Addon();
+		new YoastSeo\Addon();
 
 		// Related Posts
-		new ACP_ThirdParty_RelatedPosts_Addon();
+		new RelatedPosts\Addon();
 
 		// WooCommerce
 		add_filter( 'acp/editing/post_statuses', array( $this, 'remove_woocommerce_statuses_for_editing' ), 10, 2 );
@@ -28,8 +28,8 @@ class ACP_ThirdParty_Addon {
 	}
 
 	/**
-	 * @param array $statuses
-	 * @param AC_Column $column
+	 * @param array     $statuses
+	 * @param AC\Column $column
 	 *
 	 * @return array
 	 */
@@ -42,8 +42,8 @@ class ACP_ThirdParty_Addon {
 	}
 
 	/**
-	 * @param array $statuses
-	 * @param AC_Column $column
+	 * @param array     $statuses
+	 * @param AC\Column $column
 	 *
 	 * @return array
 	 */

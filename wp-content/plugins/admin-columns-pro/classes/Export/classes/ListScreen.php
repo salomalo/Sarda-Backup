@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
 
-interface ACP_Export_ListScreen {
+use ACP;
+
+interface ListScreen {
 
 	/**
-	 * @return ACP_Export_Strategy
+	 * @return ACP\Export\Strategy
 	 */
 	public function export();
 

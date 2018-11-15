@@ -1,17 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-/**
- * @since 4.0
- */
-class ACP_Column_Media_FileName extends AC_Column_Media_FileName
-	implements ACP_Column_SortingInterface {
+use AC;
+use ACP\Sorting;
+
+class FileName extends AC\Column\Media\FileName
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Media_FileName( $this );
+		return new Sorting\Model\Media\FileName( $this );
 	}
 
 }

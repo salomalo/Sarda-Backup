@@ -102,6 +102,6 @@ class AccountInfo extends Component
     }
 
     public function toJson() {
-        return wp_json_encode($this);
+        return json_encode($this);
     }
 }

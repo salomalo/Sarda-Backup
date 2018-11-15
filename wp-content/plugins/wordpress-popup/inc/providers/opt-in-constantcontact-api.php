@@ -1,11 +1,11 @@
-<?php
+<?php 
 
 if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 
 	if ( !class_exists ( 'Ctct\CTCTOfficialSplClassLoader' ) ) {
-		require_once Opt_In::$vendor_path . 'Ctct/autoload.php';
+		require_once( Opt_In::$vendor_path . 'Ctct/autoload.php' );
 	}
-
+	
 	if( !class_exists("Opt_In_ConstantContact_Api") ):
 
 		class Opt_In_ConstantContact_Api extends Opt_In_WPMUDEV_API {
@@ -37,17 +37,17 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			/**
 			* @var bool
 			*/
-			public $is_error = false;
+			var $is_error = false;
 
 			/**
 			* @var string
 			*/
-			public $error_message;
+			var $error_message;
 
 			/**
 			* @var boolean
 			*/
-			public $sending = false;
+			var $sending = false;
 
 
 			/**
@@ -61,7 +61,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			/**
 			* Helper function to listen to request callback sent from WPMUDEV
 			*/
-			public function process_callback_request() {
+			function process_callback_request() {
 				if ( $this->validate_callback_request( 'constantcontact' ) ) {
 					$code 			= filter_input( INPUT_GET, 'code', FILTER_SANITIZE_STRING );
 					// Get the referer page that sent the request
@@ -78,7 +78,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 					// Allow retry but don't log referrer
 					$authorization_uri = $this->get_authorization_uri( false, false, $current_page );
 
-					$this->wp_die( esc_attr__( 'Constant Contact integration failed!', Opt_In::TEXT_DOMAIN ), esc_url( $authorization_uri ), esc_url( $referer ) );
+					$this->wp_die( __( 'Constant Contact integration failed!', Opt_In::TEXT_DOMAIN ), $authorization_uri, $referer );
 				}
 			}
 
@@ -90,7 +90,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			 *
 			 * @return string
 			 */
-			public function get_authorization_uri( $module_id = 0, $log_referrer = true, $page = 'hustle_embedded' ) {
+			function get_authorization_uri( $module_id = 0, $log_referrer = true, $page = 'hustle_embedded' ) {
 
 				$oauth = new Ctct\Auth\CtctOAuth2( self::APIKEY, self::CONSUMER_SECRET, $this->get_redirect_uri() );
 
@@ -116,7 +116,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @return bool|mixed
 			*/
-			public function get_token( $key ) {
+			function get_token( $key ) {
 				$auth = $this->get_auth_token();
 
 				if ( ! empty( $auth ) && ! empty( $auth[ $key ] ) )
@@ -132,7 +132,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @return string
 			*/
-			public function get_redirect_uri() {
+			function get_redirect_uri() {
 				return $this->_get_redirect_uri(
 					'constantcontact',
 					'authorize',
@@ -145,7 +145,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @param Array $args
 			*/
-			public function get_access_token( $code ) {
+			function get_access_token( $code ) {
 				$oauth = new Ctct\Auth\CtctOAuth2( self::APIKEY, self::CONSUMER_SECRET, $this->get_redirect_uri() );
 				$access_token = $oauth->getAccessToken( $code );
 
@@ -160,7 +160,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @return array|null
 			*/
-			public function get_auth_token() {
+			function get_auth_token() {
 				return is_multisite() ? get_site_option( $this->option_token_name ) : get_option( $this->option_token_name );
 			}
 
@@ -171,7 +171,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			* @param array $token
 			* @return void
 			*/
-			public function update_auth_token( array $token ) {
+			function update_auth_token( array $token ) {
 				if ( is_multisite() )
 					update_site_option( $this->option_token_name, $token );
 				else
@@ -183,7 +183,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @return array
 			*/
-			public function get_contact_lists() {
+			function get_contact_lists() {
 
 				$cc_api = new Ctct\ConstantContact(self::APIKEY);
 
@@ -200,7 +200,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			*
 			* @return bool|Object
 			*/
-			public function email_exist( $email, $list_id ) {
+			function email_exist( $email, $list_id ) {
 				$exists = false;
 				$cc_api = new Ctct\ConstantContact(self::APIKEY);
 				$access_token = $this->get_token( 'access_token' );
@@ -212,7 +212,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 						$exists = $contact;
 						foreach ( $lists as $list ) {
 							$list = (array) $list;
-							if ( (string)$list_id === (string)$list['id']  ) {
+							if ( $list_id == $list['id']  ) {
 								$exists = true;
 								break;
 							}
@@ -231,7 +231,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			* @param String $list
 			* @param Array $custom_fields
 			*/
-			public function subscribe( $email, $first_name, $last_name, $list, $custom_fields = array() ) {
+			function subscribe( $email, $first_name, $last_name, $list, $custom_fields = array() ) {
 				$access_token = $this->get_token( 'access_token' );
 				$cc_api = new Ctct\ConstantContact(self::APIKEY);
 				$contact = new Ctct\Components\Contacts\Contact();
@@ -258,7 +258,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 					// Add extra fields
 					$x = 1;
 					foreach ( $custom_fields as $key => $value ) {
-						if ( in_array( $key, $allowed, true ) ) {
+						if ( in_array( $key, $allowed ) ) {
 							$contact->$key = $value;
 						} else {
 							if ( ! empty( $value ) ) {
@@ -281,7 +281,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 			* Update Subscription
 			*
 			*/
-			public function updateSubscription( $contact, $first_name, $last_name, $list, $custom_fields = array() ) {
+			function updateSubscription( $contact, $first_name, $last_name, $list, $custom_fields = array() ) {
 				$access_token = $this->get_token( 'access_token' );
 				$cc_api = new Ctct\ConstantContact(self::APIKEY);
 				$contact->addList( $list );
@@ -306,7 +306,7 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 					// Add extra fields
 					$x = 1;
 					foreach ( $custom_fields as $key => $value ) {
-						if ( in_array( $key, $allowed, true ) ) {
+						if ( in_array( $key, $allowed ) ) {
 							$contact->$key = $value;
 						} else {
 							if ( ! empty( $value ) ) {

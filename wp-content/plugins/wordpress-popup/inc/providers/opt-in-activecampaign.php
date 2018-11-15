@@ -16,31 +16,31 @@ if( !class_exists("Opt_In_Activecampaign") ):
 
 		protected  static $errors;
 
-		protected $id = self::ID;
 
-		/**
-		 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-		 */
-		public static function instance(){
-			return new self();
+		static function instance(){
+			return new self;
 		}
 
 		/**
-		 * Get Provider Details
-		 * General function to get provider details from database based on key
+		 * Updates api option
 		 *
-		 * @param Hustle_Module_Model $module
-		 * @param String $field - the field name
-		 *
-		 * @return String
+		 * @param $option_key
+		 * @param $option_value
+		 * @return bool
 		 */
-		protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-			$details = '';
-			$name = self::ID;
-			if ( isset( $module->content->email_services[$name][$field] ) ) {
-				$details = $module->content->email_services[$name][$field];
-			}
-			return $details;
+		function update_option($option_key, $option_value){
+			return update_site_option( self::ID . "_" . $option_key, $option_value);
+		}
+
+		/**
+		 * Retrieves api option from db
+		 *
+		 * @param $option_key
+		 * @param $default
+		 * @return mixed
+		 */
+		function get_option($option_key, $default){
+			return get_site_option( self::ID . "_" . $option_key, $default );
 		}
 
 		/**
@@ -85,11 +85,7 @@ if( !class_exists("Opt_In_Activecampaign") ):
 				$data['last_name'] = $data['l_name']; // Legacy
 				unset( $data['l_name'] );
 			}
-			$custom_fields = array_diff_key( $data, array(
-				'first_name' => '',
-				'last_name' => '',
-				'email' => '',
-			) );
+			$custom_fields = array_diff_key( $data, array( 'first_name' => '', 'last_name' => '', 'email' => '' ) );
 			$origData = $data;
 
 			if ( ! empty( $custom_fields ) ) {
@@ -105,9 +101,10 @@ if( !class_exists("Opt_In_Activecampaign") ):
 		/**
 		 * Retrieves initial options of the GetResponse account with the given api_key
 		 *
+		 * @param $module_id
 		 * @return array
 		 */
-		public function get_options(){
+		function get_options( $module_id ){
 
 			$_lists = self::api( $this->url, $this->api_key )->get_lists();
 
@@ -124,10 +121,7 @@ if( !class_exists("Opt_In_Activecampaign") ):
 			foreach(  ( array) $_lists as $list ){
 				$list = (object) (array) $list;
 
-				$lists[ $list->id ] = array(
-					'value' => $list->id,
-					'label' => $list->name,
-				);
+				$lists[ $list->id ] = array('value' => $list->id, 'label' => $list->name);
 
 			}
 
@@ -166,7 +160,7 @@ if( !class_exists("Opt_In_Activecampaign") ):
 		 * @param $module_id
 		 * @return array
 		 */
-		public function get_account_options( $module_id ){
+		function get_account_options( $module_id ){
 
 			$module     = Hustle_Module_Model::instance()->get( $module_id );
 			$api_key    = self::_get_api_key( $module );
@@ -233,14 +227,35 @@ if( !class_exists("Opt_In_Activecampaign") ):
 			);
 		}
 
-		public function is_authorized(){
+		function is_authorized(){
 			return true;
+		}
+
+		/**
+		 * Get Provider Details
+		 * General function to get provider details from database based on key
+		 *
+		 * @param Hustle_Module_Model $module
+		 * @param String $field - the field name
+		 *
+		 * @return String
+		 */
+		private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+			$details = '';
+			$name = self::ID;
+			if ( !is_null( $module->content->email_services ) 
+				&& isset( $module->content->email_services[$name] ) 
+				&& isset( $module->content->email_services[$name][$field] ) ) {
+
+				$details = $module->content->email_services[$name][$field];
+			}
+			return $details;
 		}
 
 		private static function _get_api_key( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'api_key' );
 		}
-
+		
 		private static function _get_api_url( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'url' );
 		}
@@ -250,9 +265,9 @@ if( !class_exists("Opt_In_Activecampaign") ):
 		}
 
 		public static function add_values_to_previous_optins( $option, $module  ){
-			if( "activecampaign" !== $module->optin_provider ) return $option;
+			if( $module->optin_provider !== "activecampaign" ) return $option;
 
-			if( "optin_username_id" === $option['id'] && isset( $module->provider_args->username ) ){
+			if( $option['id'] === "optin_username_id" && isset( $module->provider_args->username ) ){
 				$option['elements']['optin_username_field']['value'] = $module->provider_args->username;
 			}
 
@@ -267,7 +282,7 @@ if( !class_exists("Opt_In_Activecampaign") ):
 		 * @return bool
 		 */
 		public static function show_selected_list(  $val, $module  ){
-			if( self::ID !== $module->optin_provider ) return true;
+			if( $module->optin_provider !== Opt_In_Activecampaign::ID ) return true;
 			return false;
 		}
 
@@ -277,31 +292,28 @@ if( !class_exists("Opt_In_Activecampaign") ):
 		 * @param $module Hustle_Module_Model
 		 */
 		public static function render_selected_list( $module ){
-			if( self::ID !== $module->optin_provider || !$module->optin_mail_list ) return;
-			printf( esc_attr__("Selected audience list: %s (Press the GET LISTS button to update value)", Opt_In::TEXT_DOMAIN), esc_attr( $module->optin_mail_list ) );
+			if( $module->optin_provider !== Opt_In_Activecampaign::ID || !$module->optin_mail_list ) return;
+			printf( __("Selected audience list: %s (Press the GET LISTS button to update value)", Opt_In::TEXT_DOMAIN), $module->optin_mail_list );
 		}
 
-		public static function add_custom_field( $fields, $module_id ) {
+		static function add_custom_field( $fields, $module_id ) {
 			$module     = Hustle_Module_Model::instance()->get( $module_id );
 			$api_key    = self::_get_api_key( $module );
 			$ac_url     = self::_get_api_url( $module );
 			$list_id    = self::_get_api_list_id( $module );
 
 			$api        = self::api( $ac_url, $api_key );
-
+			
 			$available_fields = array( 'first_name', 'last_name', 'email' );
-
+			
 			foreach ( $fields as $field ) {
-				if ( ! in_array( $field['name'], $available_fields, true ) ) {
+				if ( ! in_array( $field['name'], $available_fields ) ) {
 					$custom_field = array( $field['name'] => $field['label'] );
 					$api->add_custom_fields( $custom_field, $list_id, $module );
 				}
 			}
 
-			return array(
-				'success' => true,
-				'fields' => $fields,
-			);
+			return array( 'success' => true, 'fields' => $fields );
 		}
 	}
 

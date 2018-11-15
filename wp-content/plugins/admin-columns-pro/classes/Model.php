@@ -1,24 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
 
-abstract class ACP_Model {
+use AC;
+
+abstract class Model {
 
 	/**
-	 * @var AC_Column
+	 * @var AC\Column
 	 */
 	protected $column;
-
-	/**
-	 * Strategy
-	 *
-	 * Handles model functionality for content types like posts, users, comments and taxonomies
-	 *
-	 * @var ACP_Sorting_Strategy|ACP_Filtering_Strategy|ACP_Editing_Strategy|ACP_Strategy
-	 */
-	protected $strategy;
 
 	/**
 	 * @var string
@@ -30,33 +21,15 @@ abstract class ACP_Model {
 	 */
 	abstract public function is_active();
 
-	public function __construct( AC_Column $column ) {
+	public function __construct( AC\Column $column ) {
 		$this->column = $column;
 	}
 
 	/**
-	 * @return AC_Column
+	 * @return AC\Column
 	 */
 	public function get_column() {
 		return $this->column;
-	}
-
-	/**
-	 * @return ACP_Filtering_Strategy|ACP_Editing_Strategy|ACP_Sorting_Strategy
-	 */
-	public function get_strategy() {
-		return $this->strategy;
-	}
-
-	/**
-	 * @param ACP_Strategy $strategy
-	 *
-	 * @return $this
-	 */
-	public function set_strategy( ACP_Strategy $strategy ) {
-		$this->strategy = $strategy;
-
-		return $this;
 	}
 
 	/**
@@ -79,14 +52,6 @@ abstract class ACP_Model {
 	 */
 	public function get_data_type() {
 		return $this->data_type;
-	}
-
-	/**
-	 * @deprecated 4.0.3
-	 * @param $disabled
-	 */
-	public function set_disabled( $disabled ) {
-		_deprecated_function( __METHOD__, '4.0.3' );
 	}
 
 }

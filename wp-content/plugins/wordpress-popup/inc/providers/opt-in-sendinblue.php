@@ -12,46 +12,44 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 		const LIST_PAGES = "hustle-sendinblue-list-pages";
 		const CURRENT_LISTS = "hustle-sendinblue-current-list";
 
-		protected $id = self::ID;
-
-
-		/**
-		 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-		 */
-		public static function instance(){
-			return new self();
+		static function instance() {
+			return new self;
 		}
 
-		/**
-		 * Get Provider Details
-		 * General function to get provider details from database based on key
-		 *
-		 * @param Hustle_Module_Model $module
-		 * @param String $field - the field name
-		 *
-		 * @return String
-		 */
-		protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-			$details = '';
-			$name = self::ID;
-			if ( isset( $module->content->email_services[$name][$field] ) ) {
-				 $details = $module->content->email_services[$name][$field];
-			}
-			return $details;
-		}
-
-		public function is_authorized() {
+		function is_authorized() {
 			return true;
 		}
 
-
-		public static function api( $api_key ) {
+	
+		static function api( $api_key ) {
 			if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) )
 				require_once 'opt-in-sendinblue-api.php';
 
 			$api = new Opt_In_SendinBlue_Api( $api_key );
 
 			return $api;
+		}
+
+		/**
+		* Updates api option
+		*
+		* @param $option_key
+		* @param $option_value
+		* @return bool
+		*/
+		function update_option( $option_key, $option_value) {
+			return update_site_option( self::ID . "_" . $option_key, $option_value);
+		}
+
+		/**
+		* Retrieves api option from db
+		*
+		* @param $option_key
+		* @param $default
+		* @return mixed
+		*/
+		function get_option( $option_key, $default ) {
+			return get_site_option( self::ID . "_" . $option_key, $default );
 		}
 
 		/**
@@ -63,7 +61,7 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 		 *
 		 * @return bool|WP_Error
 		 */
-		public function subscribe( Hustle_Module_Model $module, array $data ) {
+		function subscribe( Hustle_Module_Model $module, array $data ) {
 
 			$api_key    = self::_get_api_key( $module );
 			$list_id    = self::_get_email_list( $module );
@@ -122,7 +120,7 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 				//We first get the old list id and merge with the new one
 				$contact = $api->get_user( array( 'email' => $email ) );
 				if ( !is_wp_error( $contact ) ) {
-					if ( 'failure' !== $contact['code'] || isset( $contact['data']['listid'] ) ) {
+					if ( $contact['code'] != 'failure' || ( isset( $contact['data'] ) && isset( $contact['data']['listid'] ) ) ) {
 						if ( in_array( $list_id, $contact['data']['listid'] ) ) {
 							$err = new WP_Error();
 							$err->add( 'email_exist', __( 'This email address has already subscribed.', Opt_In::TEXT_DOMAIN ) );
@@ -142,25 +140,25 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 				}
 				$res = $api->create_update_user( $subscribe_data );
 
-				if ( !is_wp_error( $res ) && isset( $res['code'] ) && 'success' === $res['code'] ) {
+				if ( !is_wp_error( $res ) && isset( $res['code'] ) && $res['code'] == 'success' ) {
 					return true;
 				} else {
 					$data['error'] = $res->get_error_message();
 					$module->log_error( $data );
 				}
-
+				
 			}
 
 			return $err;
 		}
 
-		public function get_options() {
+		function get_options( $module_id ) {
 			$lists  = array();
 			$api    = self::api( $this->api_key );
 			$first  = "";
 			$total_lists = 0;
 			$total = 0;
-
+			
 			if ( $api ) {
 				//Load more function
 				$load_more  = filter_input( INPUT_POST, 'load_more' );
@@ -176,7 +174,7 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 						"page_limit" => 10
 					));
 
-					$offset++;
+					$offset = $offset + 1; 
 				} else {
 					$lists_api = $api->get_lists( array(
 						"page" => 1,
@@ -185,8 +183,8 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 					delete_site_transient( self::LIST_PAGES ); //clear pagination
 					delete_site_transient( self::CURRENT_LISTS ); //clear the lists we have
 				}
-
-				if( !is_wp_error( $lists_api ) && isset( $lists_api['code'] ) && ( 'success' === $lists_api['code'] ) && isset( $lists_api['data'] ) ) {
+				
+				if( !is_wp_error( $lists_api ) && isset( $lists_api['code'] ) && ( $lists_api['code'] == 'success' ) && isset( $lists_api['data'] ) ) {
 
 					$total = $lists_api['data']['total_list_records'];
 
@@ -209,7 +207,7 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 					set_site_transient( self::LIST_PAGES , $offset ); //set page offset
 
 					$total_lists = count( $lists );
-
+					
 
 					$first = $total_lists > 0 ? reset( $lists ) : "";
 					if( !empty( $first ) )
@@ -256,7 +254,7 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 			return $default_options;
 		}
 
-		public function get_account_options( $module_id ){
+		function get_account_options( $module_id ){
 
 			$module     = Hustle_Module_Model::instance()->get( $module_id );
 			$api_key    = self::_get_api_key( $module );
@@ -301,31 +299,49 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 			);
 		}
 
+		/**
+		* Get Provider Details
+		* General function to get provider details from database based on key
+		*
+		* @param Hustle_Module_Model $module
+		* @param String $field - the field name
+		*
+		* @return String
+		*/
+		private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+			$details = '';
+			$name = self::ID;
+			if ( !is_null( $module->content->email_services ) 
+				&& isset( $module->content->email_services[$name] ) 
+				&& isset( $module->content->email_services[$name][$field] ) ) {
+					
+				$details = $module->content->email_services[$name][$field];
+			}
+			return $details;
+		}
+
 		private static function _get_email_list( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'list_id' );
 		}
-
+	
 		private static function _get_api_key( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'api_key' );
 		}
 
-		public static function add_custom_field( $fields, $module_id ) {
+		static function add_custom_field( $fields, $module_id ) {
 			$module     = Hustle_Module_Model::instance()->get( $module_id );
 			$api_key    = self::_get_api_key( $module );
 
-
+			
 			try{
 				$api = self::api( $api_key );
 				foreach ( $fields as $field ) {
-					$type = ( 'email' === $field['type'] || 'name' === $field['type'] || 'address' === $field['type'] || 'phone' === $field['type'] ) ? 'text' : $field['type'];
-					$api->create_attribute( array(
-						"type" => "normal",
-						"data" => array(
-							strtoupper( $field['label'] ) => strtoupper( $type ),
-							),
-						) );
+					$type = ( $field['type'] == 'email' || $field['type'] == 'name' || $field['type'] == 'address' || $field['type'] == 'phone' ) ? 'text' : $field['type'];
+					$api->create_attribute( array( "type" => "normal", "data" => array(
+						strtoupper( $field['label'] ) => strtoupper( $type )
+					) ) );
 				}
-
+				
 				// double check if already on our system
 				/*$current_module_fields = $module->get_design()->__get( 'module_fields' );
 				foreach( $current_module_fields as $m_field ) {
@@ -333,18 +349,12 @@ if( !class_exists("Opt_In_SendinBlue") ) :
 						return array( 'error' => true, 'code' => 'custom', 'message' => __( 'Field already exists.', Opt_In::TEXT_DOMAIN ) );
 					}
 				}*/
-
+				
 			}catch (Exception $e){
-				return array(
-					'error' => true,
-					'code' => 'custom',
-					'message' => $e->getMessage(),
-				);
+				return array( 'error' => true, 'code' => 'custom', 'message' => $e->getMessage() );
 			}
-			return array(
-				'success' => true,
-				'field' => $fields,
-			);
+			return array( 'success' => true, 'field' => $fields );
 		}
 	}
 endif;
+?>

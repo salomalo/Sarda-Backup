@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Comment;
 
-class ACP_Editing_Model_Comment_Comment extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Comment extends Model {
 
 	public function get_edit_value( $id ) {
 		$comment = get_comment( $id );

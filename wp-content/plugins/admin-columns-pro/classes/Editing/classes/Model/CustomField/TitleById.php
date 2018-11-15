@@ -1,16 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_TitleById extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+use ACP\Settings;
+
+class TitleById extends Model\CustomField {
 
 	public function get_edit_value( $id ) {
 		$raw = $this->column->get_raw_value( $id );
 
 		/**
-		 * @var ACP_Settings_Column_CustomFieldType $field_type
+		 * @var Settings\Column\CustomFieldType $field_type
 		 */
 		$field_type = $this->column->get_setting( 'field_type' );
 

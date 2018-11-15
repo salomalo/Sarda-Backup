@@ -1,5 +1,54 @@
 == Changelog ==
 
+= 4.3.5 =
+Release Date: July 11th, 2018
+
+* [Fixed] Free version is automatically disable when enabling the Pro version
+* [Updated] Admin Column Core changes ( Release 3.2.4 )
+    * [Fixed] Improved performance for ac_quickedit_events()
+
+= 4.3.4 =
+Release Date: June 27th, 2018
+
+* [Fixed] Plugin updater now works for old add-ons
+
+= 4.3.3 =
+Release Date: June 26th, 2018
+
+* [Fixed] ThidParty classes are now using correct camelcasing
+
+= 4.3.2 =
+Release Date: June 26th, 2018
+
+* [Fixed] Fixed possible fatal error when running update
+
+= 4.3.1 =
+Release Date: June 26th, 2018
+
+* [Fixed] Assets did not load correctly. Upgrade script fix.
+
+= 4.3 =
+Release Date: June 25th, 2018
+
+* [Added] Sorting and Filtering support for Taxonomy overviews
+* [Fixed] Inline Edit ajax callback for save now returns correct row_html value
+* [Fixed] Inline edit bug for Attachment (Posts) column
+* [Improved] Update overview page now shows icon when there are Admin Columns Pro updates
+* [Improved] Less external API calls to check license, updates and plugin information
+* [Updated] Admin Column Core changes ( Release 3.2 )
+    * [Removed] Support for PHP 5.2. The minimum version required to run Admin Columns is now PHP 5.3+.
+    * [Removed] Deprecated functions (before 3.0) will be removed after 12 months.
+
+
+= 4.2.9 =
+Release Date: April 30th, 2018
+
+* [Fixed] Sorting for custom field numeric fields
+* [Improved] Dismissable renewal notice improved
+* [Updated] Admin Column Core changes ( Release 3.1.8 )
+    * [Improved] Styling for dismissable notice (wrong placed dismiss button)
+    * [Improved] Changed Full Path Label to Path
+
 = 4.2.8 =
 Release Date: March 30th, 2018
 
@@ -47,7 +96,7 @@ Release Date: February 6th, 2018
 
 * [Added] Added deprecated hook `do_action( 'acp/column_types' )`
 * [Fixed] Fixed default sorting for hierarchical pages
-* [Fixed] Fiexed issue where some page ordering plugins would no longer be sorted correctly
+* [Fixed] Fixed issue where some page ordering plugins would no longer be sorted correctly
 * [Fixed] Fixed sorting on media items in grid view mode
 * [Fixed] Delegated filter menu's (e.g. categories) no longer appear when disabled
 * [Updated] Admin Column Core changes

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_Registered extends AC_Column {
+use AC;
+
+class Registered extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'registered' );

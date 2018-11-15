@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Post;
+
+use ACP\Export\Model;
 
 /**
  * @since 4.1
  */
-class ACP_Export_Model_Post_ChildPages extends ACP_Export_Model {
+class ChildPages extends Model {
 
 	public function get_value( $id ) {
 		$titles = array();

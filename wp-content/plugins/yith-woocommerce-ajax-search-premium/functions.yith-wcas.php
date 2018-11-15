@@ -10,23 +10,24 @@
 if ( !defined( 'YITH_WCAS' ) ) { exit; } // Exit if accessed directly
 
 if ( !function_exists( 'yit_get_shop_categories' ) ) {
-	function yith_wcas_get_shop_categories( $show_all = true ) {
+    function yith_wcas_get_shop_categories( $show_all = true ) {
+        global $wpdb;
 
-		$args = apply_filters( 'yith_wcas_form_cat_args', array(
-			'hide_empty' => 1,
-			'orderby'    => 'name',
-			'order'      => 'ASC',
-			'hide_empty' => 1
-		) );
+        if ( $show_all ){
+            $terms = $wpdb->get_results( 'SELECT name, slug FROM ' . $wpdb->prefix . 'terms, ' . $wpdb->prefix . 'term_taxonomy WHERE ' . $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'term_taxonomy.term_id AND taxonomy = "product_cat" ORDER BY name ASC;' );
+        }else{
+            $args = apply_filters( 'yith_wcas_form_cat_args', array(
+                'order'	        => 'ASC',
+                'parent'        => 0,
+                'hide_empty'	=> 1,
+                'hierarchical'	=> 0,
+            ) );
 
-		if ( ! $show_all ) {
-			$args = array_merge( $args, array( 'parent' => 0, 'hierarchical' => 0 ) );
-		}
+            $terms = get_terms( 'product_cat', $args );
+        }
 
-		$terms = get_terms( 'product_cat', apply_filters( 'yith_wcas_form_cat_args', $args ) );
-
-		return $terms;
-	}
+        return $terms;
+    }
 }
 
 function getmicrotime(){

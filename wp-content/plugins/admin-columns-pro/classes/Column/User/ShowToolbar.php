@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_User_ShowToolbar extends AC_Column_User_ShowToolbar
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+class ShowToolbar extends AC\Column\User\ShowToolbar
+	implements Filtering\Filterable, Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_ShowToolbar( $this );
+		return new Editing\Model\User\ShowToolbar( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_ShowToolbar( $this );
+		return new Filtering\Model\User\ShowToolbar( $this );
 	}
 
 }

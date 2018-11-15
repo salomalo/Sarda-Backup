@@ -1,11 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_Score extends AC_Column_Meta
-	implements ACP_Export_Column, ACP_Column_SortingInterface {
+use AC;
+use ACP\Export;
+use ACP\Sorting;
+
+class Score extends AC\Column\Meta
+	implements Export\Exportable, Sorting\Sortable {
 
 	public function __construct() {
 		$this->set_original( true );
@@ -20,7 +22,6 @@ class ACP_ThirdParty_YoastSeo_Column_Score extends AC_Column_Meta
 
 	public function register_settings() {
 		$width = $this->get_setting( 'width' );
-
 		$width->set_default( 63 );
 		$width->set_default( 'px', 'width_unit' );
 	}
@@ -33,14 +34,14 @@ class ACP_ThirdParty_YoastSeo_Column_Score extends AC_Column_Meta
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedRawValue( $this );
+		return new Export\Model\StrippedRawValue( $this );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function sorting() {
-		$model = new ACP_Sorting_Model_Meta( $this );
+		$model = new Sorting\Model\Meta( $this );
 		$model->set_data_type( 'numeric' );
 
 		return $model;

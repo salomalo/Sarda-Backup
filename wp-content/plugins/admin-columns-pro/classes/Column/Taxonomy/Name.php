@@ -1,14 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Taxonomy_Name extends AC_Column
-	implements ACP_Column_EditingInterface, ACP_Export_Column {
+class Name extends AC\Column
+	implements Editing\Editable, Export\Exportable {
 
 	public function __construct() {
 		$this->set_original( true );
@@ -16,11 +18,11 @@ class ACP_Column_Taxonomy_Name extends AC_Column
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Taxonomy_Name( $this );
+		return new Editing\Model\Taxonomy\Name( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Term_Name( $this );
+		return new Export\Model\Term\Name( $this );
 	}
 
 }

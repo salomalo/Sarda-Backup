@@ -1,63 +1,94 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\License;
 
-abstract class ACP_License_Request {
+class Request {
 
 	/**
 	 * @var array
 	 */
 	protected $args;
 
-	public function __construct() {
-		$this->args = array(
-			'timeout' => 15,
-			'body'    => array(
-				'wc-api' => 'software-licence-api',
-			),
-		);
+	/**
+	 * @var string
+	 */
+	protected $format;
+
+	/**
+	 * @param array $body
+	 */
+	public function __construct( array $body = array() ) {
+		$this->set_body( $body )
+		     ->set_format( 'json' )
+		     ->set_arg( 'timeout', 15 );
 	}
 
-	public function set_body_param( $key, $value ) {
-		$this->args['body'][ $key ] = $value;
+	/**
+	 * @return array
+	 */
+	public function get_body() {
+		return $this->args['body'];
+	}
+
+	/**
+	 * @param array $value
+	 *
+	 * @return $this
+	 */
+	public function set_body( array $value ) {
+		$this->args['body'] = $value;
 
 		return $this;
 	}
 
-	public function set_body( array $body ) {
-		$this->args['body'] = array();
+	/**
+	 * @return string
+	 */
+	public function get_format() {
+		return $this->format;
+	}
 
-		foreach ( $body as $key => $value ) {
-			$this->set_body_param( $key, $body );
-		}
+	/**
+	 * @param string $format
+	 *
+	 * @return $this
+	 */
+	public function set_format( $format ) {
+		$this->format = $format;
 
 		return $this;
 	}
 
-	public function set_request( $request ) {
-		$this->set_body_param( 'request', $request );
+	public function get_args() {
+		return $this->args;
+	}
+
+	/**
+	 * @param array $args
+	 *
+	 * @return $this
+	 */
+	public function set_args( array $args ) {
+		$this->args = $args;
 
 		return $this;
 	}
 
 	/**
 	 * @param string $key
+	 * @param mixed  $value
 	 *
 	 * @return $this
 	 */
-	public function set_licence_key( $key ) {
-		$this->set_body_param( 'license_key', $key );
+	public function set_arg( $key, $value ) {
+		switch ( $key ) {
+			case 'body':
+				$this->set_body( $value );
 
-		return $this;
-	}
-
-	/**
-	 * @return $this
-	 */
-	public function set_site_url() {
-		$this->set_body_param( 'site_url', site_url() );
+				break;
+			default:
+				$this->args[ $key ] = $value;
+		}
 
 		return $this;
 	}

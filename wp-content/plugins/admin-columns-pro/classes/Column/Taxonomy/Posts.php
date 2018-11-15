@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
+
+use AC;
+use ACP\Export;
 
 /**
  * @since 4.1
  */
-class ACP_Column_Taxonomy_Posts extends AC_Column
-	implements ACP_Export_Column {
+class Posts extends AC\Column
+	implements Export\Exportable {
 
 	public function __construct() {
 		$this->set_original( true );
@@ -16,7 +17,7 @@ class ACP_Column_Taxonomy_Posts extends AC_Column
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Term_Posts( $this );
+		return new Export\Model\Term\Posts( $this );
 	}
 
 }

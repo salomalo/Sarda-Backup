@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Slug extends AC_Column_Post_Slug
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+use AC;
+use ACP\Editing;
+use ACP\Sorting;
+
+class Slug extends AC\Column\Post\Slug
+	implements Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model_Post_Field( $this );
+		$model = new Sorting\Model\Post\Field( $this );
 		$model->set_field( 'post_name' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Slug( $this );
+		return new Editing\Model\Post\Slug( $this );
 	}
 
 }

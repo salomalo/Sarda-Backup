@@ -1,11 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_Title extends ACP_ThirdParty_YoastSeo_Column
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+use ACP\ThirdParty\YoastSeo;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Export;
+
+class Title extends YoastSeo\Column
+	implements Editing\Editable, Filtering\Filterable, Export\Exportable {
 
 	public function __construct() {
 		parent::__construct();
@@ -14,15 +17,15 @@ class ACP_ThirdParty_YoastSeo_Column_Title extends ACP_ThirdParty_YoastSeo_Colum
 	}
 
 	public function editing() {
-		return new ACP_ThirdParty_YoastSeo_Editing_Title( $this );
+		return new YoastSeo\Editing\Title( $this );
 	}
 
 	public function filtering() {
-		return new ACP_ThirdParty_YoastSeo_Filtering_Title( $this );
+		return new YoastSeo\Filtering\Title( $this );
 	}
 
 	public function export() {
-		return new ACP_ThirdParty_YoastSeo_Export_Title( $this );
+		return new YoastSeo\Export\Title( $this );
 	}
 
 }

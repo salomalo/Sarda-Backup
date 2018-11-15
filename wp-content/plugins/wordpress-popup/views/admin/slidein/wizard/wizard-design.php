@@ -9,7 +9,7 @@
 	<?php $this->render( "admin/slidein/wizard/boxes/box-image_position", array() ); ?>
 
 	<?php $this->render( "admin/slidein/wizard/boxes/box-image_fit", array() ); ?>
-
+	
 	<?php $this->render( "admin/slidein/wizard/boxes/box-palette", array() ); ?>
 
 	<?php $this->render( "admin/slidein/wizard/boxes/box-shapes", array() ); ?>

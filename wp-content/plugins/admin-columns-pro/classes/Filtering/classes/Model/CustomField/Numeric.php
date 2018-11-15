@@ -1,11 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\CustomField;
 
-class ACP_Filtering_Model_CustomField_Numeric extends ACP_Filtering_Model_CustomField {
+use ACP\Filtering\Model;
 
+class Numeric extends Model\CustomField {
 	public function __construct( $column ) {
 		parent::__construct( $column );
 

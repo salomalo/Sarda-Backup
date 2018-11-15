@@ -907,23 +907,13 @@
 
 				if ( !empty( $wp_query ) ) {
 
-					if ( isset( self::$settings['loop_start'] ) ) {
-						$data['loop_start'] = self::$settings['loop_start'];
-					}
-					else {
-						ob_start();
-						woocommerce_product_loop_start();
-						$data['loop_start'] = ob_get_clean();
-					}
+					ob_start();
+					woocommerce_product_loop_start();
+					$data['loop_start'] = ob_get_clean();
 
-					if ( isset( self::$settings['loop_end'] ) ) {
-						$data['loop_end'] = self::$settings['loop_end'];
-					}
-					else {
-						ob_start();
-						woocommerce_product_loop_end();
-						$data['loop_end'] = ob_get_clean();
-					}
+					ob_start();
+					woocommerce_product_loop_end();
+					$data['loop_end'] = ob_get_clean();
 
 					if ( !in_array( 'result', $ajaxTemplates ) && isset( $opt['pf_count_template'] ) ) {
 
@@ -1503,14 +1493,10 @@
 					remove_filter( 'woocommerce_product_loop_start', 'woocommerce_maybe_show_product_subcategories' );
 				}
 
-				$html = '';
-
 				ob_start();
+
 				woocommerce_product_loop_start();
-				$loop_start = ob_get_clean();
-				self::$settings['loop_start'] = $loop_start;
 
-				ob_start();
 				if ( $offset < 1 ) {
 					if ( ( $show_categories == 'yes' && function_exists( 'woocommerce_output_product_categories' ) ) ) {
 						if ( wc_get_loop_prop( 'is_filtered' ) !== true ) {
@@ -1573,12 +1559,8 @@
 				if ( is_ajax() ) {
 					$_SERVER['REQUEST_URI'] = $remember;
 				}
-				$products = ob_get_clean();
 
-				ob_start();
 				woocommerce_product_loop_end();
-				$loop_end = ob_get_clean();
-				self::$settings['loop_end'] = $loop_end;
 
 				if ( !empty( $loop_elements ) ) {
 					self::make_visibility( 'add', $loop_elements );
@@ -1590,7 +1572,7 @@
 
 				remove_filter( 'loop_shop_columns', __CLASS__ . '::set_columns' );
 
-				return $loop_start . $products . $loop_end;
+				return ob_get_clean();
 
 			}
 			else {

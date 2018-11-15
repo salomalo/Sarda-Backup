@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Export;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Comment_Author extends AC_Column_Comment_Author
-	implements ACP_Column_FilteringInterface, ACP_Export_Column {
+class Author extends AC\Column\Comment\Author
+	implements Filtering\Filterable, Export\Exportable {
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_Author( $this );
+		return new Filtering\Model\Comment\Author( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Comment_Author( $this );
+		return new Export\Model\Comment\Author( $this );
 	}
 
 }

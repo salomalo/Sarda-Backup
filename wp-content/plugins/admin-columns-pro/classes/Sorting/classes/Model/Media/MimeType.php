@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-class ACP_Sorting_Model_Media_MimeType extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class MimeType extends Model {
 
 	public function get_sorting_vars() {
 		add_filter( 'posts_orderby', array( $this, 'posts_orderby_callback' ) );

@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
+
+use AC;
+use ACP\Export;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Media_Comments extends AC_Column_Media_Comments
-	implements ACP_Column_FilteringInterface, ACP_Export_Column {
+class Comments extends AC\Column\Media\Comments
+	implements Filtering\Filterable, Export\Exportable {
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Media_Comments( $this );
+		return new Filtering\Model\Media\Comments( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Comments( $this );
+		return new Export\Model\Post\Comments( $this );
 	}
 
 }

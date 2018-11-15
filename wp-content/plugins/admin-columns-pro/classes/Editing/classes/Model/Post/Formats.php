@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Formats extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Formats extends Model {
 
 	public function get_view_settings() {
 		return array(

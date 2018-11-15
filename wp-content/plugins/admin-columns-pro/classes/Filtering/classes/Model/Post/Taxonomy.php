@@ -1,16 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
+
+use ACP\Filtering\Strategy;
+use ACP\Filtering\Model;
 
 /**
- * @property ACP_Filtering_Strategy_Post $strategy
+ * @property Strategy\Post $strategy
  */
-class ACP_Filtering_Model_Post_Taxonomy extends ACP_Filtering_Model {
+class Taxonomy extends Model {
 
 	public function get_filtering_vars( $vars ) {
-		if ( $this->strategy instanceof ACP_Filtering_Strategy_Post ) {
+		if ( $this->strategy instanceof Strategy\Post ) {
 			return $this->strategy->get_filterable_request_vars_taxonomy( $vars, $this->get_filter_value(), $this->column->get_taxonomy() );
 		}
 

@@ -4,7 +4,7 @@ class Opt_In_Front_Ajax {
 
     private $_hustle;
 
-    public function __construct( Opt_In $hustle ){
+    function __construct( Opt_In $hustle ){
         $this->_hustle = $hustle;
         // When optin is viewed
         add_action("wp_ajax_inc_opt_optin_viewed", array( $this, "optin_viewed" ));
@@ -16,7 +16,7 @@ class Opt_In_Front_Ajax {
     }
 
 
-    public function submit_optin() {
+    function submit_optin(){
         $data = $_POST['data'];
         parse_str( $data['form'], $form_data );
 
@@ -27,9 +27,7 @@ class Opt_In_Front_Ajax {
 
 		// Remove inc_optin prefix on module fields
 		foreach ( $form_data as $key => $value ) {
-			if ( preg_match( '%inc_optin_%', $key ) ) {
-				$key = str_replace( 'inc_optin_', '', $key );
-			}
+			if ( preg_match( '%inc_optin_%', $key ) ) $key = str_replace( 'inc_optin_', '', $key );
 
 			$subscribe_data[ $key ] = $value;
 		}
@@ -37,15 +35,11 @@ class Opt_In_Front_Ajax {
         $e_newsletter_data = array();
         $e_newsletter_data['member_email'] = $subscribe_data['email'];
 
-        if( isset( $form_data['first_name'] ) ) {
-            $e_newsletter_data['member_fname'] = $form_data['first_name'];
-			$subscribe_data['f_name'] = $form_data['first_name'];
-		}
+        if( isset( $form_data['first_name'] ) )
+            $e_newsletter_data['member_fname'] = $subscribe_data['f_name'] = $form_data['first_name'];
 
-        if( isset( $form_data['last_name'] ) ) {
-            $e_newsletter_data['member_lname'] = $form_data['last_name'];
-			$subscribe_data['l_name'] = $form_data['last_name'];
-		}
+        if( isset( $form_data['last_name'] ) )
+            $e_newsletter_data['member_lname'] = $subscribe_data['l_name'] = $form_data['last_name'];
 
 
         $optin = Opt_In_Model::instance()->get( $data['optin_id'] );
@@ -82,7 +76,7 @@ class Opt_In_Front_Ajax {
 
             if( !is_subclass_of( $provider, "Opt_In_Provider_Abstract") && !$test_mode )
                wp_send_json_error( __("Invalid provider", Opt_In::TEXT_DOMAIN) );
-
+		   
         } else if ( $local_save ) {
 			// if no provider and was able to save it locally
 			$this->log_conversion($optin, $data);
@@ -109,14 +103,14 @@ class Opt_In_Front_Ajax {
             $collected_errs_messages = array_merge( $collected_errs_messages, $local_save->get_error_messages() );
 		}
 
-        if( array() !== $collected_errs_messages ){
+        if( $collected_errs_messages !== array()  ){
             wp_send_json_error( $collected_errs_messages);
         }
 
         wp_send_json_error( $api_result );
     }
 
-    public function optin_viewed(){
+    function optin_viewed(){
         $data = $_REQUEST['data'];
 
         $optin_id = is_array( $data ) ?  $data['optin_id'] : null;
@@ -127,7 +121,7 @@ class Opt_In_Front_Ajax {
 
         $optin = Opt_In_Model::instance()->get( $optin_id );
 
-        $res = $optin->log_view( array(
+         $res = $optin->log_view( array(
             'page_type' => $data['page_type'],
             'page_id'   => $data['page_id'],
             'optin_id' => $optin_id,
@@ -140,8 +134,8 @@ class Opt_In_Front_Ajax {
             wp_send_json_success( __("Stats Successfully saved") );
 
     }
-
-	public function log_conversion( $optin, $data ) {
+	
+	function log_conversion( $optin, $data ) {
 		$optin_type = ( isset( $data['type'] ) ) ? $data['type'] : '';
 		$tracking_types = $optin->get_tracking_types();
 		if ( $tracking_types && ( (bool) $tracking_types[$optin_type] ) ) {
@@ -153,7 +147,7 @@ class Opt_In_Front_Ajax {
 		}
 	}
 
-	public function pre_process_fields( $data ) {
+	function pre_process_fields( $data ) {
 		$newdata = array();
 
 		foreach ( $data as $key => $value ) {
@@ -163,4 +157,4 @@ class Opt_In_Front_Ajax {
 
 		return $newdata;
 	}
-}
+} 

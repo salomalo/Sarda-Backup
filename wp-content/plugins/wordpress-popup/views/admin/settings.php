@@ -4,18 +4,18 @@
  */
 ?>
 
-<?php if ( ! count( $modules ) ) : ?>
-
+<?php if ( count( $modules ) == 0 ) : ?>
+	
 	<?php $this->render( "admin/settings/welcome", array( 'user_name' => $user_name ) ); ?>
-
+	
 <?php else : ?>
 
 	<main id="wpmudev-hustle" class="wpmudev-ui wpmudev-hustle-popup-wizard-view">
 
 		<header id="wpmudev-hustle-title">
 
-			<h1><?php esc_attr_e( "Settings", Opt_In::TEXT_DOMAIN ); ?></h1>
-
+			<h1><?php _e( "Settings", Opt_In::TEXT_DOMAIN ); ?></h1>
+			
 		</header>
 
 		<section id="wpmudev-hustle-content" class="wpmudev-container">
@@ -24,12 +24,10 @@
 
 				<div id="wpmudev-settings-activity" class="wpmudev-col col-12 col-sm-6">
 
-					<?php
-					$this->render( "admin/settings/widget-modules", array(
+					<?php $this->render( "admin/settings/widget-modules", array(
 						"modules" => $modules,
 						"modules_state_toggle_nonce" => $modules_state_toggle_nonce
-					) );
-					?>
+					) ); ?>
 
 				</div><?php // #wpmudev-settings-activity ?>
 

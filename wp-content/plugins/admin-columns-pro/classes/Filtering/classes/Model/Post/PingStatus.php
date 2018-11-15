@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_PingStatus extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class PingStatus extends Model {
 
 	public function filter_by_ping_status( $where ) {
 		global $wpdb;

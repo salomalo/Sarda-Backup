@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_BeforeMoreTag extends AC_Column_Post_BeforeMoreTag
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class BeforeMoreTag extends AC\Column\Post\BeforeMoreTag
+	implements Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_BeforeMoreTag( $this );
+		return new Filtering\Model\Post\BeforeMoreTag( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

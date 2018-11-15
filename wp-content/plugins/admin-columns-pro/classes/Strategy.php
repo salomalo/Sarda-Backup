@@ -1,20 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
 
-abstract class ACP_Strategy {
+use AC;
+
+abstract class Strategy {
 
 	/**
-	 * @return AC_Column
+	 * @return AC\Column
 	 */
 	public function get_column() {
 		return $this->get_model()->get_column();
 	}
 
 	/**
-	 * @return ACP_Model
+	 * @return Model
 	 */
 	public abstract function get_model();
 

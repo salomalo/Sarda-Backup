@@ -1,22 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_MimeType extends AC_Column_Media_MimeType
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class MimeType extends AC\Column\Media\MimeType
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Media_MimeType( $this );
+		return new Sorting\Model\Media\MimeType( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Media_MimeType( $this );
+		return new Editing\Model\Media\MimeType( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Media_MimeType( $this );
+		return new Filtering\Model\Media\MimeType( $this );
 	}
 
 }

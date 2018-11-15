@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Taxonomy extends ACP_Editing_Model {
+use ACP\Editing\Model;
+use ACP\Editing\Settings;
+
+class Taxonomy extends Model {
 
 	/**
 	 * @param int $id
@@ -100,11 +101,11 @@ class ACP_Editing_Model_Post_Taxonomy extends ACP_Editing_Model {
 	 * Register editing settings
 	 */
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Editing_Settings_Taxonomy( $this->column ) );
+		$this->column->add_setting( new Settings\Taxonomy( $this->column ) );
 	}
 
 	/**
-	 * @param $post     WP_Post|int
+	 * @param $post     \WP_Post|int
 	 * @param $term_ids int[]|int Term ID's
 	 * @param $taxonomy string Taxonomy name
 	 *

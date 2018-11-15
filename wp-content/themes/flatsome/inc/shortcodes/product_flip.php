@@ -48,10 +48,6 @@ function ux_product_flip($atts, $content = null, $tag) {
 
     if(empty($ids)){
 
-	    if ( ! is_array( $atts ) ) {
-		    $atts = array();
-	    }
-
       // Get products
       $atts['products'] = $products;
       $atts['offset'] = $offset;

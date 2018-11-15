@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_Taxonomy extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Taxonomy extends Model {
 
 	public function get_sorting_vars() {
 		add_filter( 'posts_clauses', array( $this, 'sorting_clauses_callback' ), 10, 2 );
@@ -20,7 +20,7 @@ class ACP_Sorting_Model_Post_Taxonomy extends ACP_Sorting_Model {
 	 * @since 3.4
 	 *
 	 * @param array    $clauses array
-	 * @param WP_Query $query
+	 * @param \WP_Query $query
 	 *
 	 * @return array
 	 */

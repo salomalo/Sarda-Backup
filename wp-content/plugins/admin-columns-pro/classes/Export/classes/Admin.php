@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
 
 /**
  * Handles general functionality for admin screens
  *
  * @since 1.0
  */
-class ACP_Export_Admin {
+class Admin {
 
 	/**
 	 * Constructor
@@ -63,18 +61,18 @@ class ACP_Export_Admin {
 
 			// Decrypt the file contents
 			try {
-				$cryptor = new ACP_Export_Cryptor();
-				$key = ACP_Export_Utility_Users::get_user_encryption_key();
+				$cryptor = new Cryptor();
+				$key = Utility\Users::get_user_encryption_key();
 				$result = $cryptor->decrypt( $file_content, $key );
 				$content .= $result;
-			} catch ( Exception $e ) {
+			} catch ( \Exception $e ) {
 				wp_die( __( 'The requested file could not be processed.', 'codepress-admin-columns' ) );
 			}
 
 			$counter++;
 		}
 
-		$file = new ACP_Export_DownloadableFile();
+		$file = new DownloadableFile();
 		$file->load_content_string( $content );
 
 		$prefix = filter_input( INPUT_GET, 'acp-export-filename-prefix', FILTER_SANITIZE_STRING );

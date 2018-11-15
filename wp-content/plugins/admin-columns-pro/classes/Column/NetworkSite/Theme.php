@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_Theme extends AC_Column {
+use AC;
+use ACP\Settings;
+
+class Theme extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'column-msite_theme' );
@@ -16,7 +17,7 @@ class ACP_Column_NetworkSite_Theme extends AC_Column {
 	}
 
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_NetworkSite_Theme( $this ) );
+		$this->add_setting( new Settings\Column\NetworkSite\Theme( $this ) );
 	}
 
 }

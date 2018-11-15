@@ -1,18 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
-/**
- * Main Inline Edit Addon plugin class
- *
- * @since 1.0
- */
-class ACP_Editing_Addon extends AC_Addon {
+use AC;
+use ACP\Editing;
+
+class Addon extends AC\Addon {
 
 	/**
-	 * @var ACP_Editing_TableScreen
+	 * @var TableScreen
 	 */
 	private $table_screen;
 
@@ -20,14 +16,15 @@ class ACP_Editing_Addon extends AC_Addon {
 	 * @since 4.0
 	 */
 	function __construct() {
-		AC()->autoloader()->register_prefix( 'ACP_Editing', $this->get_plugin_dir() . 'classes' );
+		AC\Autoloader::instance()->register_prefix( __NAMESPACE__, $this->get_dir() . 'classes/' );
+		AC\Autoloader\Underscore::instance()->add_alias( __NAMESPACE__ . '\Editable', 'ACP_Column_EditingInterface' );
 
 		// Settings screen
 		add_action( 'ac/column/settings', array( $this, 'register_column_settings' ) );
 		add_action( 'ac/settings/general', array( $this, 'register_general_settings' ) );
 
 		// Table screen
-		$this->table_screen = new ACP_Editing_TableScreen();
+		$this->table_screen = new TableScreen();
 	}
 
 	protected function get_file() {
@@ -46,34 +43,36 @@ class ACP_Editing_Addon extends AC_Addon {
 	}
 
 	public function helper() {
-		return new ACP_Editing_Helper();
+		return new Helper();
 	}
 
 	/**
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 *
-	 * @return ACP_Editing_Model|false
+	 * @return Editing\Model|false
 	 */
 	public function get_editing_model( $column ) {
-		if ( ! $column instanceof ACP_Column_EditingInterface ) {
+		if ( ! $column instanceof Editing\Editable ) {
 			return false;
 		}
 
 		$list_screen = $column->get_list_screen();
 
-		if ( ! $list_screen instanceof ACP_Editing_ListScreen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return false;
 		}
 
 		$model = $column->editing();
 
-		return $model->set_strategy( $list_screen->editing( $model ) );
+		$model->set_strategy( $list_screen->editing( $model ) );
+
+		return $model;
 	}
 
 	/**
 	 * @since 3.1.2
 	 *
-	 * @param AC_Admin_Page_Settings $settings
+	 * @param AC\Admin\Page\Settings $settings
 	 */
 	public function register_general_settings( $settings ) {
 		$settings->single_checkbox( array(
@@ -93,7 +92,7 @@ class ACP_Editing_Addon extends AC_Addon {
 	/**
 	 * Register setting for editing
 	 *
-	 * @param AC_Column|ACP_Column_EditingInterface $column
+	 * @param AC\Column $column
 	 */
 	public function register_column_settings( $column ) {
 		if ( $model = $this->get_editing_model( $column ) ) {

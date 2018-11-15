@@ -12,7 +12,7 @@ class WC_Catalog_Restrictions_Location_Picker_ShortCode {
 	}
 
 	public function __construct() {
-		add_shortcode( 'location_picker', array($this, 'do_shortcode') );
+		add_shortcode( 'location_picker', array(&$this, 'do_shortcode') );
 	}
 
 	public function do_shortcode() {

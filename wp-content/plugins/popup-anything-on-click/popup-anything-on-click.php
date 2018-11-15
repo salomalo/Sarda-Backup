@@ -108,18 +108,10 @@ function wpos_analytics_anl32_load() {
                             'type'          => 'plugin',
                             'menu'          => 'edit.php?post_type=aoc_popup',
                             'text_domain'   => 'popup-anything-on-click',
-                            'promotion'     => array(
-                                                    'bundle' => array(
-                                                        'name'  => 'Download FREE 50 Plugins, 10+ Themes and Dashboard Plugin',
-                                                        'desc'  => 'Download FREE 50 Plugins, 10+ Themes and Dashboard Plugin',
-                                                        'file'  => 'https://www.wponlinesupport.com/latest/wpos-free-50-plugins-plus-12-themes.zip'
-                                                    )
-                                                ),
                             'offers'        => array(
                                                     'trial_premium' => array(
-                                                            1 => array(
-                                                                    'image' => 'http://analytics.wponlinesupport.com/?anylc_img=32',
-                                                                ),
+                                                        'image' => 'http://analytics.wponlinesupport.com/?anylc_img=32',
+                                                        'link'  => 'https://www.wponlinesupport.com/plugins-plus-themes-powerpack-combo-offer/?ref=blogeditor'
                                                     ),
                                                 ),
                         ));

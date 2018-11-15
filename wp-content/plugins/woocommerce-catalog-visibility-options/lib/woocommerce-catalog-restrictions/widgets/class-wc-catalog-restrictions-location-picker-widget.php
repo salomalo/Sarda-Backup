@@ -62,7 +62,7 @@ class WC_Catalog_Restrictions_Location_Picker_Widget extends WP_Widget {
 		echo $before_widget;
 
 		// Get redirect URL
-		$redirect_to = apply_filters( 'woocommerce_catalog_restrictions_choose_location_widget_redirect', get_permalink( wc_get_page_id( 'shop' ) ) );
+		$redirect_to = apply_filters( 'woocommerce_catalog_restrictions_choose_location_widget_redirect', get_permalink( woocommerce_get_page_id( 'shop' ) ) );
 		?>
 		<form method="post">
 			<p><?php woocommerce_catalog_restrictions_country_input( $wc_catalog_restrictions->get_location_for_current_user(), array('label' => $location_not_set_title) ); ?></p>
@@ -138,7 +138,7 @@ function woocommerce_catalog_restrictions_sidebar_location_picker_process() {
 
 	if ( isset( $_POST['woocommerce_catalog_restrictions_location_picker'] ) && $_POST['woocommerce_catalog_restrictions_location_picker'] == 'sidebar' ) {
 		// Get redirect URL
-		$redirect_to = apply_filters( 'woocommerce_catalog_restrictions_choose_location_widget_redirect', get_permalink( wc_get_page_id( 'shop' ) ) );
+		$redirect_to = apply_filters( 'woocommerce_catalog_restrictions_choose_location_widget_redirect', get_permalink( woocommerce_get_page_id( 'shop' ) ) );
 		$woocommerce->session->wc_location = $_POST['location'];
 
 		wp_safe_redirect( $redirect_to );

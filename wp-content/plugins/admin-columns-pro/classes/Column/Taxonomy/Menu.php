@@ -1,11 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
 
-class ACP_Column_Taxonomy_Menu extends AC_Column_Menu
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Export_Column {
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Sorting;
+
+class Menu extends AC\Column\Menu
+	implements Sorting\Sortable, Editing\Editable, Export\Exportable {
 
 	public function get_item_type() {
 		return 'taxonomy';
@@ -16,15 +19,15 @@ class ACP_Column_Taxonomy_Menu extends AC_Column_Menu
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Taxonomy_Menu( $this );
+		return new Editing\Model\Taxonomy\Menu( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

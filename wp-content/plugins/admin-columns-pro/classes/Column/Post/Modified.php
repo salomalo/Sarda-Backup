@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Modified extends AC_Column_Post_Modified
-	implements ACP_Column_SortingInterface {
+use AC;
+use ACP\Sorting;
+
+class Modified extends AC\Column\Post\Modified
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'modified' );
 
 		return $model;

@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column;
 
-class ACP_Settings_Column_CustomFieldType extends AC_Settings_Column_CustomFieldType {
+use AC;
+use AC\Collection;
+
+class CustomFieldType extends AC\Settings\Column\CustomFieldType {
 
 	public function get_dependent_settings() {
 		$settings = parent::get_dependent_settings();
@@ -12,16 +13,16 @@ class ACP_Settings_Column_CustomFieldType extends AC_Settings_Column_CustomField
 		switch ( $this->get_field_type() ) {
 
 			case 'title_by_id' :
-				$settings[] = new AC_Settings_Column_Post( $this->column );
+				$settings[] = new AC\Settings\Column\Post( $this->column );
 
 				break;
 			case 'user_by_id' :
-				$settings[] = new AC_Settings_Column_User( $this->column );
+				$settings[] = new AC\Settings\Column\User( $this->column );
 
 				break;
 			case 'image' :
 			case 'library_id' :
-				$settings[] = new AC_Settings_Column_NumberOfItems( $this->column );
+				$settings[] = new AC\Settings\Column\NumberOfItems( $this->column );
 
 				break;
 		}
@@ -38,7 +39,7 @@ class ACP_Settings_Column_CustomFieldType extends AC_Settings_Column_CustomField
 				$string = ac_helper()->array->implode_recursive( ',', $value );
 				$ids = ac_helper()->string->string_to_array_integers( $string );
 
-				$value = new AC_Collection( $ids );
+				$value = new Collection( $ids );
 
 				break;
 			case 'image':

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_TitleRaw extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class TitleRaw extends Model {
 
 	public function get_edit_value( $id ) {
 		return get_post_field( 'post_title', $id );

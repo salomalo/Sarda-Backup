@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_PluginsInclude extends AC_Settings_Column
-	implements AC_Settings_FormatValueInterface {
+use AC\Settings;
+use AC\View;
+
+class PluginsInclude extends Settings\Column
+	implements Settings\FormatValue {
 
 	/**
 	 * @var bool
@@ -22,7 +23,7 @@ class ACP_Settings_Column_NetworkSite_PluginsInclude extends AC_Settings_Column
 			'include_network' => __( 'Include network plugins', 'codepress-admin-columns' ),
 		);
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'label'   => __( 'Plugins' ),
 			'setting' => $this->create_element( 'checkbox' )->set_options( $options ),
 		) );

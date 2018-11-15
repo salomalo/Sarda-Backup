@@ -1,7 +1,8 @@
 <?php
 
-class Hustle_SShare_Design extends Hustle_Meta {
-	public $defaults = array(
+class Hustle_SShare_Design extends Hustle_Meta
+{
+	var $defaults = array(
 		'icon_style' => 'squared', // "flat", "outline", "rounded", or "squared"
 		'icons_order' => '',
 		'customize_colors' => 0,

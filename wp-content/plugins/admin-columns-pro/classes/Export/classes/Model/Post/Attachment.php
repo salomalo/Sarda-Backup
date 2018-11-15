@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Post;
+
+use ACP\Export\Model;
 
 /**
  * @since 4.1
  */
-class ACP_Export_Model_Post_Attachment extends ACP_Export_Model {
+class Attachment extends Model {
 
 	public function get_value( $id ) {
 		$urls = array();

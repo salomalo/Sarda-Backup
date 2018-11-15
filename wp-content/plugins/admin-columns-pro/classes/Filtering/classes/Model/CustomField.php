@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model;
+
+use AC;
+use ACP\Filtering\Model;
 
 /**
- * @property AC_Column_CustomField $column
+ * @property AC\Column\CustomField $column
  */
-class ACP_Filtering_Model_CustomField extends ACP_Filtering_Model_Meta {
+class CustomField extends Model\Meta {
 
-	public function __construct( AC_Column_CustomField $column ) {
+	public function __construct( AC\Column\CustomField $column ) {
 		parent::__construct( $column );
 	}
 

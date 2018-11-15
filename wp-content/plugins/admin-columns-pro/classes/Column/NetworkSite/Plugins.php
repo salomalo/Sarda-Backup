@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_Plugins extends AC_Column {
+use AC;
+use ACP\Settings;
+
+class Plugins extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'column-msite_plugins' );
@@ -34,8 +35,8 @@ class ACP_Column_NetworkSite_Plugins extends AC_Column {
 	}
 
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_NetworkSite_PluginsInclude( $this ) );
-		$this->add_setting( new ACP_Settings_Column_NetworkSite_Plugins( $this ) );
+		$this->add_setting( new Settings\Column\NetworkSite\PluginsInclude( $this ) );
+		$this->add_setting( new Settings\Column\NetworkSite\Plugins( $this ) );
 	}
 
 }

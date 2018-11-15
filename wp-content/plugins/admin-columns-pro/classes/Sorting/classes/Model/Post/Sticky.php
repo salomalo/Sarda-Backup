@@ -1,12 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_Sticky extends ACP_Sorting_Model {
+use AC;
+use ACP\Sorting\Model;
 
-	public function __construct( AC_Column $column ) {
+class Sticky extends Model {
+
+	public function __construct( AC\Column $column ) {
 		parent::__construct( $column );
 
 		$this->set_data_type( 'numeric' );

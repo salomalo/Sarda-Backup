@@ -1,8 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
 
 /**
  * Handles the exposure of a downloadable file. Receives a string or a file pointer as its input,
@@ -11,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-class ACP_Export_DownloadableFile {
+class DownloadableFile {
 
 	/**
 	 * String content to be made downloadable. If set (via the `load_content_string` method) this
@@ -68,7 +66,7 @@ class ACP_Export_DownloadableFile {
 	 *
 	 * @since 1.0
 	 *
-	 * @return string File pointer to be made downloadable
+	 * @return resource File pointer to be made downloadable
 	 */
 	public function get_content_fh() {
 		return $this->content_fh;

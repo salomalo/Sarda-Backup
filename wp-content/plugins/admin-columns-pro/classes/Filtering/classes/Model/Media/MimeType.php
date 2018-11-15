@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Media;
 
-class ACP_Filtering_Model_Media_MimeType extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class MimeType extends Model {
 
 	public function filter_by_mime_type( $where ) {
 		global $wpdb;

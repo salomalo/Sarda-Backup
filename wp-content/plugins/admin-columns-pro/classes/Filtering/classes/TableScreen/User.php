@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\TableScreen;
 
-class ACP_Filtering_TableScreen_User extends ACP_Filtering_TableScreen {
+use ACP\Filtering\TableScreen;
+
+class User extends TableScreen {
 
 	public function __construct( array $models ) {
 		parent::__construct( $models );

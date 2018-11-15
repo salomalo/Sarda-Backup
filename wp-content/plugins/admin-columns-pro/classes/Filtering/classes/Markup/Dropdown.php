@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Markup;
 
-class ACP_Filtering_Markup_Dropdown extends AC_Form_Element_Select {
+use AC\Form\Element\Select;
+
+class Dropdown extends Select {
 
 	/**
 	 * @var string
@@ -97,9 +97,6 @@ class ACP_Filtering_Markup_Dropdown extends AC_Form_Element_Select {
 		return $this->order;
 	}
 
-	/**
-	 * @param array $options
-	 */
 	private function sanitize_options() {
 		$sanitized = array();
 

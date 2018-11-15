@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_AuthorEmail extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class AuthorEmail extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		$vars['author_email'] = $this->get_filter_value();

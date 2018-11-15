@@ -1,13 +1,19 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
+
+use ACP;
+use ACP\Editing;
 
 /**
  * @since 4.0
  */
-class ACP_Editing_Model extends ACP_Model {
+class Model extends ACP\Model {
+
+	/**
+	 * @var Strategy\Comment | Strategy\Post | Strategy\Site | Strategy\Taxonomy | Strategy\User
+	 */
+	protected $strategy;
 
 	/**
 	 * @return bool True when editing is enabled by user
@@ -15,7 +21,7 @@ class ACP_Editing_Model extends ACP_Model {
 	public function is_active() {
 		$setting = $this->column->get_setting( 'edit' );
 
-		if ( ! $setting instanceof ACP_Editing_Settings ) {
+		if ( ! $setting instanceof Editing\Settings ) {
 			return false;
 		}
 
@@ -46,7 +52,7 @@ class ACP_Editing_Model extends ACP_Model {
 	 *
 	 * @param int $id
 	 *
-	 * @return array|stdClass|string
+	 * @return array|object|string
 	 */
 	public function get_edit_value( $id ) {
 		return $this->column->get_raw_value( $id );
@@ -69,7 +75,7 @@ class ACP_Editing_Model extends ACP_Model {
 	 * @param int          $id
 	 * @param string|array $value
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function save( $id, $value ) {
 		return false;
@@ -79,7 +85,21 @@ class ACP_Editing_Model extends ACP_Model {
 	 * Register column field settings
 	 */
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Editing_Settings( $this->column ) );
+		$this->column->add_setting( new Editing\Settings( $this->column ) );
+	}
+
+	/**
+	 * @return Strategy
+	 */
+	public function get_strategy() {
+		return $this->strategy;
+	}
+
+	/**
+	 * @param Strategy $strategy
+	 */
+	public function set_strategy( $strategy ) {
+		$this->strategy = $strategy;
 	}
 
 }

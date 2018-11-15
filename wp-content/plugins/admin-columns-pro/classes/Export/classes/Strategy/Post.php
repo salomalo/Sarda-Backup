@@ -1,20 +1,21 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Strategy;
+
+use AC;
+use ACP\Export\Strategy;
 
 /**
  * Exportability class for posts list screen
  *
  * @since 1.0
  */
-class ACP_Export_Strategy_Post extends ACP_Export_Strategy {
+class Post extends Strategy {
 
 	/**
-	 * @param AC_ListScreenPost $list_screen
+	 * @param AC\ListScreenPost $list_screen
 	 */
-	public function __construct( AC_ListScreenPost $list_screen ) {
+	public function __construct( AC\ListScreenPost $list_screen ) {
 		parent::__construct( $list_screen );
 	}
 
@@ -31,7 +32,7 @@ class ACP_Export_Strategy_Post extends ACP_Export_Strategy {
 	 * Modify the main posts query to use the correct pagination arguments. This should be attached
 	 * to the pre_get_posts hook when an AJAX request is sent
 	 *
-	 * @param WP_Query $query
+	 * @param \WP_Query $query
 	 *
 	 * @since 1.0
 	 * @see   action:pre_get_posts
@@ -51,8 +52,8 @@ class ACP_Export_Strategy_Post extends ACP_Export_Strategy {
 	 * Run the actual export when the posts query is finalized. This should be attached to the
 	 * the_posts filter when an AJAX request is run
 	 *
-	 * @param array    $posts
-	 * @param WP_Query $query
+	 * @param array     $posts
+	 * @param \WP_Query $query
 	 *
 	 * @since 1.0
 	 * @see   action:the_posts

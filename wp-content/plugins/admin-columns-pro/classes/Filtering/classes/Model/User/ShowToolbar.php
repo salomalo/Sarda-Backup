@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\User;
 
-class ACP_Filtering_Model_User_ShowToolbar extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class ShowToolbar extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		$vars['meta_query'][] = array(

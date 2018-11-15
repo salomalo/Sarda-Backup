@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\RelatedPosts;
 
-final class ACP_ThirdParty_RelatedPosts_Addon {
+use AC;
+
+final class Addon {
 
 	public function __construct() {
 		add_action( 'ac/column_types', array( $this, 'set_columns' ) );
@@ -12,18 +12,18 @@ final class ACP_ThirdParty_RelatedPosts_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 */
 	public function set_columns( $list_screen ) {
 		if ( ! function_exists( 'RP4WP' ) ) {
 			return;
 		}
 
-		$list_screen->register_column_type( new ACP_ThirdParty_RelatedPosts_Column );
+		$list_screen->register_column_type( new Column );
 	}
 
 	/**
-	 * @param AC_Groups $groups
+	 * @param AC\Groups $groups
 	 */
 	public function set_groups( $groups ) {
 		$groups->register_group( 'related-posts', __( 'Related Posts', 'codepress-admin-columns' ), 25 );

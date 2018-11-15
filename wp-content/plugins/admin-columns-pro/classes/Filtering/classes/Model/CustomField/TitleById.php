@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\CustomField;
 
-class ACP_Filtering_Model_CustomField_TitleById extends ACP_Filtering_Model_CustomField {
+use ACP\Filtering\Model;
+
+class TitleById extends Model\CustomField {
 
 	public function get_filtering_data() {
 		$options = array();

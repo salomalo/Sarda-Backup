@@ -95,7 +95,6 @@ function get_flatsome_repeater_start( $atts ) {
           $row_classes[] = 'row-box-shadow-'.$atts['depth'];
     }
     if(!empty($atts['depth_hover'])){
-       $row_classes[] = 'has-shadow';
           $row_classes_full[] = 'box-shadow-'.$atts['depth_hover'].'-hover';
           $row_classes[] = 'row-box-shadow-'.$atts['depth_hover'].'-hover';
     }
@@ -134,11 +133,8 @@ function get_flatsome_repeater_start( $atts ) {
       $slider_options = '{"imagesLoaded": true, "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": '.$atts['slider_bullets'].', "rightToLeft": '.$rtl.', "autoPlay" : '.$atts['auto_slide'].'}';
     }
 
-	$row_classes_full = array_unique( $row_classes_full );
-	$row_classes      = array_unique( $row_classes );
-
-	$row_classes_full = implode( ' ', $row_classes_full );
-	$row_classes      = implode( ' ', $row_classes );
+    $row_classes_full = implode(' ', $row_classes_full);
+    $row_classes = implode(' ', $row_classes);
   ?>
 
   <?php if($atts['title']){?>
@@ -416,11 +412,10 @@ function flatsome_get_gradient($primary){ ?>
  * Adds 'noopener noreferrer' to rel when target is _blank.
  *
  * @param array $link_atts Link attributes 'target' and 'rel'.
- * @param bool  $trim      Trim start and end whitespaces?
  *
  * @return null|string Parsed target/rel string or null when no target defined.
  */
-function flatsome_parse_target_rel( array $link_atts, $trim = false ) {
+function flatsome_parse_target_rel( array $link_atts ) {
 	if ( ! $link_atts['target'] ) {
 		return null;
 	}
@@ -428,15 +423,11 @@ function flatsome_parse_target_rel( array $link_atts, $trim = false ) {
 		$link_atts['rel'][] = 'noopener';
 		$link_atts['rel'][] = 'noreferrer';
 	}
-
 	if ( isset( $link_atts['rel'] ) && is_array( $link_atts['rel'] ) ) {
-		$rel  = implode( ' ', $link_atts['rel'] );
-		$atts = " target=\"{$link_atts['target']}\" rel=\"{$rel}\" ";
+		$rel = implode( ' ', $link_atts['rel'] );
 
-		return $trim ? trim( $atts ) : $atts;
+		return "target=\"{$link_atts['target']}\" rel=\"{$rel}\"";
 	}
 
-	$atts = " target=\"{$link_atts['target']}\" ";
-
-	return $trim ? trim( $atts ) : $atts;
+	return "target=\"{$link_atts['target']}\"";
 }

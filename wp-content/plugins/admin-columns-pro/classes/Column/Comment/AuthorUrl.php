@@ -1,28 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Comment_AuthorUrl extends AC_Column_Comment_AuthorUrl
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface, ACP_Column_FilteringInterface {
+class AuthorUrl extends AC\Column\Comment\AuthorUrl
+	implements Editing\Editable, Sorting\Sortable, Filtering\Filterable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'comment_author_url' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Comment_AuthorURL( $this );
+		return new Editing\Model\Comment\AuthorURL( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_AuthorUrl( $this );
+		return new Filtering\Model\Comment\AuthorUrl( $this );
 	}
 
 }

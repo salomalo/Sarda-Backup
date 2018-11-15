@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Post_PageTemplate extends AC_Column_Post_PageTemplate
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+class PageTemplate extends AC\Column\Post\PageTemplate
+	implements Filtering\Filterable, Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_PageTemplate( $this );
+		return new Editing\Model\Post\PageTemplate( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_PageTemplate( $this );
+		return new Filtering\Model\Post\PageTemplate( $this );
 	}
 
 }

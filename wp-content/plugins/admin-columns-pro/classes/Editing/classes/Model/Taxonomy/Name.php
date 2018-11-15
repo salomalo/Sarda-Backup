@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Taxonomy;
 
-class ACP_Editing_Model_Taxonomy_Name extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Name extends Model {
 
 	public function get_view_settings() {
 		return array(

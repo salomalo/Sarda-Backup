@@ -321,6 +321,6 @@ class Campaign extends Component
             }
         }
 
-        return wp_json_encode($campaign);
+        return json_encode($campaign);
     }
 }

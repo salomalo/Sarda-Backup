@@ -3,8 +3,8 @@
 Contributors: yithemes
 Tags: woocommerce search by sku, woocommerce search results, woocommerce search shortcode, woocommerce search page, woocommerce search form, woocommerce search filter, woocommerce search products, woocommerce search content, woocommerce search autocomplete, woocommerce advanced search, woocommerce search category, woocommerce search product attributes, woocommerce search by tag, woocommerce search by brand, woocommerce predictive, woocommerce live search, woocommerce single product search, woocommerce site search, woocommerce search tex, tajax, search, woocommerce, products, themes, yit, e-commerce, shop, yith, ajax search, instant search, premium, yithemes, autocomplete, autosuggest, better search, category search, custom search, highlight terms, Live Search, Predictive Search, product search, relevant search, search highlight, search product, suggest, typeahead, WooCommerce Plugin, woocommerce product search, woocommerce search, wordpress ecommerce
 Requires at least: 4.0.0
-Tested up to: 4.9
-Stable tag: 1.5.8
+Tested up to: 4.9.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ It works just like Google Suggest, but this tool will be available on your WooCo
  * Set minimum number of characters for WooCommerce search
  * Set maximum number of WooCommerce results
 
-If you want to boost your YITH WooCommerce Ajax Search, you can also visit YITH page and explore the [live demo](https://plugins.yithemes.com/yith-woocommerce-ajax-search/) of the premium version, which includes all the following features to improve at the best your WooCommerce site search.
+If you want to boost your YITH WooCommerce Ajax Search, you can also visit YIThemes page and explore the [live demo](https://plugins.yithemes.com/yith-woocommerce-ajax-search/) of the premium version, which includes all the following features to improve at the best your WooCommerce site search.
 
 = Premium features of YITH WooCommerce Ajax Search: =
 
@@ -80,14 +80,14 @@ Important: First of all, you have to download and activate WooCommerce plugin, b
 
 
 = Configuration =
-YITH WooCommerce Ajax Search will add a new tab called "Ajax Search" in "YIT Plugins" menu. There, you will find all YITH plugins and you will be able to access quickly plugin settings page.
+YITH WooCommerce Ajax Search will add a new tab called "Ajax Search" in "YIT Plugins" menu. There, you will find all YIThemes plugins and you will be able to access quickly plugin settings page.
 
 == Frequently Asked Questions ==
 
 = Is it compatible with all WordPress themes? =
 
 Compatibility with all themes is impossible, because they are too many, but generally if themes are developed according to WordPress and WooCommerce guidelines, YITH plugins are compatible with them.
-Yet, we can grant compatibility with themes developed by YITH, because they are constantly updated and tested with our plugins. Sometimes, especially when new versions are released, it might only require some time for them to be all updated, but you can be sure that they will be tested and will be working in a few days.
+Yet, we can grant compatibility with themes developed by YIThemes, because they are constantly updated and tested with our plugins. Sometimes, especially when new versions are released, it might only require some time for them to be all updated, but you can be sure that they will be tested and will be working in a few days. 
 
 
 = How can I get support if my WooCommerce plugin is not working? =
@@ -102,7 +102,7 @@ If none of the previous listed actions helps you solve the problem, then, submit
 
 
 = How can I get more features for my WooCommerce plugin? =
-You can get more features with the premium version of YITH WooCommerce Ajax Search, available on [YITH page]( https://yithemes.com/themes/plugins/yith-woocommerce-ajax-search/). Here you can read more about the premium features of the plugin and make it give it its best shot!
+You can get more features with the premium version of YITH WooCommerce Ajax Search, available on [YIThemes page]( https://yithemes.com/themes/plugins/yith-woocommerce-ajax-search/). Here you can read more about the premium features of the plugin and make it give it its best shot!
 
 
 = How can I try the full-featured plugin? =
@@ -138,9 +138,6 @@ If you have created your own language pack for YITH WooCommerce Ajax Search, or 
 2. YITH WooCommerce Ajax Search in operation displaying WooCommerce search results
 
 == Changelog ==
-= 1.5.8 - Released: Jun 28, 2018 =
-* Update: Plugin Core 3.0.21
-* Fix: Fixed compatibility class loading
 
 = 1.5.7 - Released: Jun 28, 2018 =
 * Fix: Fixed compatibility class loading

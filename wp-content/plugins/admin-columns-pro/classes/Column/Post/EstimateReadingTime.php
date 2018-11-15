@@ -1,18 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_EstimateReadingTime extends AC_Column_Post_EstimatedReadingTime
-	implements ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Export;
+use ACP\Sorting;
+
+class EstimateReadingTime extends AC\Column\Post\EstimatedReadingTime
+	implements Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_EstimateReadingTime( $this );
+		return new Sorting\Model\Post\EstimateReadingTime( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

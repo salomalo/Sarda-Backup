@@ -1,14 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.2
  */
-class ACP_Column_User_Language extends AC_Column_Meta
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Language extends AC\Column\Meta
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	private $translations = null;
 
@@ -66,15 +69,15 @@ class ACP_Column_User_Language extends AC_Column_Meta
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Language( $this );
+		return new Editing\Model\User\Language( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Language( $this );
+		return new Filtering\Model\User\Language( $this );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Meta( $this );
+		return new Sorting\Model\Meta( $this );
 	}
 
 }

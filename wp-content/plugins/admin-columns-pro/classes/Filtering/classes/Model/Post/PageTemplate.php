@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
+
+use AC;
+use ACP\Filtering\Model;
 
 /**
- * @property AC_Column_Post_PageTemplate $column
+ * @property AC\Column\Post\PageTemplate $column
  */
-class ACP_Filtering_Model_Post_PageTemplate extends ACP_Filtering_Model_Meta {
+class PageTemplate extends Model\Meta {
 
-	public function __construct( AC_Column_Post_PageTemplate $column ) {
+	public function __construct( AC\Column\Post\PageTemplate $column ) {
 		parent::__construct( $column );
 	}
 

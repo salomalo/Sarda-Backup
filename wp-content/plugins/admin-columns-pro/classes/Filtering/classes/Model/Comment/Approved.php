@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_Approved extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Approved extends Model {
 
 	public function filter_by_approved( $comments_clauses ) {
 		global $wpdb;

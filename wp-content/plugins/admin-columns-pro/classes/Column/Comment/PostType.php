@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Filtering;
 
 /**
  * @since 4.2
  */
-class ACP_Column_Comment_PostType extends AC_Column
-	implements ACP_Column_FilteringInterface {
+class PostType extends AC\Column
+	implements Filtering\Filterable {
 
 	public function __construct() {
 		$this->set_type( 'column-post_type' );
@@ -33,7 +34,7 @@ class ACP_Column_Comment_PostType extends AC_Column
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_PostType( $this );
+		return new Filtering\Model\Comment\PostType( $this );
 	}
 
 }

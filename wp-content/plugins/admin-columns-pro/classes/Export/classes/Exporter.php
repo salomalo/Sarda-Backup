@@ -1,8 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
 
 /**
  * Base class for exporters, which handle the construction of the file content for an an exported
@@ -11,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-abstract class ACP_Export_Exporter {
+abstract class Exporter {
 
 	/**
 	 * Rows to be exported. Format: array of associative arrays, where each associative array
@@ -38,8 +36,8 @@ abstract class ACP_Export_Exporter {
 	 *
 	 * @since 1.0
 	 *
-	 * @param resource $fh File reference pointer of file to write to
-	 * @param boolean $encrypt Whether to encrypt the data before writing it to the file
+	 * @param resource $fh      File reference pointer of file to write to
+	 * @param boolean  $encrypt Whether to encrypt the data before writing it to the file
 	 */
 	abstract public function export( $fh );
 

@@ -1,30 +1,29 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model;
+
+use AC;
+use ACP\Filtering\Model;
 
 /**
- * @property AC_Column_Meta $column
+ * @property AC\Column\Meta $column
  */
-class ACP_Filtering_Model_Meta extends ACP_Filtering_Model {
+class Meta extends Model {
 
 	/**
-	 * @param AC_Column_Meta $column
+	 * @param AC\Column\Meta $column
 	 */
-	public function __construct( AC_Column_Meta $column ) {
+	public function __construct( AC\Column\Meta $column ) {
 		parent::__construct( $column );
 	}
 
 	/**
 	 * Get meta values by meta key
 	 *
-	 * @param boolean $filter Remove unserialized, long and empty values
-	 *
 	 * @return array
 	 */
 	public function get_meta_values() {
-		$query = new AC_Meta_Query( $this->column->get_meta_type() );
+		$query = new AC\Meta\Query( $this->column->get_meta_type() );
 		$query->select( 'meta_value' )
 		      ->distinct()
 		      ->join()
@@ -197,7 +196,11 @@ class ACP_Filtering_Model_Meta extends ACP_Filtering_Model {
 
 		foreach ( $this->get_meta_values() as $value ) {
 			if ( is_serialized( $value ) ) {
-				$values = array_merge( $values, unserialize( $value ) );
+				$value = unserialize( $value );
+
+				if ( is_array( $value ) ) {
+					$values = array_merge( $values, $value );
+				}
 			}
 		}
 
@@ -206,7 +209,7 @@ class ACP_Filtering_Model_Meta extends ACP_Filtering_Model {
 
 	/**
 	 * @param array  $vars
-	 * @param string $filter_value
+	 * @param string $value
 	 *
 	 * @return array
 	 */
@@ -220,20 +223,6 @@ class ACP_Filtering_Model_Meta extends ACP_Filtering_Model {
 			'value'   => serialize( $value ),
 			'compare' => 'LIKE',
 		);
-
-		return $vars;
-	}
-
-	/**
-	 * @deprecated 4.0.3
-	 *
-	 * @param array $vars
-	 * @param array $args
-	 *
-	 * @return array
-	 */
-	public function get_filtering_vars_date( $vars, $args ) {
-		_deprecated_function( __METHOD__, '4.0.3' );
 
 		return $vars;
 	}

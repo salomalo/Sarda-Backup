@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
 
 /**
  * @since 2.0
  */
-class ACP_Column_User_Url extends AC_Column_User_Url
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Url extends AC\Column\User\Url
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Url( $this );
+		return new Editing\Model\User\Url( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Url( $this );
+		return new Filtering\Model\User\Url( $this );
 	}
 
 }

@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
 
 /**
  * @since 2.0
  */
-class ACP_Column_User_CommentCount extends AC_Column_User_CommentCount
-	implements ACP_Column_SortingInterface {
+class CommentCount extends AC\Column\User\CommentCount
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_User_CommentCount( $this );
+		return new Sorting\Model\User\CommentCount( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_CommentCount( $this );
+		return new Editing\Model\User\CommentCount( $this );
 	}
 
 }

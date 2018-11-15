@@ -9,32 +9,30 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 	const ID = "sendy";
 	const NAME = "Sendy";
 
-	protected $id = self::ID;
-
-
-	/**
-	 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-	 */
-	public static function instance(){
-		return new self();
+	static function instance(){
+		return new self;
 	}
 
 	/**
-	 * Get Provider Details
-	 * General function to get provider details from database based on key
+	 * Updates api option
 	 *
-	 * @param Hustle_Module_Model $module
-	 * @param String $field - the field name
-	 *
-	 * @return String
+	 * @param $option_key
+	 * @param $option_value
+	 * @return bool
 	 */
-	protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-		$details = '';
-		$name = self::ID;
-		if ( isset( $module->content->email_services[$name][$field] ) ) {
- 			$details = $module->content->email_services[$name][$field];
-		}
-		return $details;
+	function update_option( $option_key, $option_value ) {
+		return update_site_option( self::ID . "_" . $option_key, $option_value );
+	}
+
+	/**
+	 * Retrieves api option from db
+	 *
+	 * @param $option_key
+	 * @param $default
+	 * @return mixed
+	 */
+	function get_option( $option_key, $default ) {
+		return get_site_option( self::ID . "_" . $option_key, $default );
 	}
 
 	/**
@@ -51,7 +49,7 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 
 		$err 				= new WP_Error();
 		$_data = array(
-			"boolean" => 'true',
+			"boolian" => false,
 			"list" => $email_list
 		);
 		$_data['email'] =  $data['email'];
@@ -99,25 +97,12 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 			"header" => 'Content-type: application/x-www-form-urlencoded',
 			"body" => $_data
 		));
-
+		
 		if ( is_wp_error( $res ) ) {
 			return $res;
 		}
 
 		if ( $res['response']['code'] <= 204 ) {
-			if ( 'Already subscribed.' === $res['body'] ) {
-				$err->add( 'email_exist', __( 'This email address has already subscribed.', Opt_In::TEXT_DOMAIN ) );
-				return $err;
-			} elseif ( 'Invalid list ID.' === $res['body'] ) {
-				$err->add( 'invalid_list_id', __( 'Invalid list id.', Opt_In::TEXT_DOMAIN ) );
-				return $err;
-			} elseif ( 'Some fields are missing.' === $res['body'] ) {
-				$err->add( 'field_missing', __( 'Some fields are missing.', Opt_In::TEXT_DOMAIN ) );
-				return $err;
-			} elseif ( 'Invalid email address.' === $res['body'] ) {
-				$err->add( 'invalid_email', __( 'Invalid email address.', Opt_In::TEXT_DOMAIN ) );
-				return $err;
-			}
 			return true;
 		} else {
 			$err->add( $res['response']['code'], $res['response']['message']  );
@@ -128,9 +113,10 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 	/**
 	 * Retrieves initial options of the GetResponse account with the given api_key
 	 *
+	 * @param $module_id
 	 * @return array
 	 */
-	public function get_options() {
+	function get_options( $module_id ) {
 		return array();
 	}
 
@@ -140,7 +126,7 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 	 * @param $module_id
 	 * @return array
 	 */
-	public function get_account_options( $module_id ) {
+	function get_account_options( $module_id ) {
 		$module     		= Hustle_Module_Model::instance()->get( $module_id );
 		$api_key    		= self::_get_api_key( $module );
 		$email_list 		= self::_get_email_list( $module );
@@ -224,6 +210,27 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 		);
 	}
 
+	/**
+	* Get Provider Details
+	* General function to get provider details from database based on key
+	*
+	* @param Hustle_Module_Model $module
+	* @param String $field - the field name
+	*
+	* @return String
+	*/
+	private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+		$details = '';
+		$name = self::ID;
+		if ( !is_null( $module->content->email_services ) 
+			&& isset( $module->content->email_services[$name] ) 
+			&& isset( $module->content->email_services[$name][$field] ) ) {
+				
+			$details = $module->content->email_services[$name][$field];
+		}
+		return $details;
+	}
+
 	private static function _get_api_url( Hustle_Module_Model $module ) {
 		return self::_get_provider_details( $module, 'installation_url' );
 	}
@@ -236,7 +243,7 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 		return self::_get_provider_details( $module, 'list_id' );
 	}
 
-	public function is_authorized(){
+	function is_authorized(){
 		return true;
 	}
 
@@ -247,23 +254,23 @@ class Opt_In_Sendy extends Opt_In_Provider_Abstract implements  Opt_In_Provider_
 	 * @return bool
 	 */
 	public static function show_selected_list( $val, $module ){
-		if( self::ID === $module->content->active_email_service )
+		if( $module->content->active_email_service === self::ID )
 			return false;
 
 		return true;
 	}
 
 	public static function add_values_to_previous_optins( $option, $module  ){
-		if( self::ID !== $module->content->active_email_service ) return $option;
+		if( $module->content->active_email_service !== self::ID ) return $option;
 
 		$list   = self::_get_email_list( $module );
 		$url    = self::_get_api_url( $module );
 
-		if( "wpoi-sendy-get-lists" === $option['id'] ){
+		if(  $option['id'] === "wpoi-sendy-get-lists" ){
 			$option['elements']['choose_email_list']['value'] = $list;
 		}
 
-		if( "wpoi-sendy-installation-url" === $option['id'] && isset( $url ) ){
+		if( $option['id'] === "wpoi-sendy-installation-url" && isset( $url ) ){
 			$option['elements']['installation_url']['value'] = $url;
 		}
 

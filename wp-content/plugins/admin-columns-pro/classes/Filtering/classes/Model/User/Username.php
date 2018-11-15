@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\User;
 
-class ACP_Filtering_Model_User_Username extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Username extends Model {
 
 	public function filter_by_username( $query ) {
 		global $wpdb;

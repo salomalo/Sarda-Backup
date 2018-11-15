@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Utility;
 
 /**
  * Utility functions for encryption
  *
  * @since 1.0
  */
-class ACP_Export_Utility_Encryption {
+class Encryption {
 
 	/**
 	 * Generate a random encryption key

@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column;
+
+use AC;
 
 /**
  * @deprecated 4.2.4
  */
-class ACP_Column_Menu extends AC_Column {
+class Menu extends AC\Column {
 
 	// Deprecated. Should be removed at some point.
 

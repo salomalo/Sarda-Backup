@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Editing;
+
+use ACP;
+use ACP\Editing;
 
 /**
- * @property ACP_ThirdParty_YoastSeo_Column_PrimaryTaxonomy $column
+ * @property ACP\ThirdParty\YoastSeo\Column\PrimaryTaxonomy $column
  */
-class ACP_ThirdParty_YoastSeo_Editing_PrimaryTaxonomy extends ACP_Editing_Model_Meta {
+class PrimaryTaxonomy extends Editing\Model\Meta {
 
 	/**
 	 * @param int $id

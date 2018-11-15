@@ -1,11 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
 
-class ACP_Column_User_Roles extends AC_Column_Meta
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Export;
+
+class Roles extends AC\Column\Meta
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function __construct() {
 		$this->set_type( 'column-roles' );
@@ -21,7 +25,7 @@ class ACP_Column_User_Roles extends AC_Column_Meta
 	// Display
 
 	public function get_value( $user_id ) {
-		$user = new WP_User( $user_id );
+		$user = new \WP_User( $user_id );
 
 		$roles = array();
 		foreach ( ac_helper()->user->translate_roles( $user->roles ) as $role => $label ) {
@@ -36,19 +40,19 @@ class ACP_Column_User_Roles extends AC_Column_Meta
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Role( $this );
+		return new Editing\Model\User\Role( $this );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model_User_Roles( $this );
+		return new Sorting\Model\User\Roles( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Role( $this );
+		return new Filtering\Model\User\Role( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_User_Role( $this );
+		return new Export\Model\User\Role( $this );
 	}
 
 }

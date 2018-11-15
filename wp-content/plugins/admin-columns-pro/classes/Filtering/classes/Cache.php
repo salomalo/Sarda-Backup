@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
-class ACP_Filtering_Cache {
+class Cache {
 
 	/**
 	 * @var string
@@ -21,7 +19,7 @@ class ACP_Filtering_Cache {
 	/**
 	 * Set Cache id. Max length for site_transient name is 40 characters,
 	 *
-	 * @param string $name
+	 * @param string $key
 	 * @source https://core.trac.wordpress.org/ticket/15058
 	 */
 	private function set_key( $key ) {

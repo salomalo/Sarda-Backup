@@ -1,56 +1,58 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-/**
- * @since 4.0
- */
-class ACP_Column_Post_AuthorName extends AC_Column_Post_AuthorName
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Settings;
+use ACP\Sorting;
+
+class AuthorName extends AC\Column\Post\AuthorName
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
 		if ( 'custom_field' === $this->get_user_setting_display() ) {
-			return new ACP_Sorting_Model_Disabled( $this );
+			return new Sorting\Model\Disabled( $this );
 		}
 
-		return new ACP_Sorting_Model_Post_AuthorName( $this );
+		return new Sorting\Model\Post\AuthorName( $this );
 	}
 
 	public function editing() {
 		if ( 'custom_field' === $this->get_user_setting_display() ) {
-			return new ACP_Editing_Model_Disabled( $this );
+			return new Editing\Model\Disabled( $this );
 		}
 
-		return new ACP_Editing_Model_Post_Author( $this );
+		return new Editing\Model\Post\Author( $this );
 	}
 
 	public function filtering() {
 		if ( 'custom_field' === $this->get_user_setting_display() ) {
-			return new ACP_Filtering_Model_Disabled( $this );
+			return new Filtering\Model\Disabled( $this );
 		}
 
 		if ( 'roles' === $this->get_user_setting_display() ) {
-			return new ACP_Filtering_Model_Post_Roles( $this );
+			return new Filtering\Model\Post\Roles( $this );
 		}
 
-		return new ACP_Filtering_Model_Post_AuthorName( $this );
+		return new Filtering\Model\Post\AuthorName( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_User( $this ) );
+		$this->add_setting( new Settings\Column\User( $this ) );
 	}
 
 	/**
 	 * @return string
 	 */
 	private function get_user_setting_display() {
-		/* @var AC_Settings_Column_User $setting */
+		/* @var AC\Settings\Column\User $setting */
 		$setting = $this->get_setting( 'user' );
 
 		return $setting->get_display_author_as();

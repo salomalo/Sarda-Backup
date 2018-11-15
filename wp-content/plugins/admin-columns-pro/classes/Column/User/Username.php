@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Export;
 
 /**
  * @since 4.1
  */
-class ACP_Column_User_Username extends AC_Column_User_Username
-	implements ACP_Export_Column {
+class Username extends AC\Column\User\Username
+	implements Export\Exportable {
 
 	public function export() {
-		return new ACP_Export_Model_User_Username( $this );
+		return new Export\Model\User\Username( $this );
 	}
 
 }

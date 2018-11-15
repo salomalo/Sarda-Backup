@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Strategy;
 
-final class ACP_Filtering_Strategy_Comment extends ACP_Filtering_Strategy {
+use ACP\Filtering\Strategy;
+
+class Comment extends Strategy {
 
 	public function handle_request() {
 		add_action( 'pre_get_comments', array( $this, 'handle_filter_requests' ), 2 );
@@ -15,7 +15,7 @@ final class ACP_Filtering_Strategy_Comment extends ACP_Filtering_Strategy {
 	 *
 	 * @since 3.5
 	 *
-	 * @param WP_Comment_Query $comment_query
+	 * @param \WP_Comment_Query $comment_query
 	 */
 	public function handle_filter_requests( $comment_query ) {
 		// meta_query in WP_Comment is by default a string. We parse it to an array because of PHP7.1 compatibility issue
@@ -25,6 +25,8 @@ final class ACP_Filtering_Strategy_Comment extends ACP_Filtering_Strategy {
 
 	/**
 	 * @since 3.5
+	 *
+	 * @param string $field
 	 */
 	public function get_values_by_db_field( $field ) {
 		global $wpdb;

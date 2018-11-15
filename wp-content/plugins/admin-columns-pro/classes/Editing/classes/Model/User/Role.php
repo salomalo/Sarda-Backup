@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\User;
 
-class ACP_Editing_Model_User_Role extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Role extends Model {
 
 	public function get_edit_value( $id ) {
 		$roles = ac_helper()->user->get_user_field( 'roles', $id );
@@ -45,7 +45,7 @@ class ACP_Editing_Model_User_Role extends ACP_Editing_Model {
 				}
 			}
 			else {
-				return new WP_Error( 'empty', 'Can not be empty.', 'codepress-admin-columns' );
+				return new \WP_Error( 'empty', 'Can not be empty.', 'codepress-admin-columns' );
 			}
 		}
 

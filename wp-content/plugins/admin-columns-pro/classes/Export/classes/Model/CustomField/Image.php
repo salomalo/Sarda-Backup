@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\CustomField;
 
-class ACP_Export_Model_CustomField_Image extends ACP_Export_Model {
+use ACP\Export\Model;
+
+class Image extends Model {
 
 	public function get_value( $id ) {
 		$urls = array();

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_Date extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+
+class Date extends Model\CustomField {
 
 	public function get_edit_value( $id ) {
 		$timestamp = ac_helper()->date->strtotime( parent::get_edit_value( $id ) );

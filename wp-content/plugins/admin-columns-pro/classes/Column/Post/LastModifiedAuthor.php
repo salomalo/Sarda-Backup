@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Post_LastModifiedAuthor extends AC_Column_Post_LastModifiedAuthor
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class LastModifiedAuthor extends AC\Column\Post\LastModifiedAuthor
+	implements Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_LastModifiedAuthor( $this );
+		return new Sorting\Model\Post\LastModifiedAuthor( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_LastModifiedAuthor( $this );
+		return new Filtering\Model\Post\LastModifiedAuthor( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_LastModifiedAuthor( $this );
+		return new Export\Model\Post\LastModifiedAuthor( $this );
 	}
 
 }

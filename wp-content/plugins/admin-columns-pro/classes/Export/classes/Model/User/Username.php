@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\User;
+
+use ACP\Export\Model;
 
 /**
  * Username (default column) exportability model
  *
  * @since 4.1
  */
-class ACP_Export_Model_User_Username extends ACP_Export_Model {
+class Username extends Model {
 
 	public function get_value( $id ) {
 		$user = get_userdata( $id );

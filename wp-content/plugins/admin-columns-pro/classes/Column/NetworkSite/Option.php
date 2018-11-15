@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-abstract class ACP_Column_NetworkSite_Option extends AC_Column
-	implements ACP_Column_EditingInterface {
+use AC;
+use ACP\Editing;
+
+abstract class Option extends AC\Column
+	implements Editing\Editable {
 
 	/**
 	 * @return string Site option name
@@ -25,7 +26,7 @@ abstract class ACP_Column_NetworkSite_Option extends AC_Column
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Site_Option( $this );
+		return new Editing\Model\Site\Option( $this );
 	}
 
 }

@@ -1,11 +1,11 @@
 <?php
 /**
 * Plugin Name: YITH WooCommerce Ajax Search
-* Plugin URI: https://yithemes.com/themes/plugins/yith-woocommerce-ajax-search/
-* Description: <code><strong>YITH WooCommerce Ajax Search Premium</strong></code> is the plugin that allows you to search for a specific product by inserting a few characters. Thanks to <strong>Ajax Search</strong>, users can quickly find the contents they are interested in without wasting time among site pages. <a href="https://yithemes.com/" target="_blank">Find new awesome plugins on <strong>YITH</strong></a>.
-* Version: 1.5.8
+* Plugin URI: http://yithemes.com/
+* Description: YITH WooCommerce Ajax Search allows your users to search products in real time.
+* Version: 1.5.7
 * Author: YITHEMES
-* Author URI: https://yithemes.com/
+* Author URI: http://yithemes.com/
 * Text Domain: yith-woocommerce-ajax-search
 * Domain Path: /languages/
 * WC requires at least: 3.0.0
@@ -67,7 +67,7 @@ register_activation_hook( __FILE__, 'yith_plugin_registration_hook' );
 if ( defined( 'YITH_WCAS_VERSION' ) ){
     return;
 }else{
-    define( 'YITH_WCAS_VERSION', '1.5.8' );
+    define( 'YITH_WCAS_VERSION', '1.5.7' );
 }
 
 if ( ! defined( 'YITH_WCAS_FREE_INIT' ) ) {
@@ -100,9 +100,7 @@ if ( ! defined( 'YITH_WCAS_ASSETS_IMAGES_URL' ) ) {
     define( 'YITH_WCAS_ASSETS_IMAGES_URL', YITH_WCAS_ASSETS_URL . '/images/' );
 }
 
-if ( ! defined( 'YITH_WCAS_SLUG' ) ) {
-	define( 'YITH_WCAS_SLUG', 'yith-woocommerce-ajax-search' );
-}
+
 function yith_ajax_search_constructor() {
 
     if ( !function_exists( 'WC' ) ) {

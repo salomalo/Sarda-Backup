@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Post;
+
+use ACP\Export\Model;
 
 /**
  * Shows Internal / External links in post content
  *
  * @since 4.1
  */
-class ACP_Export_Model_Post_LinkCount extends ACP_Export_Model {
+class LinkCount extends Model {
 
 	public function get_value( $id ) {
 		$links = $this->get_column()->get_raw_value( $id );

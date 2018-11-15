@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_ImageFileSizes extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class ImageFileSizes extends Model {
 
 	public function get_sorting_vars() {
 		$this->set_data_type( 'numeric' );

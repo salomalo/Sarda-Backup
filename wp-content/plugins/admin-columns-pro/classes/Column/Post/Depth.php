@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Depth extends AC_Column_Post_Depth
-	implements ACP_Column_SortingInterface {
+use AC;
+use ACP\Sorting;
+
+class Depth extends AC\Column\Post\Depth
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 }

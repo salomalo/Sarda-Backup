@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_Author extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Author extends Model {
 
 	public function filter_by_author( $comments_clauses ) {
 		global $wpdb;

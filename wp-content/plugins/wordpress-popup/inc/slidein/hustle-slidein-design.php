@@ -1,7 +1,8 @@
 <?php
 
-class Hustle_Slidein_Design extends Hustle_Meta {
-	public $defaults = array(
+class Hustle_Slidein_Design extends Hustle_Meta
+{
+	var $defaults = array(
 		'form_layout' => 'one',
 		'feature_image_position' => 'left',
 		'feature_image_fit' => 'contain',

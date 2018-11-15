@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Comment;
 
-class ACP_Editing_Model_Comment_AuthorName extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class AuthorName extends Model {
 
 	public function save( $id, $value ) {
 		$this->strategy->update( $id, array( 'comment_author' => $value ) );

@@ -1,25 +1,25 @@
 jQuery(document).ready(function () {
-  var container = jQuery('.shop-container .products')
-  var paginationNext = '.woocommerce-pagination li a.next'
+  let container = jQuery('.shop-container > .products')
+  let paginationNext = '.woocommerce-pagination li a.next'
 
   if (container.length === 0 || jQuery(paginationNext).length === 0) {
     return
   }
 
-  var viewMoreButton = jQuery('button.view-more-button.products-archive')
-  var byButton = flatsome_infinite_scroll.type === 'button'
-  var isMasonry = flatsome_infinite_scroll.list_style === 'masonry'
+  let viewMoreButton = jQuery('button.view-more-button.products-archive')
+  let byButton = flatsome_infinite_scroll.type === 'button'
+  let isMasonry = flatsome_infinite_scroll.list_style === 'masonry'
   // Set packery instance as outlayer when masonry is set.
-  var outlayer = isMasonry ? Packery.data(container[0]) : false
+  let outlayer = isMasonry ? Packery.data(container[0]) : false
 
-  var $container = container.infiniteScroll({
+  let $container = container.infiniteScroll({
     path: paginationNext,
     append: '.product',
     checkLastPage: true,
     status: '.page-load-status',
     hideNav: '.woocommerce-pagination',
     button: '.view-more-button',
-    history: flatsome_infinite_scroll.history,
+    history: 'push',
     debug: false,
     outlayer: outlayer,
     scrollThreshold: parseInt(flatsome_infinite_scroll.scroll_threshold)
@@ -61,14 +61,14 @@ jQuery(document).ready(function () {
     }
 
     if (window.ga && ga.loaded && typeof ga === 'function') {
-      var link = document.createElement('a')
+      let link = document.createElement('a')
       link.href = path
       ga('set', 'page', link.pathname)
       ga('send', 'pageview')
     }
   })
 
-  var flatsomeInfiniteScroll = {
+  let flatsomeInfiniteScroll = {
     attachBehaviors: function (response) {
       Flatsome.attach('quick-view', response)
       Flatsome.attach('tooltips', response)

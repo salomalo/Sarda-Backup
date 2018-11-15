@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Taxonomy;
 
-class ACP_Editing_Model_Taxonomy_Menu extends ACP_Editing_Model_Menu {
+use ACP\Editing\Model;
+
+class Menu extends Model\Menu {
 
 	/**
 	 * @param int $id

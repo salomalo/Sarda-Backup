@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
-class ACP_Editing_TableScreen {
+use AC;
+use ACP\Editing;
+
+class TableScreen {
 
 	public function __construct() {
 		add_action( 'ac/table_scripts', array( $this, 'scripts' ) );
@@ -20,9 +21,9 @@ class ACP_Editing_TableScreen {
 	 *
 	 * @since 1.0
 	 *
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 */
-	public function scripts( AC_ListScreen $list_screen ) {
+	public function scripts( AC\ListScreen $list_screen ) {
 
 		$columns = $list_screen->get_columns();
 		if ( ! $columns ) {
@@ -39,7 +40,7 @@ class ACP_Editing_TableScreen {
 			return;
 		}
 
-		$plugin_url = ACP()->editing()->get_plugin_url();
+		$plugin_url = ACP()->editing()->get_url();
 		$version = ACP()->editing()->get_version();
 
 		// Libraries
@@ -108,7 +109,7 @@ class ACP_Editing_TableScreen {
 		$locale = substr( get_locale(), 0, 2 );
 
 		// Select 2 translations
-		if ( file_exists( ACP()->editing()->get_plugin_dir() . 'library/select2/select2_locale_' . $locale . '.js' ) ) {
+		if ( file_exists( ACP()->editing()->get_dir() . 'library/select2/select2_locale_' . $locale . '.js' ) ) {
 			wp_register_script( 'select2-locale', $plugin_url . 'library/select2/select2_locale_' . $locale . '.js', array( 'jquery' ), $version );
 			wp_enqueue_script( 'select2-locale' );
 		}
@@ -131,22 +132,20 @@ class ACP_Editing_TableScreen {
 			$this->ajax_error( __( 'Invalid item ID.', 'codepress-admin-columns' ) );
 		}
 
-		$list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) );
+		$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ), filter_input( INPUT_POST, 'layout' ) );
 
 		if ( ! $list_screen ) {
 			$this->ajax_error( __( 'Invalid list screen.', 'codepress-admin-columns' ) );
 		}
 
-		$list_screen->set_layout_id( filter_input( INPUT_POST, 'layout' ) );
-
-		/* @var $column AC_Column */
+		/* @var $column AC\Column */
 		$column = $list_screen->get_column_by_name( filter_input( INPUT_POST, 'column' ) );
 
 		if ( ! $column ) {
 			$this->ajax_error( __( 'Invalid column.', 'codepress-admin-columns' ) );
 		}
 
-		if ( ! $column instanceof ACP_Column_EditingInterface ) {
+		if ( ! $column instanceof Editing\Editable ) {
 			$this->ajax_error( __( 'Column does not support editing.', 'codepress-admin-columns' ) );
 		}
 
@@ -165,7 +164,7 @@ class ACP_Editing_TableScreen {
 		 * @since 4.0
 		 *
 		 * @param mixed     $value Value send from inline edit ajax callback
-		 * @param AC_Column $column
+		 * @param AC\Column $column
 		 * @param int       $id    ID
 		 */
 		$value = apply_filters( 'acp/editing/save_value', $value, $column, $id );
@@ -181,7 +180,7 @@ class ACP_Editing_TableScreen {
 		 * @param bool      $save_result
 		 * @param int       $id Object ID
 		 * @param mixed     $value
-		 * @param AC_Column $column
+		 * @param AC\Column $column
 		 */
 		$save_result = apply_filters( 'acp/editing/save', $save_result, $id, $value, $column );
 		$save_result = apply_filters( 'acp/editing/save/' . $column->get_type(), $save_result, $id, $value, $column );
@@ -195,7 +194,7 @@ class ACP_Editing_TableScreen {
 		 *
 		 * @since 4.0
 		 *
-		 * @param AC_Column $column Column instance
+		 * @param AC\Column $column Column instance
 		 * @param int       $id     Item ID
 		 * @param string    $value  User submitted input
 		 */
@@ -220,7 +219,7 @@ class ACP_Editing_TableScreen {
 			'cell_html' => $display_value,
 
 			// Row HTML. Mainly used to fetch the return value from default columns.
-			'row_html'  => $list_screen instanceof AC_ListScreenWP ? $list_screen->get_single_row( $id ) : '',
+			'row_html'  => $list_screen instanceof AC\ListScreenWP ? $list_screen->get_single_row( $id ) : '',
 		);
 
 		/**
@@ -228,7 +227,7 @@ class ACP_Editing_TableScreen {
 		 *
 		 * @param array     $data
 		 * @param int       $id
-		 * @param AC_Column $column
+		 * @param AC\Column $column
 		 */
 		$data = apply_filters( 'acp/editing/result', $data, $id, $column );
 
@@ -236,7 +235,7 @@ class ACP_Editing_TableScreen {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return bool
 	 */
@@ -272,28 +271,19 @@ class ACP_Editing_TableScreen {
 	public function ajax_get_options() {
 		check_ajax_referer( 'ac-ajax' );
 
-		$column = filter_input( INPUT_GET, 'column' );
-		$list_screen = filter_input( INPUT_GET, 'list_screen' );
-
-		if ( ! $column || ! $list_screen ) {
-			wp_send_json_error( __( 'Invalid request.', 'codepress-admin-columns' ) );
-		}
-
-		$list_screen = AC()->get_list_screen( $list_screen );
+		$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_GET, 'list_screen' ), filter_input( INPUT_GET, 'layout' ) );
 
 		if ( ! $list_screen ) {
 			$this->ajax_error( __( 'Invalid list screen.', 'codepress-admin-columns' ) );
 		}
 
-		$list_screen->set_layout_id( filter_input( INPUT_GET, 'layout' ) );
-
-		$column = $list_screen->get_column_by_name( $column );
+		$column = $list_screen->get_column_by_name( filter_input( INPUT_GET, 'column' ) );
 
 		if ( ! $column ) {
 			wp_send_json_error( __( 'Invalid column.', 'codepress-admin-columns' ) );
 		}
 
-		if ( ! $column instanceof ACP_Column_EditingInterface ) {
+		if ( ! $column instanceof Editing\Editable ) {
 			wp_send_json_error( __( 'Invalid column.', 'codepress-admin-columns' ) );
 		}
 
@@ -312,7 +302,7 @@ class ACP_Editing_TableScreen {
 	}
 
 	/**
-	 * @param AC_Column[] $columns
+	 * @param AC\Column[] $columns
 	 */
 	private function get_column_data( $columns ) {
 		$column_data = array();
@@ -331,7 +321,7 @@ class ACP_Editing_TableScreen {
 			 * @since 4.0
 			 *
 			 * @param array     $data
-			 * @param AC_Column $column
+			 * @param AC\Column $column
 			 */
 			$data = apply_filters( 'acp/editing/view_settings', $data, $column );
 			$data = apply_filters( 'acp/editing/view_settings/' . $column->get_type(), $data, $column );
@@ -354,7 +344,7 @@ class ACP_Editing_TableScreen {
 	}
 
 	/**
-	 * @param AC_Column[] $columns
+	 * @param AC\Column[] $columns
 	 * @param int[]       $rows
 	 *
 	 * @return array
@@ -392,7 +382,7 @@ class ACP_Editing_TableScreen {
 				 *
 				 * @param mixed     $value  Column value used for editability
 				 * @param int       $id     Post ID to get the column editability for
-				 * @param AC_Column $column Column object
+				 * @param AC\Column $column Column object
 				 */
 				$value = apply_filters( 'acp/editing/value', $value, $id, $column );
 				$value = apply_filters( 'acp/editing/value/' . $column->get_type(), $value, $id, $column );
@@ -476,10 +466,10 @@ class ACP_Editing_TableScreen {
 	/**
 	 * Get an instance of preferences for the current user
 	 *
-	 * @return AC_Preferences
+	 * @return AC\Preferences
 	 */
 	public function preferences() {
-		return new AC_Preferences_Site( 'editability_state' );
+		return new AC\Preferences\Site( 'editability_state' );
 	}
 
 }

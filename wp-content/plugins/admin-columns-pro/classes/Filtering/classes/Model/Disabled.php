@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model;
 
-class ACP_Filtering_Model_Disabled extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Disabled extends Model {
 
 	public function is_active() {
 		return false;

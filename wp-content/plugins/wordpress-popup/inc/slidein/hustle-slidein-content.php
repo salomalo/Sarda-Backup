@@ -1,7 +1,8 @@
 <?php
 
-class Hustle_Slidein_Content extends Hustle_Meta {
-	public $defaults = array(
+class Hustle_Slidein_Content extends Hustle_Meta
+{
+	var $defaults = array(
 		'module_name' => '',
 		'has_title' => 0,
 		'title' => '',

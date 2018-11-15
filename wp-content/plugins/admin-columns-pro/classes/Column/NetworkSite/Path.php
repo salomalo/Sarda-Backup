@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_Path extends ACP_Column_NetworkSite_Property {
+class Path extends Property {
 
 	public function __construct() {
 		$this->set_type( 'column-msite_path' );

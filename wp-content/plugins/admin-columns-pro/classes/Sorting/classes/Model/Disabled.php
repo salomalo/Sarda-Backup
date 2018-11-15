@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model;
 
-class ACP_Sorting_Model_Disabled extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Disabled extends Model {
 
 	public function is_active() {
 		return false;

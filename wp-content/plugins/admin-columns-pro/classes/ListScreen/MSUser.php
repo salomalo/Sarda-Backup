@@ -1,30 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ListScreen;
 
-class ACP_ListScreen_MSUser extends ACP_ListScreen_User {
+use AC;
+use ACP\Filtering;
+
+class MSUser extends AC\ListScreen\User {
 
 	public function __construct() {
 		parent::__construct();
 
-		$this->set_label( __( 'Network Users' ) );
-		$this->set_singular_label( __( 'Network User' ) );
-		$this->set_key( 'wp-ms_users' );
-		$this->set_screen_base( 'users-network' );
-		$this->set_screen_id( 'users-network' );
-		$this->set_group( 'network' );
-		$this->set_network_only( true );
+		$this->set_label( __( 'Network Users' ) )
+		     ->set_singular_label( __( 'Network User' ) )
+		     ->set_key( 'wp-ms_users' )
+		     ->set_screen_base( 'users-network' )
+		     ->set_screen_id( 'users-network' )
+		     ->set_group( 'network' )
+		     ->set_network_only( true );
 	}
 
 	/**
-	 * @return WP_MS_Users_List_Table
+	 * @return \WP_MS_Users_List_Table
 	 */
 	public function get_list_table() {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-ms-users-list-table.php' );
 
-		return new WP_MS_Users_List_Table( array( 'screen' => $this->get_screen_id() ) );
+		return new \WP_MS_Users_List_Table( array( 'screen' => $this->get_screen_id() ) );
 	}
 
 	/**
@@ -47,7 +48,7 @@ class ACP_ListScreen_MSUser extends ACP_ListScreen_User {
 	}
 
 	public function filtering( $model ) {
-		return new ACP_Filtering_Strategy_User( $model );
+		return new Filtering\Strategy\User( $model );
 	}
 
 }

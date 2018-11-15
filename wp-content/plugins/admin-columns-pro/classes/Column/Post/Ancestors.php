@@ -1,14 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC\Column;
+use AC\Collection;
+use AC\Settings;
+use ACP\Export;
+use ACP\Filtering;
 
 /**
  * @since 4.2
  */
-class ACP_Column_Post_Ancestors extends AC_Column
-	implements ACP_Export_Column, ACP_Column_FilteringInterface {
+class Ancestors extends Column
+	implements Export\Exportable, Filtering\Filterable {
 
 	public function __construct() {
 		$this->set_type( 'column-ancestors' );
@@ -30,9 +34,9 @@ class ACP_Column_Post_Ancestors extends AC_Column
 		}
 
 		/**
-		 * @var AC_Collection $formatted_values
+		 * @var Collection $formatted_values
 		 */
-		$formatted_values = $this->get_formatted_value( new AC_Collection( $ancestors ) );
+		$formatted_values = $this->get_formatted_value( new Collection( $ancestors ) );
 
 		return $formatted_values->implode( $this->get_separator() );
 	}
@@ -59,7 +63,7 @@ class ACP_Column_Post_Ancestors extends AC_Column
 	}
 
 	public function register_settings() {
-		$this->add_setting( new AC_Settings_Column_Post( $this ) );
+		$this->add_setting( new Settings\Column\Post( $this ) );
 	}
 
 	public function is_valid() {
@@ -67,11 +71,11 @@ class ACP_Column_Post_Ancestors extends AC_Column
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Ancestors( $this );
+		return new Filtering\Model\Post\Ancestors( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Ancestors( $this );
+		return new Export\Model\Post\Ancestors( $this );
 	}
 
 }

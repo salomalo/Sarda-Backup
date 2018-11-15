@@ -6,7 +6,7 @@
 <div class="tool-box bg-white p-20p">
     <h3 class="title aw-title"><?php _e('Export Product in CSV Format', 'wf_csv_import_export'); ?></h3>
     <p><?php _e('Export and download your products in CSV format. This file can be used to import products back into your Woocommerce shop.', 'wf_csv_import_export'); ?></p>
-    <form action="<?php echo admin_url('admin.php?page=wf_woocommerce_csv_im_ex&action=export'); ?>" method="post" id="wf_woocommerce_csv_im_ex_export">
+    <form action="<?php echo admin_url('admin.php?page=wf_woocommerce_csv_im_ex&action=export'); ?>" method="post">
         <table class="form-table">
             <tr>
                 <th>
@@ -160,13 +160,10 @@
                     <label for="v_new_profile"><?php _e('Save the export mapping', 'wf_csv_import_export'); ?></label>
                 </th>
                 <td>
-                    <input type="text" name="new_profile" id="v_new_profile" class="input-text" /> <input type="button" name="save_export_mapping" id="v_save_export_mapping"  class="button button-primary" value="<?php _e('Save Export Mapping', 'wf_csv_import_export'); ?>" >
-                    <span style="float: none" class ="spinner " ></span>
-                    <span id="prod_save_mapping_notice"></span>
+                    <input type="text" name="new_profile" id="v_new_profile" class="input-text" />
                     <p style="font-size: 12px"><?php _e('Specify columns that alone will be exported and save the mapping for later exports', 'wf_csv_import_export'); ?></p> 
 
                 </td>
-                
             </tr>
             <tr>
                 <th>

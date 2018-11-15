@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\bbPress\Editing;
 
-class ACP_ThirdParty_bbPress_Editing_TopicForum extends ACP_Editing_Model {
+use ACP\Editing;
+
+class TopicForum extends Editing\Model {
 
 	public function get_view_settings() {
 		return array(
@@ -32,7 +32,7 @@ class ACP_ThirdParty_bbPress_Editing_TopicForum extends ACP_Editing_Model {
 		}
 
 		return array(
-			$post->ID => $post->post_title
+			$post->ID => $post->post_title,
 		);
 	}
 

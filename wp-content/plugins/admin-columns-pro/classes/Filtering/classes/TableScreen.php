@@ -1,16 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
-/**
- * @since 4.0
- */
-abstract class ACP_Filtering_TableScreen {
+abstract class TableScreen {
 
 	/**
-	 * @var ACP_Filtering_Model[]
+	 * @var Model[]
 	 */
 	protected $models;
 
@@ -23,8 +18,8 @@ abstract class ACP_Filtering_TableScreen {
 	}
 
 	public function scripts() {
-		wp_enqueue_style( 'acp-filtering-table', acp_filtering()->get_plugin_url() . 'assets/css/table.css', array(), acp_filtering()->get_version() );
-		wp_enqueue_script( 'acp-filtering-table', acp_filtering()->get_plugin_url() . 'assets/js/table.js', array( 'jquery', 'jquery-ui-datepicker' ), acp_filtering()->get_version() );
+		wp_enqueue_style( 'acp-filtering-table', acp_filtering()->get_url() . 'assets/css/table.css', array(), acp_filtering()->get_version() );
+		wp_enqueue_script( 'acp-filtering-table', acp_filtering()->get_url() . 'assets/js/table.js', array( 'jquery', 'jquery-ui-datepicker' ), acp_filtering()->get_version() );
 	}
 
 	/**
@@ -64,7 +59,7 @@ abstract class ACP_Filtering_TableScreen {
 		$disabled = array();
 
 		foreach ( $this->models as $model ) {
-			if ( $model instanceof ACP_Filtering_Model_Delegated && ! $model->is_active() ) {
+			if ( $model instanceof Model\Delegated && ! $model->is_active() ) {
 				$disabled[] = '#' . $model->get_dropdown_attr_id();
 			}
 		}
@@ -82,14 +77,14 @@ abstract class ACP_Filtering_TableScreen {
 		<?php
 	}
 
-	protected function get_data_from_cache( ACP_Filtering_Model $model ) {
-		$cache = new ACP_Filtering_Cache_Model( $model );
+	protected function get_data_from_cache( Model $model ) {
+		$cache = new Cache\Model( $model );
 		$data = $cache->get();
 
 		if ( ! $data ) {
 			$data = array(
 				'options' => array(
-					ACP_Filtering_Markup_Dropdown::get_disabled_prefix() . 'loading' => __( 'Loading values', 'codepress-admin-columns' ) . ' ...',
+					Markup\Dropdown::get_disabled_prefix() . 'loading' => __( 'Loading values', 'codepress-admin-columns' ) . ' ...',
 				),
 			);
 		}
@@ -110,7 +105,7 @@ abstract class ACP_Filtering_TableScreen {
 				continue;
 			}
 
-			$cache = new ACP_Filtering_Cache_Model( $model );
+			$cache = new Cache\Model( $model );
 			$cache->put_if_expired();
 
 			$this->render_model( $model );
@@ -128,10 +123,10 @@ abstract class ACP_Filtering_TableScreen {
 	/**
 	 * Display dropdown markup
 	 *
-	 * @param array $data
+	 * @param Model $data
 	 */
-	protected function render_model( ACP_Filtering_Model $model ) {
-		if ( $model instanceof ACP_Filtering_Model_Delegated || ! $model->is_active() ) {
+	protected function render_model( Model $model ) {
+		if ( $model instanceof Model\Delegated || ! $model->is_active() ) {
 			return;
 		}
 
@@ -140,7 +135,7 @@ abstract class ACP_Filtering_TableScreen {
 		// Check filter
 		$filter_setting = $column->get_setting( 'filter' );
 
-		if ( ! $filter_setting instanceof ACP_Filtering_Settings ) {
+		if ( ! $filter_setting instanceof Settings ) {
 			return;
 		}
 
@@ -161,11 +156,11 @@ abstract class ACP_Filtering_TableScreen {
 
 			switch ( $model->get_data_type() ) {
 				case 'date':
-					$markup = new ACP_Filtering_Markup_Ranged_Date( $name, $label, $min, $max );
+					$markup = new Markup\Ranged\Date( $name, $label, $min, $max );
 
 					break;
 				case 'numeric':
-					$markup = new ACP_Filtering_Markup_Ranged_Number( $name, $label, $min, $max );
+					$markup = new Markup\Ranged\Number( $name, $label, $min, $max );
 
 					break;
 				default:
@@ -190,7 +185,7 @@ abstract class ACP_Filtering_TableScreen {
 
 			$data = apply_filters( 'acp/filtering/dropdown_args', $data, $model->get_column() );
 
-			$markup = new ACP_Filtering_Markup_Dropdown( $name );
+			$markup = new Markup\Dropdown( $name );
 			$markup->set_value( $model->get_request_var() )
 			       ->set_label( $label )
 			       ->set_order( $data['order'] );

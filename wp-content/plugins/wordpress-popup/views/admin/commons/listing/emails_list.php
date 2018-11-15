@@ -5,50 +5,50 @@
 ?>
 
 <script id="wph-modal-email-tpl" type="text/template">
-
+	
 	<div class="hustle-two">
-
+	
 		<div class="wpoi-complete-mask"></div>
-
+		
 		<div class="wpoi-complete-wrap row">
-
+			
 			<div class="col-xs-12">
-
+				
 				<section class="box">
-
+					
 					<div class="box-title">
-
-						<h3>{{name}}<span class="wpoi-total-subscribers"><?php esc_attr_e('Total {{total}} subscriptions', Opt_In::TEXT_DOMAIN); ?></span></h3>
-
+						
+						<h3>{{name}}<span class="wpoi-total-subscribers"><?php _e('Total {{total}} subscriptions', Opt_In::TEXT_DOMAIN); ?></span></h3>
+						
 						<a href="#" aria-label="Close" class="wph-icon i-close inc-opt-close-emails-list"></a>
-
+						
 					</div>
-
+					
 					<div class="box-content">
 						<div class="wpoi-emails-list">
-
+							
 							<table class="wph-table wph-table--fixed wpoi-emails-list-header" cellpadding="0" cellspacing="0"></table>
-
+							
 							<div id="wpoi-emails-list-content"></div>
-
+							
 							<div class="wpoi-emails-list-footer">
-
-								<a href="<?php echo esc_url( wp_nonce_url( get_admin_url(null, 'admin-ajax.php?action=inc_optin_export_subscriptions&id=__id' ), 'inc_optin_export_subscriptions' ) ); ?>" class="wph-button wph-button--small wph-button--filled wph-button--gray button-export-csv" data-id="{{id}}" target="_blank"><?php esc_attr_e("Export CSV", Opt_In::TEXT_DOMAIN); ?></a>
-
+								
+								<a href="<?php echo wp_nonce_url( get_admin_url(null, 'admin-ajax.php?action=inc_optin_export_subscriptions&id=__id'  ), 'inc_optin_export_subscriptions' ) ?>" class="wph-button wph-button--small wph-button--filled wph-button--gray button-export-csv" data-id="{{id}}" target="_blank"><?php _e("Export CSV", Opt_In::TEXT_DOMAIN); ?></a>
+								
 							</div>
-
+							
 						</div>
-
+						
 					</div>
-
+					
 				</section>
-
+				
 			</div>
-
+			
 		</div>
-
+		
 	</div>
-
+    
 </script>
 
 <script id="wpoi-email-list-header-tpl" type="text/template">

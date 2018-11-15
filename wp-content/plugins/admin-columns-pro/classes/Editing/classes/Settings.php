@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
-class ACP_Editing_Settings extends AC_Settings_Column
-	implements AC_Settings_HeaderInterface {
+use AC;
+use AC\View;
+
+class Settings extends AC\Settings\Column
+	implements AC\Settings\Header {
 
 	private $edit;
 
@@ -16,7 +17,7 @@ class ACP_Editing_Settings extends AC_Settings_Column
 	public function create_header_view() {
 		$filter = $this->get_edit();
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'title'    => __( 'Enable Editing', 'codepress-admin-columns' ),
 			'dashicon' => 'dashicons-edit',
 			'state'    => $filter,
@@ -35,7 +36,7 @@ class ACP_Editing_Settings extends AC_Settings_Column
 				'off' => __( 'No' ),
 			) );
 
-		$view = new AC_View();
+		$view = new View();
 		$view->set( 'label', __( 'Inline Editing', 'codepress-admin-columns' ) )
 		     ->set( 'tooltip', __( 'This will make the column support inline editing.', 'codepress-admin-columns' ) )
 		     ->set( 'setting', $edit );

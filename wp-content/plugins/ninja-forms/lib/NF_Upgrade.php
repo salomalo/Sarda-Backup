@@ -6,11 +6,7 @@ function ninja_forms_ajax_migrate_database(){
     if ( ! isset( $_POST[ 'security' ] ) ) return;
     if ( ! wp_verify_nonce( $_POST[ 'security' ], 'ninja_forms_upgrade_nonce' ) ) return;
     $migrations = new NF_Database_Migrations();
-    
-    $sure = true;
-    $really_sure = true;
-    $nuke_multisite = false;
-    $migrations->nuke( $sure, $really_sure, $nuke_multisite );
+    $migrations->nuke( true, true );
     $migrations->migrate();
     echo json_encode( array( 'migrate' => 'true' ) );
     wp_die();

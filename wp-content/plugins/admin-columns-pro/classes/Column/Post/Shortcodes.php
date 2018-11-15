@@ -1,18 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Shortcodes extends AC_Column_Post_Shortcodes
-	implements ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Export;
+use ACP\Sorting;
+
+class Shortcodes extends AC\Column\Post\Shortcodes
+	implements Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Shortcodes( $this );
+		return new Export\Model\Post\Shortcodes( $this );
 	}
 
 }

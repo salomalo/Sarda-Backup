@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Media;
 
-class ACP_Editing_Model_Media_AlternateText extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class AlternateText extends Model {
 
 	public function get_edit_value( $id ) {
 		if ( ! wp_attachment_is_image( $id ) ) {

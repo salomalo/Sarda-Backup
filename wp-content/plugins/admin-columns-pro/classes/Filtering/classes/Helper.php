@@ -1,13 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Filtering_Helper {
+class Helper {
 
 	/**
 	 * @param int[] $post_ids Post ID's

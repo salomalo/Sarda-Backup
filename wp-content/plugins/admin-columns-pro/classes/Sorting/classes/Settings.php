@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting;
 
-class ACP_Sorting_Settings extends AC_Settings_Column
-	implements AC_Settings_HeaderInterface {
+use AC;
+use AC\View;
+
+class Settings extends AC\Settings\Column
+	implements AC\Settings\Header {
 
 	private $sort;
 
@@ -16,7 +17,7 @@ class ACP_Sorting_Settings extends AC_Settings_Column
 	public function create_header_view() {
 		$sort = $this->get_sort();
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'title'    => __( 'Enable Sorting', 'codepress-admin-columns' ),
 			'dashicon' => 'dashicons-sort',
 			'state'    => $sort,
@@ -34,7 +35,7 @@ class ACP_Sorting_Settings extends AC_Settings_Column
 			             'off' => __( 'No' ),
 		             ) );
 
-		$view = new AC_View();
+		$view = new View();
 		$view->set( 'label', __( 'Sorting', 'codepress-admin-columns' ) )
 		     ->set( 'tooltip', __( 'This will make the column support sorting.', 'codepress-admin-columns' ) )
 		     ->set( 'setting', $sort );

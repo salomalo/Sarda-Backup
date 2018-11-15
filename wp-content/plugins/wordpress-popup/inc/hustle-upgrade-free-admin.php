@@ -8,13 +8,13 @@ class Hustle_Upgrade_Free_Admin {
 
 	private $_hustle;
 
-	public function __construct( Opt_In $hustle ){
-
+	function __construct( Opt_In $hustle ){
+		
 		$this->_hustle = $hustle;
 
 		add_action( 'admin_menu', array( $this, "register_admin_menu" ) );
 		add_action( 'admin_head', array( $this, "hide_unwanted_submenus" ) );
-
+		
 	}
 
 	/**
@@ -22,18 +22,18 @@ class Hustle_Upgrade_Free_Admin {
 	 *
 	 * @since 1.0
 	 */
-	public function register_admin_menu() {
+	function register_admin_menu() {
 
 		add_submenu_page( 'hustle', __("Upgrade", Opt_In::TEXT_DOMAIN) , __("Upgrade", Opt_In::TEXT_DOMAIN) , "manage_options", Hustle_Module_Admin::UPGRADE_PAGE,  array( $this, "render_upgrade_free_page" )  );
-
+			
 	}
-
+	
 	/**
 	 * Removes the submenu entries for content creation
 	 *
 	 * @since 2.0
 	 */
-	public function hide_unwanted_submenus(){
+	function hide_unwanted_submenus(){
 		remove_submenu_page( 'hustle', Hustle_Module_Admin::UPGRADE_PAGE );
 	}
 
@@ -42,7 +42,7 @@ class Hustle_Upgrade_Free_Admin {
 	 *
 	* @since 3.0
 	 */
-	public function render_upgrade_free_page() {
+	function render_upgrade_free_page( ) {
 
 		$this->_hustle->render( 'admin/new-free-info', array(
 			'page_title' => __( 'Upgrade', Opt_In::TEXT_DOMAIN ),

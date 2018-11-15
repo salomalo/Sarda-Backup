@@ -2,8 +2,8 @@
 Contributors: lucasstark
 Tags: woocommerce
 Requires at least: 3.0
-Tested up to: 4.7.3
-Copyright: © 2017 Lucas Stark.
+Tested up to: 4.6.1
+Copyright: © 2016 Lucas Stark.
 
 WooCommerce Catalog Visibility Options
 

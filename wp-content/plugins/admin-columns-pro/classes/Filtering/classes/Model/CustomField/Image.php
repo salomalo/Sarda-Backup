@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\CustomField;
 
-class ACP_Filtering_Model_CustomField_Image extends ACP_Filtering_Model_CustomField {
+use ACP\Filtering\Model;
+use ACP\Filtering\Settings;
+
+class Image extends Model\CustomField {
 
 	public function get_filtering_data() {
 		$data = array(
@@ -21,7 +22,7 @@ class ACP_Filtering_Model_CustomField_Image extends ACP_Filtering_Model_CustomFi
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings( $this->column ) );
+		$this->column->add_setting( new Settings( $this->column ) );
 	}
 
 }

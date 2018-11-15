@@ -80,16 +80,16 @@ class WooThemes_Plugin_Updater {
 		}
 
 		// Register Navigation Menu Link
-		add_action( 'admin_menu', array($this, 'register_nav_menu_link'), 10 );
+		add_action( 'admin_menu', array(&$this, 'register_nav_menu_link'), 10 );
 
 		// Check For Updates
-		add_filter( 'pre_set_site_transient_update_plugins', array($this, 'update_check') );
+		add_filter( 'pre_set_site_transient_update_plugins', array(&$this, 'update_check') );
 
 		// Check For Plugin Information
-		add_filter( 'plugins_api', array($this, 'plugin_information'), 10, 3 );
+		add_filter( 'plugins_api', array(&$this, 'plugin_information'), 10, 3 );
 
 		if ( !$this->instance_exists() ) {
-			add_action( 'init', array($this, 'hide_admin_notice'), 0 );
+			add_action( 'init', array(&$this, 'hide_admin_notice'), 0 );
 		}
 	}
 
@@ -153,10 +153,10 @@ class WooThemes_Plugin_Updater {
 		}
 
 		// Setup Admin Notices
-		add_action( 'admin_notices', array($this, 'admin_notice') );
+		add_action( 'admin_notices', array(&$this, 'admin_notice') );
 
 		if ( function_exists( 'add_submenu_page' ) ) {
-			$this->admin_screen = add_submenu_page( 'index.php', __( 'WooThemes Updates', 'woothemes' ), __( 'WooThemes Updates', 'woothemes' ), 'switch_themes', $this->plugin_token, array($this, 'admin_screen') );
+			$this->admin_screen = add_submenu_page( 'index.php', __( 'WooThemes Updates', 'woothemes' ), __( 'WooThemes Updates', 'woothemes' ), 'switch_themes', $this->plugin_token, array(&$this, 'admin_screen') );
 		}
 
 		// Load admin screen logic.

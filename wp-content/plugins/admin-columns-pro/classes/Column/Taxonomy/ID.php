@@ -1,13 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
+
+use AC;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0.0
  */
-class ACP_Column_Taxonomy_ID extends AC_Column {
+class ID extends AC\Column
+	implements Sorting\Sortable, Filtering\Filterable {
 
 	public function __construct() {
 		$this->set_type( 'column-termid' );
@@ -20,6 +23,17 @@ class ACP_Column_Taxonomy_ID extends AC_Column {
 
 	public function get_raw_value( $term_id ) {
 		return $term_id;
+	}
+
+	public function sorting() {
+		$model = new Sorting\Model( $this );
+		$model->set_orderby( 'ID' );
+
+		return $model;
+	}
+
+	public function filtering() {
+		return new Filtering\Model\Taxonomy\ID( $this );
 	}
 
 }

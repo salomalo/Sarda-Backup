@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model;
 
-class ACP_Editing_Model_Meta extends ACP_Editing_Model {
+use AC;
+use ACP\Editing\Model;
+
+class Meta extends Model {
 
 	/**
-	 * @var AC_Column_Meta
+	 * @var AC\Column\Meta
 	 */
 	protected $column;
 
-	public function __construct( AC_Column_Meta $column ) {
+	public function __construct( AC\Column\Meta $column ) {
 		parent::__construct( $column );
 	}
 

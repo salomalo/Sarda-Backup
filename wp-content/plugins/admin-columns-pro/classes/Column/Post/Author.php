@@ -1,28 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Author extends AC_Column_Post_Author
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class Author extends AC\Column\Post\Author
+	implements Editing\Editable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'author' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Author( $this );
+		return new Editing\Model\Post\Author( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Author( $this );
+		return new Export\Model\Post\Author( $this );
 	}
 
 }

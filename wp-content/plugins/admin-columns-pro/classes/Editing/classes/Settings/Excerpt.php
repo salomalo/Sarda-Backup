@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Settings;
 
-class ACP_Editing_Settings_Excerpt extends ACP_Editing_Settings {
+use AC\View;
+use ACP\Editing\Settings;
+
+class Excerpt extends Settings {
 
 	/**
 	 * @var string
@@ -36,7 +37,7 @@ class ACP_Editing_Settings_Excerpt extends ACP_Editing_Settings {
 					)
 				);
 
-			$editable_type = new AC_View();
+			$editable_type = new View();
 			$editable_type->set( 'label', __( 'Input Type', 'codepress-admin-columns' ) )
 			              ->set( 'setting', $type );
 

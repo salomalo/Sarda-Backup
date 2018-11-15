@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\CustomField;
+
+use AC;
+use ACP\Sorting\Model;
 
 /**
- * @property AC_Column_CustomField $column
+ * @property AC\Column\CustomField $column
  */
-class ACP_Sorting_Model_CustomField_Checkmark extends ACP_Sorting_Model_CustomField {
+class Checkmark extends Model\CustomField {
 
-	public function __construct( AC_Column_CustomField $column ) {
+	public function __construct( AC\Column\CustomField $column ) {
 		parent::__construct( $column );
 
 		$this->set_data_type( 'numeric' );

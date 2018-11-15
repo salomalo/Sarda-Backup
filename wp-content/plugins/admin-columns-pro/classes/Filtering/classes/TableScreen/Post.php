@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\TableScreen;
 
-class ACP_Filtering_TableScreen_Post extends ACP_Filtering_TableScreen {
+use ACP\Filtering\TableScreen;
+use ACP\Filtering\Model;
+
+class Post extends TableScreen {
 
 	public function __construct( array $models ) {
 		parent::__construct( $models );
@@ -16,7 +17,7 @@ class ACP_Filtering_TableScreen_Post extends ACP_Filtering_TableScreen {
 		parent::hide_default_dropdowns();
 
 		foreach ( $this->models as $model ) {
-			if ( $model instanceof ACP_Filtering_Model_Post_Date && $model->is_active() && 'monthly' === $model->get_filter_format() ) {
+			if ( $model instanceof Model\Post\Date && $model->is_active() && 'monthly' === $model->get_filter_format() ) {
 				add_filter( 'disable_months_dropdown', '__return_true' );
 			}
 		}

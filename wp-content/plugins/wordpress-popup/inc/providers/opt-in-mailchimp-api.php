@@ -5,29 +5,29 @@
  * @class Opt_In_Mailchimp_Api
  **/
 class Opt_In_Mailchimp_Api {
-
+	
 	private $_api_key;
 	private $_data_center;
 	private $_user;
-
-	/*
+	
+	/* 
 	The <dc> part of the URL corresponds to the data center for your account. For example, if the last part of your MailChimp API key is us6, all API endpoints for your account are available at https://us6.api.mailchimp.com/3.0/.
 	*/
 	private $_endpoint = 'https://<dc>.api.mailchimp.com/3.0/';
-
+	
 	/**
 	 * Constructs class with required data
 	 *
 	 * Opt_In_Mailchimp_Api constructor.
 	 * @param $api_key
 	 */
-	public function __construct( $api_key, $data_center ) {
+	function __construct( $api_key, $data_center ) {
 		$this->_api_key = $api_key;
 		$this->_data_center = $data_center;
 		$this->_endpoint = str_replace( '<dc>', $data_center, $this->_endpoint );
 		$this->_user = wp_get_current_user()->display_name;
 	}
-
+	
 	/**
 	 * Sends request to the endpoint url with the provided $action
 	 *
@@ -38,7 +38,7 @@ class Opt_In_Mailchimp_Api {
 	 */
 	private function _request( $verb = "GET", $action, $args = array() ){
 		$url = trailingslashit( $this->_endpoint )  . $action;
-
+		
 		$_args = array(
 			"method" => $verb,
 			"headers" =>  array(
@@ -50,11 +50,11 @@ class Opt_In_Mailchimp_Api {
 		if( "GET" === $verb ){
 			$url .= ( "?" . http_build_query( $args ) );
 		}else{
-			$_args['body'] = wp_json_encode( $args['body'] );
+			$_args['body'] = json_encode( $args['body'] );
 		}
 
 		$res = wp_remote_request( $url, $_args );
-
+		
 		if ( !is_wp_error( $res ) && is_array( $res ) ) {
 			if( $res['response']['code'] <= 204 )
 				return json_decode(  wp_remote_retrieve_body( $res ) );
@@ -88,7 +88,7 @@ class Opt_In_Mailchimp_Api {
 	private function _post( $action, $args = array()  ){
 		return $this->_request( "POST", $action, $args );
 	}
-
+	
 	 /**
 	 * Sends rest PUT request
 	 *
@@ -99,7 +99,7 @@ class Opt_In_Mailchimp_Api {
 	private function _put( $action, $args = array()  ){
 		return $this->_request( "PUT", $action, $args );
 	}
-
+	
 	/**
 	 * Gets all the lists
 	 *
@@ -113,7 +113,7 @@ class Opt_In_Mailchimp_Api {
 			'count' => ( $count > 0 ) ? ( $count * 10 ) : 10
 		) );
 	}
-
+	
 	/**
 	 * Gets all the groups under a list
 	 * @param $list_id
@@ -125,7 +125,7 @@ class Opt_In_Mailchimp_Api {
 			'user' => $this->_user . ':' . $this->_api_key, 'count' => $total
 		) );
 	}
-
+	
 	/**
 	 * Gets all the interests under a group list
 	 * @param $list_id
@@ -138,7 +138,7 @@ class Opt_In_Mailchimp_Api {
 			'user' => $this->_user . ':' . $this->_api_key, 'count' => $total
 		) );
 	}
-
+	
 	/**
 	 * Check member email address if already existing
 	 * @param $list_id
@@ -152,7 +152,7 @@ class Opt_In_Mailchimp_Api {
 			'user' => $this->_user . ':' . $this->_api_key
 		) );
 	}
-
+	
 	/**
 	 * Add custom field for list
 	 * @param $list_id
@@ -165,7 +165,7 @@ class Opt_In_Mailchimp_Api {
 			"body" =>  $field_data
 		) );
 	}
-
+	
 	/**
 	 * Add new subscriber
 	 *
@@ -177,16 +177,16 @@ class Opt_In_Mailchimp_Api {
 		$res = $this->_post( 'lists/'. $list_id .'/members', array(
 			"body" =>  $data
 		) );
-
+		
 		$error = __("Something went wrong, please compare your Opt-in fields with MailChimp fields and add any missing fields.", Opt_In::TEXT_DOMAIN);
-
+		
 		if ( !is_wp_error( $res ) ) {
 			return __("Successful subscription", Opt_In::TEXT_DOMAIN);
 		} else {
 			throw new Exception($error);
 		}
 	}
-
+	
 	/**
 	 * Update subscription
 	 *
@@ -202,12 +202,12 @@ class Opt_In_Mailchimp_Api {
 			"body" =>  $data
 		) );
 		$error = __("This email address has already subscribed", Opt_In::TEXT_DOMAIN);
-
+		
 		if ( !is_wp_error( $res ) ) {
 			return __("You have been added to the new group", Opt_In::TEXT_DOMAIN);
 		} else {
 			throw new Exception( $error );
 		}
 	}
-
+	
 }

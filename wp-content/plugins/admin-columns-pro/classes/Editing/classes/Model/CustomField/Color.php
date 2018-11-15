@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_Color extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+
+class Color extends Model\CustomField {
 
 	/**
 	 * @return array

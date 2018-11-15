@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\User;
+
+use ACP\Filtering\Model;
+use ACP\Column;
 
 /**
- * @property ACP_Column_User_Language $column
+ * @property Column\User\Language $column
  */
-class ACP_Filtering_Model_User_Language extends ACP_Filtering_Model_Meta {
+class Language extends Model\Meta {
 
-	public function __construct( ACP_Column_User_Language $column ) {
+	public function __construct( Column\User\Language $column ) {
 		parent::__construct( $column );
 	}
 

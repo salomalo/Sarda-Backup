@@ -1,7 +1,8 @@
 <?php
 
-class Opt_In_Condition_From_Search_Engine extends Opt_In_Condition_Abstract implements Opt_In_Condition_Interface {
-	public function is_allowed( Hustle_Model $optin ){
+class Opt_In_Condition_From_Search_Engine extends Opt_In_Condition_Abstract implements Opt_In_Condition_Interface
+{
+	function is_allowed(Hustle_Model $optin){
 		return $this->is_from_searchengine_ref();
 	}
 
@@ -30,7 +31,7 @@ class Opt_In_Condition_From_Search_Engine extends Opt_In_Condition_Abstract impl
 
 		foreach ( $patterns as $url ) {
 			if ( false !== stripos( $referrer, $url ) ) {
-				if ( '.google.' === $url ) {
+				if ( $url == '.google.' ) {
 					if ( $this->is_googlesearch( $referrer ) ) {
 						$response = true;
 					} else {
@@ -57,23 +58,23 @@ class Opt_In_Condition_From_Search_Engine extends Opt_In_Condition_Abstract impl
 		$response = true;
 
 		// Get the query strings and check its a web source.
-		$qs = wp_parse_url( $referrer, PHP_URL_QUERY );
+		$qs = parse_url( $referrer, PHP_URL_QUERY );
 		$qget = array();
 
 		foreach ( explode( '&', $qs ) as $keyval ) {
 			$kv = explode( '=', $keyval );
-			if ( 2 === count( $kv ) ) {
+			if ( 2 == count( $kv ) ) {
 				$qget[ trim( $kv[0] ) ] = trim( $kv[1] );
 			}
 		}
 
 		if ( isset( $qget['source'] ) ) {
-			$response = 'web' === $qget['source'] ;
+			$response = $qget['source'] == 'web';
 		}
 
 		return $response;
 	}
-	public function label(){
+	function label(){
 		return __("Only from search engine", Opt_In::TEXT_DOMAIN);
 	}
 }

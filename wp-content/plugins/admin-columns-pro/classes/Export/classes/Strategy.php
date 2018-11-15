@@ -1,8 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
+
+use AC;
+use AC\Column;
+
 
 /**
  * Base class for governing exporting for a list screen that is exportable. This class should be
@@ -11,13 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-abstract class ACP_Export_Strategy {
+abstract class Strategy {
 
 	/**
 	 * Admin Columns list screen object this object is attached to
 	 *
 	 * @since 1.0
-	 * @var AC_ListScreen
+	 * @var ListScreen
 	 */
 	private $list_screen;
 
@@ -36,9 +38,9 @@ abstract class ACP_Export_Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @param AC_ListScreen $list_screen Associated Admin Columns list screen object
+	 * @param AC\ListScreen $list_screen Associated Admin Columns list screen object
 	 */
-	public function __construct( AC_ListScreen $list_screen ) {
+	public function __construct( AC\ListScreen $list_screen ) {
 		$this->list_screen = $list_screen;
 	}
 
@@ -118,7 +120,7 @@ abstract class ACP_Export_Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @return AC_ListScreen Associated Admin Columns list screen object
+	 * @return AC\ListScreen Associated Admin Columns list screen object
 	 */
 	public function get_list_screen() {
 		return $this->list_screen;
@@ -152,9 +154,9 @@ abstract class ACP_Export_Strategy {
 					continue;
 				}
 
-				$model = $column instanceof ACP_Export_Column
+				$model = $column instanceof Exportable
 					? $column->export()
-					: new ACP_Export_Model_RawValue( $column );
+					: new Model\RawValue( $column );
 
 				$value = $model->get_value( $id );
 
@@ -165,10 +167,10 @@ abstract class ACP_Export_Strategy {
 				 *
 				 * @since 1.0
 				 *
-				 * @param string                $value                  Column value to export for item
-				 * @param AC_Column             $column                 Column object to export for
-				 * @param int                   $id                     Item ID to export for
-				 * @param ACP_Export_ListScreen $exportable_list_screen Exportable list screen instance
+				 * @param string            $value                  Column value to export for item
+				 * @param Column            $column                 Column object to export for
+				 * @param int               $id                     Item ID to export for
+				 * @param ListScreen $exportable_list_screen Exportable list screen instance
 				 */
 				$value = apply_filters( 'ac/export/value', $value, $column, $id, $this );
 
@@ -186,7 +188,7 @@ abstract class ACP_Export_Strategy {
 	/**
 	 * Retrieve the headers for the columns
 	 *
-	 * @param AC_Column[] $columns
+	 * @param Column[] $columns
 	 *
 	 * @since 1.0
 	 * @return string[] Associative array of header labels for the columns.
@@ -196,7 +198,7 @@ abstract class ACP_Export_Strategy {
 
 		foreach ( $columns as $column ) {
 			// Don't add columns that are not active
-			if ( $column instanceof ACP_Export_Column && ! $column->export()->is_active() ) {
+			if ( $column instanceof Exportable && ! $column->export()->is_active() ) {
 				continue;
 			}
 
@@ -217,16 +219,17 @@ abstract class ACP_Export_Strategy {
 	 * Register and enqueue scripts when on a list screen page
 	 *
 	 * @since 1.0
-	 * @param AC_ListScreen $list_screen
+	 *
+	 * @param ListScreen $list_screen
 	 */
 	public function scripts( $list_screen ) {
 		global $wp_list_table;
 
-		if ( ! $list_screen instanceof ACP_Export_ListScreen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return;
 		}
 
-		if ( ! $list_screen instanceof AC_ListScreenWP ) {
+		if ( ! $list_screen instanceof AC\ListScreenWP ) {
 			return;
 		}
 
@@ -234,7 +237,7 @@ abstract class ACP_Export_Strategy {
 			return;
 		}
 
-		$url = ac_addon_export()->get_plugin_url();
+		$url = ac_addon_export()->get_url();
 		$version = ac_addon_export()->get_version();
 
 		// Register and enqueue styles
@@ -285,7 +288,7 @@ abstract class ACP_Export_Strategy {
 
 		if ( count( $rows ) > 0 ) {
 			// Create CSV exporter
-			$exporter = new ACP_Export_Exporter_CSV();
+			$exporter = new Exporter\CSV();
 			$exporter->load_data( $rows );
 
 			if ( $this->get_export_counter() === 0 ) {
@@ -330,8 +333,8 @@ abstract class ACP_Export_Strategy {
 		 *
 		 * @since 1.0
 		 *
-		 * @param int                   $num_items              Number of items per export iteration
-		 * @param ACP_Export_ListScreen $exportable_list_screen Exportable list screen instance
+		 * @param int               $num_items              Number of items per export iteration
+		 * @param ListScreen $exportable_list_screen Exportable list screen instance
 		 */
 		return apply_filters( 'ac/export/exportable_list_screen/num_items_per_iteration', 250, $this );
 	}

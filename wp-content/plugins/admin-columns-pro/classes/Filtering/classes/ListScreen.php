@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
-interface ACP_Filtering_ListScreen {
+interface ListScreen {
 
 	/**
-	 * @param ACP_Filtering_Model $model
+	 * @param Model $model
 	 *
-	 * @return ACP_Filtering_Strategy
+	 * @return Strategy
 	 */
 	public function filtering( $model );
 

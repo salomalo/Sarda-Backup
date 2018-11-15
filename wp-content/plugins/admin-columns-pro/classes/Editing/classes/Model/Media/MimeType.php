@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Media;
 
-class ACP_Editing_Model_Media_MimeType extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class MimeType extends Model {
 
 	public function get_view_settings() {
 		$mime_types = wp_get_mime_types();

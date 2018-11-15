@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Table;
+
+use AC;
+use AC\ListScreen;
 
 /**
  * @since 4.0
  */
-class ACP_Table_ScreenOptions {
+class ScreenOptions {
 
 	public function __construct() {
 		add_filter( 'screen_settings', array( $this, 'add_screen_settings' ) );
@@ -17,10 +18,10 @@ class ACP_Table_ScreenOptions {
 	}
 
 	/**
-	 * @return AC_Preferences
+	 * @return AC\Preferences
 	 */
 	public function preferences() {
-		return new AC_Preferences_Site( 'show_overflow_table' );
+		return new AC\Preferences\Site( 'show_overflow_table' );
 	}
 
 	/**
@@ -29,13 +30,11 @@ class ACP_Table_ScreenOptions {
 	public function update_table_option_overflow() {
 		check_ajax_referer( 'ac-ajax' );
 
-		$list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) );
+		$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ), filter_input( INPUT_POST, 'layout' ) );
 
 		if ( ! $list_screen ) {
 			wp_die();
 		}
-
-		$list_screen->set_layout_id( filter_input( INPUT_POST, 'layout' ) );
 
 		$this->preferences()->set( $list_screen->get_storage_key(), 'true' === filter_input( INPUT_POST, 'value' ) );
 
@@ -58,7 +57,7 @@ class ACP_Table_ScreenOptions {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 *
 	 * @return bool
 	 */
@@ -67,14 +66,14 @@ class ACP_Table_ScreenOptions {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 */
 	public function delete_overflow_preference( $list_screen ) {
 		$this->preferences()->delete( $list_screen->get_storage_key() );
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 *
 	 * @return string
 	 */
@@ -93,7 +92,7 @@ class ACP_Table_ScreenOptions {
 			/**
 			 * @since 4.0.12
 			 *
-			 * @param AC_ListScreen $list_screen
+			 * @param ListScreen $list_screen
 			 */
 			do_action( 'ac/screen_options', $list_screen );
 
@@ -109,13 +108,13 @@ class ACP_Table_ScreenOptions {
 	 * Load scripts
 	 */
 	public function scripts() {
-		wp_enqueue_style( 'ac-table-screen-option', acp()->get_plugin_url() . 'assets/css/table-screen-options.css', array(), ACP()->get_version() );
-		wp_enqueue_script( 'ac-table-screen-option', acp()->get_plugin_url() . 'assets/js/table-screen-options.js', array(), ACP()->get_version() );
+		wp_enqueue_style( 'ac-table-screen-option', ACP()->get_url() . 'assets/css/table-screen-options.css', array(), ACP()->get_version() );
+		wp_enqueue_script( 'ac-table-screen-option', ACP()->get_url() . 'assets/js/table-screen-options.js', array(), ACP()->get_version() );
 	}
 
 	/**
-	 * @param string         $classes
-	 * @param AC_TableScreen $table
+	 * @param string          $classes
+	 * @param AC\Table\Screen $table
 	 *
 	 * @return string
 	 */

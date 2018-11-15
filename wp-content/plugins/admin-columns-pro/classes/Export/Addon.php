@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
 
-class ACP_Export_Addon extends AC_Addon {
+use AC;
+
+class Addon extends AC\Addon {
 
 	/**
 	 * @var self
@@ -12,10 +12,11 @@ class ACP_Export_Addon extends AC_Addon {
 	protected static $instance;
 
 	protected function __construct() {
-		AC()->autoloader()->register_prefix( 'ACP_Export_', $this->get_plugin_dir() . 'classes/' );
+		AC\Autoloader::instance()->register_prefix( __NAMESPACE__, $this->get_dir() . 'classes/' );
+		AC\Autoloader\Underscore::instance()->add_alias( __NAMESPACE__ . '\Exportable', 'ACP_Export_Column' );
 
-		new ACP_Export_Admin();
-		new ACP_Export_TableScreenOptions();
+		new Admin();
+		new TableScreenOptions();
 
 		add_action( 'ac/table/list_screen', array( $this, 'load_list_screen' ) );
 	}
@@ -77,19 +78,12 @@ class ACP_Export_Addon extends AC_Addon {
 	 *
 	 * @since 1.0
 	 *
-	 * @param AC_ListScreen $list_screen List screen for current table screen
+	 * @param AC\ListScreen $list_screen List screen for current table screen
 	 */
 	public function load_list_screen( $list_screen ) {
-		if ( $list_screen instanceof ACP_Export_ListScreen ) {
+		if ( $list_screen instanceof ListScreen ) {
 			$list_screen->export()->attach();
 		}
 	}
 
-}
-
-/**
- * @return ACP_Export_Addon
- */
-function ac_addon_export() {
-	return ACP_Export_Addon::instance();
 }

@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-class ACP_Sorting_Model_Media_Width extends ACP_Sorting_Model_Media_Dimensions {
+class Width extends Dimensions {
 
 	protected function get_aspect( $values ) {
 		return $this->get_width( $values );

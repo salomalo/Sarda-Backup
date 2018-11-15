@@ -1,22 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_Taxonomy extends AC_Column_Media_Taxonomy
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Column_FilteringInterface {
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class Taxonomy extends AC\Column\Media\Taxonomy
+	implements Sorting\Sortable, Editing\Editable, Filtering\Filterable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_Taxonomy( $this );
+		return new Sorting\Model\Post\Taxonomy( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Taxonomy( $this );
+		return new Editing\Model\Post\Taxonomy( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Taxonomy( $this );
+		return new Filtering\Model\Post\Taxonomy( $this );
 	}
 
 }

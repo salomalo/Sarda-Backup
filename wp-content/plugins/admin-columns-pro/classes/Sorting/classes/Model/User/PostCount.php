@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\User;
 
-class ACP_Sorting_Model_User_PostCount extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class PostCount extends Model {
 
 	public function get_sorting_vars() {
 		add_action( 'pre_user_query', array( $this, 'pre_user_query_callback' ) );
@@ -12,7 +12,7 @@ class ACP_Sorting_Model_User_PostCount extends ACP_Sorting_Model {
 		return array();
 	}
 
-	public function pre_user_query_callback( WP_User_Query $query ) {
+	public function pre_user_query_callback( \WP_User_Query $query ) {
 		global $wpdb;
 
 		$order = $this->get_order();

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Editing;
 
-class ACP_ThirdParty_YoastSeo_Editing_Title extends ACP_Editing_Model {
+use ACP\Editing;
+
+class Title extends Editing\Model {
 
 	public function get_edit_value( $id ) {
 		return get_post_meta( $id, '_yoast_wpseo_title', true );

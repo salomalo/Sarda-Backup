@@ -1,18 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Markup;
 
-abstract class ACP_Filtering_Markup_Ranged {
+use AC\Form\Element\Input;
+
+abstract class Ranged {
 
 	/**
-	 * @var AC_Form_Element_Input
+	 * @var Input
 	 */
 	private $min;
 
 	/**
-	 * @var AC_Form_Element_Input
+	 * @var Input
 	 */
 	private $max;
 
@@ -28,7 +28,7 @@ abstract class ACP_Filtering_Markup_Ranged {
 	}
 
 	private function init_input( $element, $name, $label, $value ) {
-		$input = new AC_Form_Element_Input( sprintf( 'acp_filter-%s[%s]', $element, $name ) );
+		$input = new Input( sprintf( 'acp_filter-%s[%s]', $element, $name ) );
 		$input->set_value( $value )
 		      ->set_id( sprintf( 'acp-filter-%s-%s', $element, $name ) )
 		      ->set_label( $label )
@@ -51,7 +51,7 @@ abstract class ACP_Filtering_Markup_Ranged {
 		$this->max->set_type( $type );
 	}
 
-	protected function render_input( AC_Form_Element_Input $input ) {
+	protected function render_input( Input $input ) {
 		if ( $input->get_label() ) {
 			printf( '<label for="%s">%s</label>',
 				$input->get_id(),
@@ -70,7 +70,7 @@ abstract class ACP_Filtering_Markup_Ranged {
 	private function get_type() {
 		$class_name = get_class( $this );
 
-		return strtolower( substr( $class_name, strrpos( $class_name, '_' ) + 1 ) );
+		return strtolower( substr( $class_name, strrpos( $class_name, '\\' ) + 1 ) );
 	}
 
 	public function render() {
@@ -97,14 +97,14 @@ abstract class ACP_Filtering_Markup_Ranged {
 	}
 
 	/**
-	 * @return AC_Form_Element_Input
+	 * @return Input
 	 */
 	protected function get_min() {
 		return $this->min;
 	}
 
 	/**
-	 * @return AC_Form_Element_Input
+	 * @return Input
 	 */
 	protected function get_max() {
 		return $this->max;

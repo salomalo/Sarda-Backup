@@ -298,13 +298,10 @@ class NF_Abstracts_Model
                 }
             }
 
-            $meta_select_fields = "SELECT `key`, `value`";//, `meta_key`,
-	        //`meta_value`";
-
             // Query settings from the meta table.
             $meta_results = $this->_db->get_results(
-            	$meta_select_fields .
                 "
+                SELECT `key`, `value`
                 FROM   `$this->_meta_table_name`
                 WHERE  `parent_id` = $this->_id
                 "
@@ -312,13 +309,7 @@ class NF_Abstracts_Model
 
             // Assign settings to the settings property.
             foreach ($meta_results as $meta) {
-                // If we don't already have a value from the main table...
-                // OR If that value was NULL...
-                if ( ! isset( $this->_settings[ $meta->key ] ) || NULL == $this->_settings[ $meta->key ] ) {
-                    // TODO: Update this logic after removal of original meta columns.
-                    // Set the value from meta.
-                    $this->_settings[ $meta->key ] = $meta->value;
-                }
+                $this->_settings[ $meta->key ] = $meta->value;
             }
         }
 
@@ -587,49 +578,15 @@ class NF_Abstracts_Model
         // If the setting is a column, save the settings to the model's table.
         if( in_array( $key, $this->_columns ) ){
 
-        	$format = null;
-        	if( in_array( $key, array( 'show_title', 'clear_complete', 'hide_complete', 'logged_in' ) ) ) {
-        		// gotta set the format for the columns that use bit type
-        		$format = '%d';
-	        }
-
-	        if( 'form' === $this->_type && 'title' == $key ) {
-		        $this->_db->update(
-			        $this->_table_name,
-			        array(
-				        'form_title' => $value
-			        ),
-			        array(
-				        'id' => $this->_id
-			        ),
-			        $format
-		        );
-	        }
-
-	        // Don't update the form_title. Duplicating issue for now
-	        if( 'form_title' !== $key ) {
-		        $update_model = $this->_db->update(
-			        $this->_table_name,
-			        array(
-				        $key => $value
-			        ),
-			        array(
-				        'id' => $this->_id
-			        ),
-			        $format
-		        );
-	        } else {
-        		return 1;
-	        }
-
-	        /*
-	         * if it's not a form, you can return, but we are still saving some
-	         * settings for forms in the form_meta table
-	         */
-        	if( 'form' != $this->_type
-	            || ( 'form' == $this->_type && 'title' == $key ) ) {
-        		return $update_model;
-	        }
+            return $this->_db->update(
+                $this->_table_name,
+                array(
+                    $key => $value
+                ),
+                array(
+                    'id' => $this->_id
+                )
+            );
         }
 
         $meta_row = $this->_db->get_row(
@@ -643,19 +600,11 @@ class NF_Abstracts_Model
 
         if( $meta_row ){
 
-        	$update_values = array(
-		        'value' => $value
-	        );
-
-        	// for forms we need to update the meta_key and meta_value columns
-        	if( 'form' == $this->_type ) {
-        		$update_values[ 'meta_key' ] = $key;
-        		$update_values[ 'meta_value' ] = $value;
-	        }
-
             $result = $this->_db->update(
                 $this->_meta_table_name,
-                $update_values,
+                array(
+                    'value' => $value
+                ),
                 array(
                     'key' => $key,
                     'parent_id' => $this->_id
@@ -664,21 +613,13 @@ class NF_Abstracts_Model
 
         } else {
 
-        	$insert_values = array(
-		        'key' => $key,
-		        'value' => $value,
-		        'parent_id' => $this->_id
-	        );
-
-	        // for forms we need to update the meta_key and meta_value columns
-        	if( 'form' == $this->_type ) {
-        		$insert_values[ 'meta_key' ] = $key;
-        		$insert_values[ 'meta_value' ] = $value;
-	        }
-
             $result = $this->_db->insert(
                 $this->_meta_table_name,
-                $insert_values,
+                array(
+                    'key' => $key,
+                    'value' => $value,
+                    'parent_id' => $this->_id
+                ),
                 array(
                     '%s',
                     '%s',
@@ -686,6 +627,7 @@ class NF_Abstracts_Model
                 )
             );
         }
+
 
         return $result;
     }
@@ -701,7 +643,7 @@ class NF_Abstracts_Model
     {
         if( ! $this->_settings ) return;
 
-        foreach( $this->_settings as $key => $value ) {
+        foreach( $this->_settings as $key => $value ){
             $value = maybe_serialize( $value );
             $this->_results[] = $this->_save_setting( $key, $value );
         }
@@ -732,7 +674,7 @@ class NF_Abstracts_Model
         );
 
         // If a relationship does not exists, then create one.
-        if( 0 == $this->_db->num_rows ) {
+        if( 0 == $this->_db->num_rows ){
 
             $this->_db->insert(
                 $this->_relationships_table,

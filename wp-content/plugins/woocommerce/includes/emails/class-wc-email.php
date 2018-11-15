@@ -499,12 +499,12 @@ class WC_Email extends WC_Settings_API {
 		$this->sending = true;
 
 		if ( 'plain' === $this->get_email_type() ) {
-			$email_content = wordwrap( preg_replace( $this->plain_search, $this->plain_replace, strip_tags( $this->get_content_plain() ) ), 70 );
+			$email_content = preg_replace( $this->plain_search, $this->plain_replace, strip_tags( $this->get_content_plain() ) );
 		} else {
 			$email_content = $this->get_content_html();
 		}
 
-		return $email_content;
+		return wordwrap( $email_content, 70 );
 	}
 
 	/**

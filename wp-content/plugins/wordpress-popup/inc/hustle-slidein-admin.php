@@ -9,7 +9,7 @@ class Hustle_Slidein_Admin {
 	private $_hustle;
 	private $_email_services;
 
-	public function __construct( Opt_In $hustle, Hustle_Email_Services $email_services ){
+	function __construct( Opt_In $hustle, Hustle_Email_Services $email_services ){
 
 		$this->_hustle = $hustle;
 		$this->_email_services = $email_services;
@@ -18,7 +18,7 @@ class Hustle_Slidein_Admin {
 		add_action( 'admin_menu', array( $this, "register_admin_menu" ) );
 		add_action( 'admin_head', array( $this, "hide_unwanted_submenus" ) );
 		add_filter( 'hustle_optin_vars', array( $this, "register_current_json" ) );
-
+		
 	}
 
 	/**
@@ -26,27 +26,27 @@ class Hustle_Slidein_Admin {
 	 *
 	 * @since 1.0
 	 */
-	public function register_admin_menu() {
+	function register_admin_menu() {
 
 		// Optins
 		add_submenu_page( 'hustle', __("Slide-ins", Opt_In::TEXT_DOMAIN) , __("Slide-ins", Opt_In::TEXT_DOMAIN) , "manage_options", Hustle_Module_Admin::SLIDEIN_LISTING_PAGE,  array( $this, "render_slidein_listing" )  );
 		add_submenu_page( 'hustle', __("New Slide-in", Opt_In::TEXT_DOMAIN) , __("New Slide-in", Opt_In::TEXT_DOMAIN) , "manage_options", Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE,  array( $this, "render_slidein_wizard_page" )  );
-
+			
 	}
-
+	
 	/**
 	 * Removes the submenu entries for content creation
 	 *
 	 * @since 2.0
 	 */
-	public function hide_unwanted_submenus(){
+	function hide_unwanted_submenus(){
 		remove_submenu_page( 'hustle', Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE );
 	}
+	
+	function register_current_json( $current_array ){
 
-	public function register_current_json( $current_array ){
-
-		if( Hustle_Module_Admin::is_edit() && isset( $_GET['page'] ) && Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE === $_GET['page'] ){
-
+		if( Hustle_Module_Admin::is_edit() && isset( $_GET['page'] ) && $_GET['page'] == Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE ){
+			
 			$module = Hustle_Module_Model::instance()->get( filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT) );
 			// $ss = Hustle_Social_Sharing_Model::instance()->get( filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT) );
 			// $all_ss = Hustle_Social_Sharing_Collection::instance()->get_all( null );
@@ -64,7 +64,7 @@ class Hustle_Slidein_Admin {
 
 			);
 		}
-
+		
 		return $current_array;
 	}
 
@@ -73,12 +73,12 @@ class Hustle_Slidein_Admin {
 	 *
 	* @since 1.0
 	 */
-	public function render_slidein_wizard_page() {
+	function render_slidein_wizard_page( ) {
 
 		$module_id = filter_input( INPUT_GET, "id", FILTER_VALIDATE_INT );
 		$provider = filter_input( INPUT_GET, "provider" );
 		$current_section = Hustle_Module_Admin::get_current_section();
-
+		
 		$this->_hustle->render( "/admin/slidein/wizard", array(
 			"section" => ( !$current_section ) ? 'content' : $current_section,
 			"is_edit" => Hustle_Module_Admin::is_edit(),
@@ -93,18 +93,18 @@ class Hustle_Slidein_Admin {
 			'default_form_fields' => $this->_hustle->get_default_form_fields(),
 		));
 	}
-
+	
 	/**
 	 * Check if using free version then redirect to upgrade page
 	 *
 	* @since 3.0
 	 */
-	public function check_free_version() {
-		if ( isset( $_GET['page'] ) && Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE === $_GET['page'] ) {
+	function check_free_version() {
+		if (  isset( $_GET['page'] ) && $_GET['page'] == Hustle_Module_Admin::SLIDEIN_WIZARD_PAGE ) {
 			$collection_args = array( 'module_type' => 'slidein' );
 			$total_slideins = count(Hustle_Module_Collection::instance()->get_all( null, $collection_args ));
-			if ( Opt_In_Utils::_is_free() && ! Hustle_Module_Admin::is_edit() && $total_slideins >= 3 ) {
-				wp_safe_redirect( 'admin.php?page=' . Hustle_Module_Admin::SLIDEIN_LISTING_PAGE . '&' . Hustle_Module_Admin::UPGRADE_MODAL_PARAM . '=true' );
+			if ( Opt_In_Utils::_is_free() && ! Hustle_Module_Admin::is_edit() && $total_slideins >= 1 ) {
+				wp_safe_redirect( 'admin.php?page=' . Hustle_Module_Admin::UPGRADE_PAGE );
 				exit;
 			}
 		}
@@ -115,18 +115,17 @@ class Hustle_Slidein_Admin {
 	 *
 	 * @since 2.0
 	 */
-	public function render_slidein_listing(){
+	function render_slidein_listing(){
 		$current_user = wp_get_current_user();
 		$new_module = isset( $_GET['module'] ) ? Hustle_Module_Model::instance()->get( intval($_GET['module'] ) ) : null;
 		$updated_module = isset( $_GET['updated_module'] ) ? Hustle_Module_Model::instance()->get( intval($_GET['updated_module'] ) ) : null;
-
+		
 		$this->_hustle->render("admin/slidein/listing", array(
 			'slideins' => Hustle_Module_Collection::instance()->get_all( null, array( 'module_type' => 'slidein' ) ),
 			'new_module' =>  $new_module,
 			'updated_module' =>  $updated_module,
 			'add_new_url' => admin_url("admin.php?page=hustle_slidein"),
-			'user_name' => ucfirst($current_user->display_name),
-			'is_free' => Opt_In_Utils::_is_free()
+			'user_name' => ucfirst($current_user->display_name)
 		));
 	}
 
@@ -138,24 +137,24 @@ class Hustle_Slidein_Admin {
 	 * @param $data
 	 * @return mixed
 	 */
-	public function save_new( $data ){
+	public function save_new( $data ){        
 		$module = new Hustle_Module_Model();
-
+		
 		// save to modules table
 		$module->module_name = $data['module']['module_name'];
 		$module->module_type = Hustle_Module_Model::SLIDEIN_MODULE;
 		$module->active = (int) $data['module']['active'];
 		$module->test_mode = (int) $data['module']['test_mode'];
 		$module->save();
-
+		
 		// save to meta table
 		$module->add_meta( $this->_hustle->get_const_var( "KEY_CONTENT", $module ), $data['content'] );
 		$module->add_meta( $this->_hustle->get_const_var( "KEY_DESIGN", $module ), $data['design'] );
 		$module->add_meta( $this->_hustle->get_const_var( "KEY_SETTINGS", $module ), $data['settings'] );
 		$module->add_meta( $this->_hustle->get_const_var( "KEY_SHORTCODE_ID", $module ),  $data['shortcode_id'] );
-
-		return $module->id;
-
+		
+		return $module->id; 
+		
 	}
 
 
@@ -176,8 +175,8 @@ class Hustle_Slidein_Admin {
 		$module->update_meta( $this->_hustle->get_const_var( "KEY_DESIGN", $module ), $data['design'] );
 		$module->update_meta( $this->_hustle->get_const_var( "KEY_SETTINGS", $module ), $data['settings'] );
 		$module->update_meta( $this->_hustle->get_const_var( "KEY_SHORTCODE_ID", $module ), $data['shortcode_id'] );
-
-		return $module->id;
+		
+		return $module->id; 
 	}
 }
 

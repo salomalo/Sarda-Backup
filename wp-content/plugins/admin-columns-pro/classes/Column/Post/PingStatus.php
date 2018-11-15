@@ -1,28 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Post_PingStatus extends AC_Column_Post_PingStatus
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+class PingStatus extends AC\Column\Post\PingStatus
+	implements Filtering\Filterable, Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model_Post_Field( $this );
+		$model = new Sorting\Model\Post\Field( $this );
 		$model->set_field( 'ping_status' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_PingStatus( $this );
+		return new Editing\Model\Post\PingStatus( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_PingStatus( $this );
+		return new Filtering\Model\Post\PingStatus( $this );
 	}
 
 }

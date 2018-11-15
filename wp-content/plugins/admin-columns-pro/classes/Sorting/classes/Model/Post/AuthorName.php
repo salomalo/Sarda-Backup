@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
+
+use ACP;
+use ACP\Sorting\Model;
 
 /**
- * @property ACP_Column_Post_AuthorName $column
+ * @property ACP\Column\Post\AuthorName $column
  */
-class ACP_Sorting_Model_Post_AuthorName extends ACP_Sorting_Model_Post_Field {
+class AuthorName extends Model\Post\Field {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );
@@ -16,7 +17,7 @@ class ACP_Sorting_Model_Post_AuthorName extends ACP_Sorting_Model_Post_Field {
 	}
 
 	protected function format( $value ) {
-		/** @var ACP_Settings_Column_User $setting */
+		/** @var ACP\Settings\Column\User $setting */
 		$setting = $this->column->get_setting( 'user' );
 
 		return $setting->get_user_name( $value );

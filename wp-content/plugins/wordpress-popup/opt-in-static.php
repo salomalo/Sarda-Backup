@@ -145,7 +145,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#38454E',
 					'image_container_bg' => '#35414A',
 					'form_area_bg' => '#5D7380',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -161,13 +161,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -177,7 +177,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#38C5B5',
 					'optin_submit_button_hover_bg' => '#38C5B5',
 					'optin_submit_button_active_bg' => '#38C5B5',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -206,7 +206,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#46403B',
 					'image_container_bg' => '#423D38',
 					'form_area_bg' => '#59524B',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -222,13 +222,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -238,7 +238,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#C6A685',
 					'optin_submit_button_hover_bg' => '#C69767',
 					'optin_submit_button_active_bg' => '#C69767',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -267,7 +267,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#403159',
 					'image_container_bg' => '#3D2F54',
 					'form_area_bg' => '#513E70',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -283,13 +283,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -299,7 +299,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#A4B824',
 					'optin_submit_button_hover_bg' => '#B9CE33',
 					'optin_submit_button_active_bg' => '#B9CE33',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -328,7 +328,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#176387',
 					'image_container_bg' => '#165E80',
 					'form_area_bg' => '#78B5D1',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -344,13 +344,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -360,7 +360,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#4D95B6',
 					'optin_submit_button_hover_bg' => '#176387',
 					'optin_submit_button_active_bg' => '#176387',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -389,7 +389,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#B03E34',
 					'image_container_bg' => '#A73B31',
 					'form_area_bg' => '#CB4B40',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -405,13 +405,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -421,7 +421,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#CBB000',
 					'optin_submit_button_hover_bg' => '#CCB83D',
 					'optin_submit_button_active_bg' => '#CCB83D',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -450,7 +450,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'main_bg_color' => '#25282B',
 					'image_container_bg' => '#232629',
 					'form_area_bg' => '#363B3F',
-
+					
 					'title_color' => '#FDFDFD',
 					'subtitle_color' => '#FDFDFD',
 					'content_color' => '#ADB5B7',
@@ -466,13 +466,13 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'cta_button_static_color' => '#FFFFFF',
 					'cta_button_hover_color' => '#FFFFFF',
 					'cta_button_active_color' => '#FFFFFF',
-
+					
 					'optin_input_static_bg' => '#FDFDFD',
 					'optin_input_hover_bg' => '#FDFDFD',
 					'optin_input_active_bg' => '#FDFDFD',
 
 					'optin_input_icon' => '#ADB5B7',
-
+					
 					'optin_placeholder_color' => '#ADB5B7',
 
 					'optin_form_field_text_static_color' => '#363B3F',
@@ -482,7 +482,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 					'optin_submit_button_static_bg' => '#DD4F3D',
 					'optin_submit_button_hover_bg' => '#C63D2B',
 					'optin_submit_button_active_bg' => '#C63D2B',
-
+					
 					'optin_submit_button_static_color' => '#FDFDFD',
 					'optin_submit_button_hover_color' => '#FDFDFD',
 					'optin_submit_button_active_color' => '#FDFDFD',
@@ -549,7 +549,7 @@ if ( !class_exists ('Opt_In_Static', false ) ) {
 				)
 			);
 		}
-
+		
 		public function get_providers_with_args() {
 			return array(
 				'mailchimp'

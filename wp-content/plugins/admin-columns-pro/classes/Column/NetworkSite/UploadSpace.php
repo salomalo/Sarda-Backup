@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_UploadSpace extends AC_Column {
+use AC;
+
+class UploadSpace extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'column-msite_uploadspace' );

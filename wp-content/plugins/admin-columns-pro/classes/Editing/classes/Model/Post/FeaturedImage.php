@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_FeaturedImage extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class FeaturedImage extends Model {
 
 	public function get_view_settings() {
 		return array(
@@ -21,8 +21,7 @@ class ACP_Editing_Model_Post_FeaturedImage extends ACP_Editing_Model {
 	public function save( $id, $value ) {
 		if ( $value ) {
 			set_post_thumbnail( $id, $value );
-		}
-		else {
+		} else {
 			delete_post_thumbnail( $id );
 		}
 

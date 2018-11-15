@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column;
 
-class ACP_Settings_Column_Gravatar extends AC_Settings_Column_Image {
+use AC;
+
+class Gravatar extends AC\Settings\Column\Image {
 
 	public function format( $value, $original_value ) {
 		return ac_helper()->image->get_image( $value, $this->get_size_args(), true );

@@ -1,15 +1,15 @@
 <?php
 /*
   Plugin Name:  WooCommerce Catalog Visibility Options
-  Plugin URI: https://woocommerce.com/woocommerce
+  Plugin URI: http://woothemes.com/woocommerce
   Description: Provides the ability to hide prices, or show prices only to authenticated users. Provides the ability to disable e-commerce functionality by disabling the cart.
-  Version: 3.0.1
+  Version: 2.8.4
   Author: Lucas Stark
-  Author URI: https://www.elementstark.com/
+  Author URI: http://lucasstark.com
   Requires at least: 3.1
-  Tested up to: 4.7.4
+  Tested up to: 4.6.1
 
-  Copyright: © 2016-2017 Lucas Stark.
+  Copyright: © 2016 Lucas Stark.
   License: GNU General Public License v3.0
   License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -30,13 +30,13 @@ if ( is_woocommerce_active() ) {
 	
 	load_plugin_textdomain( 'wc_catalog_restrictions', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
-	require 'includes/class-wc-catalog-visibility-options.php';
+	require 'classes/class-wc-catalog-visibility-options.php';
 	require 'shortcodes/shortcodes-init.php';
 
 	//Initalize the Catalog Restrictions included plugin. 
 	require 'lib/woocommerce-catalog-restrictions/woocommerce-catalog-restrictions.php';
 
-	define( 'WC_CATALOG_VISIBILITY_OPTIONS_VERSION', '2.8.5' );
+	
 
 	class WC_Catalog_Visibility_Options {
 
@@ -48,17 +48,17 @@ if ( is_woocommerce_active() ) {
 			    'visibility_options' => __( 'Visibility Options', 'wc_catalog_restrictions' )
 			);
 
-			add_action( 'woocommerce_settings_tabs', array($this, 'on_add_tab'), 10 );
+			add_action( 'woocommerce_settings_tabs', array(&$this, 'on_add_tab'), 10 );
 
 			// Run these actions when generating the settings tabs.
 			foreach ( $this->settings_tabs as $name => $label ) {
-				add_action( 'woocommerce_settings_tabs_' . $name, array($this, 'settings_tab_action'), 10 );
-				add_action( 'woocommerce_update_options_' . $name, array($this, 'save_settings'), 10 );
+				add_action( 'woocommerce_settings_tabs_' . $name, array(&$this, 'settings_tab_action'), 10 );
+				add_action( 'woocommerce_update_options_' . $name, array(&$this, 'save_settings'), 10 );
 			}
 
 			// Add the settings fields to each tab.
-			add_action( 'woocommerce_visibility_options_settings', array($this, 'add_settings_fields'), 10 );
-			add_action( 'woocommerce_admin_field_tinyeditor', array($this, 'on_editor_field') );
+			add_action( 'woocommerce_visibility_options_settings', array(&$this, 'add_settings_fields'), 10 );
+			add_action( 'woocommerce_admin_field_tinyeditor', array(&$this, 'on_editor_field') );
 
 			if ( !is_admin() && !defined( 'DOING_CRON' ) ) {
 				$this->wc_cvo = new WC_CVO_Visibility_Options();
@@ -88,11 +88,14 @@ if ( is_woocommerce_active() ) {
 		/* ----------------------------------------------------------------------------------- */
 
 		function on_add_tab() {
+
+			$page = WC_Catalog_Visibility_Compatibility::is_wc_version_gte_2_2() ? 'wc-settings' : 'woocommerce';
+
 			foreach ( $this->settings_tabs as $name => $label ) :
 				$class = 'nav-tab';
 				if ( $this->current_tab == $name )
 					$class .= ' nav-tab-active';
-				echo '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=' . $name ) . '" class="' . $class . '">' . $label . '</a>';
+				echo '<a href="' . admin_url( 'admin.php?page=' . $page . '&tab=' . $name ) . '" class="' . $class . '">' . $label . '</a>';
 			endforeach;
 		}
 

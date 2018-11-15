@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_PostCount extends AC_Settings_Column
-	implements AC_Settings_FormatValueInterface {
+use AC\Settings;
+use AC\View;
+
+class PostCount extends Settings\Column
+	implements Settings\FormatValue {
 
 	private $post_type;
 
@@ -27,7 +28,7 @@ class ACP_Settings_Column_NetworkSite_PostCount extends AC_Settings_Column
 			->create_element( 'select', 'post_type' )
 			->set_options( $options );
 
-		$view_post_type = new AC_View( array(
+		$view_post_type = new View( array(
 			'label'   => __( 'Post Type', 'codepress-admin-columns' ),
 			'setting' => $setting,
 			'for'     => $setting->get_id(),
@@ -42,13 +43,13 @@ class ACP_Settings_Column_NetworkSite_PostCount extends AC_Settings_Column
 			$setting->set_description( sprintf( __( 'Does not include %s', 'codepress-admin-columns' ), ac_helper()->string->enumeration_list( $excluded ) ) );
 		}
 
-		$view_post_status = new AC_View( array(
+		$view_post_status = new View( array(
 			'label'   => __( 'Post Status', 'codepress-admin-columns' ),
 			'setting' => $setting,
 			'for'     => $setting->get_id(),
 		) );
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'label'    => __( 'Display Options', 'codepress-admin-columns' ),
 			'sections' => array( $view_post_type, $view_post_status ),
 		) );
@@ -85,7 +86,7 @@ class ACP_Settings_Column_NetworkSite_PostCount extends AC_Settings_Column
 		$queries = array();
 		foreach ( get_sites() as $site ) {
 
-			/* @var WP_Site $site */
+			/* @var \WP_Site $site */
 			$table = $wpdb->get_blog_prefix( $site->id ) . 'posts';
 
 			$field = '`' . sanitize_key( $field ) . '`';

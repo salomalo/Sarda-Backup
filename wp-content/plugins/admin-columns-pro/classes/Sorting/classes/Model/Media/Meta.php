@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-abstract class ACP_Sorting_Model_Media_Meta extends ACP_Sorting_Model_Meta {
+use AC;
+use ACP\Sorting\Model;
+
+abstract class Meta extends Model\Meta {
 
 	protected function get_meta_values() {
 		$ids = $this->strategy->get_results( parent::get_sorting_vars() );
 
-		$query = new AC_Meta_QueryColumn( $this->column );
+		$query = new AC\Meta\QueryColumn( $this->column );
 		$query->select( 'id, meta_value' )
 		      ->where_in( $ids )
 		      ->order_by( 'meta_value', $this->get_order() );
@@ -32,7 +33,7 @@ abstract class ACP_Sorting_Model_Media_Meta extends ACP_Sorting_Model_Meta {
 	}
 
 	/**
-	 * @param array $meta
+	 * @param array  $meta
 	 * @param string $key
 	 *
 	 * @return false|string

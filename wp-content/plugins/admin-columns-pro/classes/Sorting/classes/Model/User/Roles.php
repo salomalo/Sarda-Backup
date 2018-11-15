@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\User;
 
-class ACP_Sorting_Model_User_Roles extends ACP_Sorting_Model_Meta {
+use ACP\Sorting\Model;
+
+class Roles extends Model\Meta {
 
 	public function get_sorting_vars() {
 		global $wp_roles;
@@ -47,7 +47,7 @@ class ACP_Sorting_Model_User_Roles extends ACP_Sorting_Model_Meta {
 		);
 	}
 
-	public function pre_user_query_callback( WP_User_Query $query ) {
+	public function pre_user_query_callback( \WP_User_Query $query ) {
 		global $wpdb;
 
 		$query->query_fields .= ", $wpdb->usermeta.meta_value";

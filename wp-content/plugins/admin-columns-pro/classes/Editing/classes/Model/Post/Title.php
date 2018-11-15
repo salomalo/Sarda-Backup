@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Title extends ACP_Editing_Model_Post_TitleRaw {
+use ACP\Editing\Model;
+
+class Title extends Model\Post\TitleRaw {
 
 	public function get_view_settings() {
 		$settings = parent::get_view_settings();

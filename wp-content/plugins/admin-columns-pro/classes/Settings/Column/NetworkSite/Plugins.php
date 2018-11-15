@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_Plugins extends AC_Settings_Column
-	implements AC_Settings_FormatValueInterface {
+use AC\View;
+use AC\Settings;
+
+class Plugins extends Settings\Column
+	implements Settings\FormatValue {
 
 	private $plugin_display;
 
@@ -20,7 +21,7 @@ class ACP_Settings_Column_NetworkSite_Plugins extends AC_Settings_Column
 			'list'  => __( 'List', 'codepress-admin-columns' ),
 		);
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'label'   => __( 'Display Format', 'codepress-admin-columns' ),
 			'setting' => $this->create_element( 'select' )->set_options( $options ),
 		) );

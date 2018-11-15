@@ -1,28 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Comment_Approved extends AC_Column_Comment_Approved
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Approved extends AC\Column\Comment\Approved
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'comment_approved' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Comment_Approved( $this );
+		return new Editing\Model\Comment\Approved( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_Approved( $this );
+		return new Filtering\Model\Comment\Approved( $this );
 	}
 
 }

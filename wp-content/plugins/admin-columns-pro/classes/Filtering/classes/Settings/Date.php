@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Settings;
 
-class ACP_Filtering_Settings_Date extends ACP_Filtering_Settings_Ranged {
+class Date extends Ranged {
 
 	protected function get_options() {
 		return array(

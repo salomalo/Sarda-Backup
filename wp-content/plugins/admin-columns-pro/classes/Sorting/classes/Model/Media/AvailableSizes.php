@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
+
+use AC;
 
 /**
- * @property AC_Column_Media_AvailableSizes $column
+ * @property AC\Column\Media\AvailableSizes $column
  */
-class ACP_Sorting_Model_Media_AvailableSizes extends ACP_Sorting_Model_Media_Meta {
+class AvailableSizes extends Meta {
 
 	public function get_sorting_vars() {
 		$ids = array();

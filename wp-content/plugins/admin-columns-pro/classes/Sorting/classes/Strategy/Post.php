@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Strategy;
 
-class ACP_Sorting_Strategy_Post extends ACP_Sorting_Strategy {
+use ACP\Sorting\Strategy;
+
+final class Post extends Strategy {
 
 	/**
-	 * @var WP_Query $wp_query
+	 * @var \WP_Query $wp_query
 	 */
 	private $wp_query;
 
@@ -16,14 +16,14 @@ class ACP_Sorting_Strategy_Post extends ACP_Sorting_Strategy {
 	}
 
 	/**
-	 * @param WP_Query $wp_query
+	 * @param \WP_Query $wp_query
 	 */
-	private function set_wp_query( WP_Query $wp_query ) {
+	private function set_wp_query( \WP_Query $wp_query ) {
 		$this->wp_query = $wp_query;
 	}
 
 	/**
-	 * @return WP_Query
+	 * @return \WP_Query
 	 */
 	public function get_wp_query() {
 		return $this->wp_query;
@@ -73,9 +73,9 @@ class ACP_Sorting_Strategy_Post extends ACP_Sorting_Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WP_Query $query
+	 * @param \WP_Query $query
 	 */
-	public function handle_sorting_request( WP_Query $query ) {
+	public function handle_sorting_request( \WP_Query $query ) {
 		if ( ! $query->is_main_query() || ! $query->get( 'orderby' ) ) {
 			return;
 		}

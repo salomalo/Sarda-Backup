@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_Date extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+use ACP\Filtering\Settings;
+
+class Date extends Model {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );
@@ -13,7 +14,7 @@ class ACP_Filtering_Model_Post_Date extends ACP_Filtering_Model {
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings_Date( $this->column ) );
+		$this->column->add_setting( new Settings\Date( $this->column ) );
 	}
 
 	public function get_filtering_vars( $vars ) {

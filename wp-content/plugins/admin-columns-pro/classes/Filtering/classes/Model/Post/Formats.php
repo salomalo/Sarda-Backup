@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_Formats extends ACP_Filtering_Model_Post_Taxonomy {
+use ACP\Filtering\Model;
+
+class Formats extends Model\Post\Taxonomy {
 
 	public function get_filtering_data() {
 		$options = $this->get_terms_list( $this->column->get_taxonomy() );

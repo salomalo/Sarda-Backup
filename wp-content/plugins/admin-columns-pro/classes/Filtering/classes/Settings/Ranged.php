@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Settings;
 
-abstract class ACP_Filtering_Settings_Ranged extends ACP_Filtering_Settings {
+use ACP\Filtering\Settings;
+use AC\View;
+
+abstract class Ranged extends Settings {
 
 	/**
 	 * @var string
@@ -31,7 +32,7 @@ abstract class ACP_Filtering_Settings_Ranged extends ACP_Filtering_Settings {
 
 		$filter_format = $this->create_element( 'select', 'filter_format' )->set_options( $options );
 
-		$format_view = new AC_View();
+		$format_view = new View();
 		$format_view->set( 'label', __( 'Filter by', 'codepress-admin-columns' ) )
 		            ->set( 'tooltip', __( 'This will allow you to set the filter format.', 'codepress-admin-columns' ) )
 		            ->set( 'setting', $filter_format )

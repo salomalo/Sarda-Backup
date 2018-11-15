@@ -1,18 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Media;
 
-class ACP_Filtering_Model_Media_Comments extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Comments extends Model {
 
 	public function filter_by_comments( $where ) {
 		global $wpdb;
 
-		if ( '0' == $this->get_filter_value() ) {
+		if ( 'no_comments' == $this->get_filter_value() ) {
 			$where .= "AND {$wpdb->posts}.comment_count = '0'";
-		}
-		elseif ( '1' == $this->get_filter_value() ) {
+		} elseif ( 'has_comments' == $this->get_filter_value() ) {
 			$where .= "AND {$wpdb->posts}.comment_count <> '0'";
 		}
 
@@ -25,14 +24,13 @@ class ACP_Filtering_Model_Media_Comments extends ACP_Filtering_Model {
 		return $vars;
 	}
 
-	public function get_filtering_data( ) {
-		$data = array();
-		$data['options'] = array(
-			'' => __( 'No comments', 'codepress-admin-columns' ),
-			1  => __( 'Has comments', 'codepress-admin-columns' ),
+	public function get_filtering_data() {
+		return array(
+			'options' => array(
+				'no_comments'  => __( 'No comments', 'codepress-admin-columns' ),
+				'has_comments' => __( 'Has comments', 'codepress-admin-columns' ),
+			),
 		);
-
-		return $data;
 	}
 
 }

@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\CustomField;
 
-class ACP_Sorting_Model_CustomField_UserById extends ACP_Sorting_Model_CustomField {
+use AC;
+use ACP\Sorting\Model;
+
+class UserById extends Model\CustomField {
 
 	public function get_sorting_vars() {
 		$setting = $this->column->get_setting( 'user' );
 
-		if ( ! $setting instanceof AC_Settings_Column_User ) {
+		if ( ! $setting instanceof AC\Settings\Column\User ) {
 			return array();
 		}
 

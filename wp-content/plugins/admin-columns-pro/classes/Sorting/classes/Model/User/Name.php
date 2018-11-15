@@ -1,13 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\User;
 
-class ACP_Sorting_Model_User_Name extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Name extends Model {
 
 	public function get_sorting_vars() {
-
 		$first = uniqid();
 		$last = uniqid();
 
@@ -28,7 +27,6 @@ class ACP_Sorting_Model_User_Name extends ACP_Sorting_Model {
 		);
 
 		if ( acp_sorting()->show_all_results() ) {
-
 			$vars['meta_query'] = array(
 				array(
 					'relation' => 'OR',

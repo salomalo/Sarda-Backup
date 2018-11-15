@@ -5,7 +5,7 @@
   Description: Import and Export Products and Product Reviews From and To your WooCommerce Store.
   Author: Xadapter
   Author URI: https://www.xadapter.com/shop/
-  Version: 3.7.0
+  Version: 3.6.9
   WC tested up to: 3.4.3
   License:           GPLv3
   License URI:       https://www.gnu.org/licenses/gpl-3.0.html

@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting;
 
-interface ACP_Sorting_ListScreen {
+interface ListScreen {
 
 	/**
-	 * @param ACP_Sorting_Model $model
+	 * @param Model $model
 	 *
-	 * @return ACP_Sorting_Strategy
+	 * @return Strategy
 	 */
 	public function sorting( $model );
 

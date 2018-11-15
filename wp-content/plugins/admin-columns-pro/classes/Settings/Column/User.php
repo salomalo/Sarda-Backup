@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column;
 
-class ACP_Settings_Column_User extends AC_Settings_Column_User {
+use AC;
+
+class User extends AC\Settings\Column\User {
 
 	protected function get_display_options() {
 		$options = parent::get_display_options();
@@ -31,10 +31,10 @@ class ACP_Settings_Column_User extends AC_Settings_Column_User {
 		switch ( $this->get_display_author_as() ) {
 			case 'custom_field' :
 
-				return array( new ACP_Settings_Column_UserCustomField( $this->column ) );
+				return array( new UserCustomField( $this->column ) );
 			case 'gravatar' :
 
-				return array( new ACP_Settings_Column_Gravatar( $this->column ) );
+				return array( new Gravatar( $this->column ) );
 			default:
 
 				return parent::get_dependent_settings();
@@ -45,7 +45,7 @@ class ACP_Settings_Column_User extends AC_Settings_Column_User {
 
 		switch ( $this->get_display_author_as() ) {
 			case 'custom_field' :
-				/** @var ACP_Settings_Column_UserCustomField $setting */
+				/** @var UserCustomField $setting */
 				$setting = $this->column->get_setting( 'custom_field' );
 
 				return get_user_meta( $user_id, $setting->get_field(), true );

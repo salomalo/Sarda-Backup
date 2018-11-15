@@ -1,55 +1,54 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Settings;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_CustomField extends AC_Column_CustomField
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+class CustomField extends AC\Column\CustomField
+	implements Sorting\Sortable, Editing\Editable, Filtering\Filterable, Export\Exportable {
 
 	/**
-	 * @return ACP_Sorting_Model_Meta
+	 * @return Sorting\Model\Meta
 	 */
 	public function sorting() {
-		return $this->get_field_object( 'ACP_Sorting_Model_CustomField' );
+		return $this->get_model( 'ACP\Sorting\Model\CustomField' );
 	}
 
 	/**
-	 * @return ACP_Editing_Model_Meta
+	 * @return Editing\Model\Meta
 	 */
 	public function editing() {
-		$class = $this->get_field_class_name( 'ACP_Editing_Model_CustomField' );
-
-		if ( ! $class ) {
-			$class = 'ACP_Editing_Model_Disabled';
-		}
-
-		return new $class( $this );
+		return $this->get_model( 'ACP\Editing\Model\CustomField', false );
 	}
 
 	/**
-	 * @return ACP_Filtering_Model_Meta
+	 * @return Filtering\Model\Meta
 	 */
 	public function filtering() {
-		return $this->get_field_object( 'ACP_Filtering_Model_CustomField' );
+		return $this->get_model( 'ACP\Filtering\Model\CustomField' );
 	}
 
 	/**
-	 * @return ACP_Export_Model_CustomField
+	 * @return Export\Model\CustomField
 	 */
 	public function export() {
-		return $this->get_field_object( 'ACP_Export_Model_CustomField' );
+		return $this->get_model( 'ACP\Export\Model\CustomField' );
 	}
 
 	/**
 	 * Settings
 	 */
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_CustomField( $this ) );
-		$this->add_setting( new AC_Settings_Column_BeforeAfter( $this ) );
+		$this->add_setting( new Settings\Column\CustomField( $this ) );
+		$this->add_setting( new AC\Settings\Column\BeforeAfter( $this ) );
 	}
 
 	/**
@@ -57,33 +56,34 @@ class ACP_Column_CustomField extends AC_Column_CustomField
 	 *
 	 * @param string $class
 	 *
-	 * @return ACP_Sorting_Model_Meta|ACP_Editing_Model_Meta|ACP_Filtering_Model_Meta|ACP_Export_Model_CustomField
+	 * @return Sorting\Model\Meta|Editing\Model\Meta|Filtering\Model\Meta|Export\Model\CustomField|false
 	 */
-	private function get_field_object( $class ) {
-		if ( $field_class = $this->get_field_class_name( $class ) ) {
-			$class = $field_class;
+	private function get_model( $class_prefix, $use_fallback = true ) {
+
+		switch ( $this->get_field_type() ) {
+			case '' :
+				$class_name = $class_prefix;
+
+				break;
+			case 'array' :
+				$class_name = $class_prefix . '\\MultipleValues';
+
+				break;
+			default :
+
+				// convert field type to a model class name
+				$class_name = $class_prefix . "\\" . implode( array_map( 'ucfirst', explode( '_', str_replace( '-', '_', $this->get_field_type() ) ) ) );
 		}
 
-		return new $class( $this );
-	}
-
-	/**
-	 * @param string $class
-	 *
-	 * @return bool|string
-	 */
-	private function get_field_class_name( $class ) {
-		$field_class = $class;
-
-		if ( $this->get_field_type() ) {
-			$field_class = $class . '_' . AC_Autoloader::string_to_classname( $this->get_field_type() );
+		if ( ! class_exists( $class_name ) ) {
+			if ( $use_fallback ) {
+				$class_name = $class_prefix;
+			} else {
+				$class_name = str_replace( '\\CustomField', '', $class_prefix ) . '\\Disabled';
+			}
 		}
 
-		if ( ! class_exists( $field_class ) ) {
-			return false;
-		}
-
-		return $field_class;
+		return new $class_name( $this );
 	}
 
 }

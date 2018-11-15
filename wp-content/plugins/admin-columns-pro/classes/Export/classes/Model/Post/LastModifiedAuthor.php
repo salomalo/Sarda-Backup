@@ -1,20 +1,21 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Post;
+
+use AC;
+use ACP\Export\Model;
 
 /**
  * Last modified author column exportability model
  *
  * @since 4.1
  */
-class ACP_Export_Model_Post_LastModifiedAuthor extends ACP_Export_Model_Value {
+class LastModifiedAuthor extends Model\Value {
 
 	/**
-	 * @param AC_Column_Post_LastModifiedAuthor $column
+	 * @param AC\Column\Post\LastModifiedAuthor $column
 	 */
-	public function __construct( AC_Column_Post_LastModifiedAuthor $column ) {
+	public function __construct( AC\Column\Post\LastModifiedAuthor $column ) {
 		parent::__construct( $column );
 	}
 

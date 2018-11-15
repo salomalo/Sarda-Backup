@@ -1,11 +1,9 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\CustomField;
 
-class ACP_Export_Model_CustomField_LibraryId extends ACP_Export_Model_CustomField_Image {
+class LibraryId extends Image {
 
-	// @see ACP_Export_Model_CustomField_Image
+	// @see Export\Model\CustomField_Image
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Status extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Status extends Model {
 
 	public function get_view_settings() {
 		$post_type_object = get_post_type_object( $this->column->get_post_type() );

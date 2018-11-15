@@ -63,7 +63,7 @@ class WF_ProdImpExpCsv_Admin_Screen {
         if (in_array($screen->id, $allowed_creen_id)) {
 
             wp_enqueue_script('woocommerce-product-csv-importer', plugins_url(basename(plugin_dir_path(WF_ProdImpExpCsv_FILE)) . '/js/product-csv-import-export-for-woocommerce.min.js', basename(__FILE__)), '', '1.0.0', 'screen');
-            wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_import_params', array('calendar_icon' => plugins_url(basename(plugin_dir_path(WF_ProdImpExpCsv_FILE)) . '/images/calendar.png', basename(__FILE__)), 'siteurl' => admin_url('admin-ajax.php'),'profile_empty_msg'=> __('Please enter a profile name.','wf_csv_import_export')));
+            wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_import_params', array('calendar_icon' => plugins_url(basename(plugin_dir_path(WF_ProdImpExpCsv_FILE)) . '/images/calendar.png', basename(__FILE__)), 'siteurl' => get_site_url()));
             wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_cron_params', array('pro_enable_ftp_ie' => '', 'pro_auto_export' => 'Disabled', 'pro_auto_import' => 'Disabled'));
         }
     }

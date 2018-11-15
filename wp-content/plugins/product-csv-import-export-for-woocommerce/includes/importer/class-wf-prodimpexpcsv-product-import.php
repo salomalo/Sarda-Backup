@@ -423,6 +423,11 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
                 $start_pos = isset($_POST['start_pos']) ? absint($_POST['start_pos']) : 0;
                 $end_pos = isset($_POST['end_pos']) ? absint($_POST['end_pos']) : '';
 
+                if ($profile !== '') {
+                    $profile_array = get_option('wf_prod_csv_imp_exp_mapping');
+                    $profile_array[$profile] = array($mapping, $eval_field);
+                    update_option('wf_prod_csv_imp_exp_mapping', $profile_array);
+                }
                 $position = $this->import_start($file, $mapping, $start_pos, $end_pos, $eval_field);
                 $this->import();
                 $this->import_end();
@@ -768,6 +773,7 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
      * @return bool False if error uploading or invalid file, true otherwise
      */
     public function handle_upload() {
+
         if ($this->handle_ftp()) {
             return true;
         }
@@ -808,70 +814,25 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
     }
 
     public function get_data_from_url($url) {
-        set_time_limit(0); // avoiding time out issue.
         $arrContextOptions = array(
             "ssl" => array(
                 "verify_peer" => false,
                 "verify_peer_name" => false,
             ),
         );
-                
-        if (strpos(substr($url, 0, 7), 'ftp://') !== false) { // the given url is an ftp url
-            
-            function get_password_and_host_from_url($url) {
-                $vsar = explode('@', $url);
-
-                list($host) = explode('/', end($vsar));  // get host name, here list holds the first element of an array 
-
-                $path = substr(end($vsar), strlen($host));
-                
-                $port = (substr($url, 0, 4)=='sftp'? 22 : 21);
-
-                array_pop($vsar); // removes last element of array
-
-                $v2 = implode('@', $vsar);
-
-                $v3 = explode(':', $v2);
-
-                array_shift($v3);
-
-                array_shift($v3);
-
-                $password = $v3[0];
-
-                return array($password, $host, $path, $port);
-            }
-
-            function get_string_between($string, $start, $end) {
-                $string = ' ' . $string;
-                $ini = strpos($string, $start);
-                if ($ini == 0)
-                    return '';
-                $ini += strlen($start);
-                $len = strpos($string, $end, $ini) - $ini;
-                return substr($string, $ini, $len);
-            }
-            
-            
-                $username = get_string_between($url, '://', ':');
-
-                list($passsword, $host, $path, $port) = get_password_and_host_from_url($url);
-
-                return $this->handle_ftp_for_url($username, $passsword, $host, $path,$port);
-         }
 
         if (ini_get('allow_url_fopen')) {
-
-            $file_contents = @file_get_contents($url, false, stream_context_create($arrContextOptions));
+            $file_contents = file_get_contents($url, false, stream_context_create($arrContextOptions));            
         } else {
             echo '<p><strong>' . __('Sorry, allow_url_fopen not activated. Please setup in php.ini', 'wf_csv_import_export') . '</strong></p>';
-            return false;
+            return false; 
         }
         
-        if (empty($file_contents)) {
+        if(empty($file_contents)){
             echo '<p><strong>' . __('Sorry, there has been an error.', 'wf_csv_import_export') . '</strong></p>';
             return false;
         }
+        //$file_contents = file_get_contents($url);
 
         $wp_upload_dir = wp_upload_dir();
         $wp_upload_path = $wp_upload_dir['path'];
@@ -880,83 +841,6 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
         file_put_contents($local_file, $file_contents);
         return esc_attr(str_replace(ABSPATH, "", $local_file));
     }
-
-    private function handle_ftp_for_url($username_via_url='',$passsword_via_url='',$host_via_url='',$path_via_url='',$port_via_url=21) {
-        
-        if(empty($username_via_url) && empty($passsword_via_url) && empty($host_via_url) && empty($path_via_url)){
-            return false;
-        }
-
-        $ftp_server = !empty($host_via_url) ? $host_via_url : '';
-        $ftp_server_path = !empty($path_via_url) ? $path_via_url : '';
-        $ftp_user = !empty($username_via_url) ? $username_via_url : '';
-        $ftp_password = !empty($passsword_via_url) ? $passsword_via_url : '';
-        $ftp_port =  $port_via_url;
-        $use_ftps = TRUE;
-
-        $local_file = 'wp-content/plugins/product-csv-import-export-for-woocommerce/temp-import.csv';
-        $server_file = $ftp_server_path;
-
-        $error_message = "";
-        $success = false;
-
-        // if have SFTP Add-on for Import Export for WooCommerce 
-        if (class_exists('class_wf_sftp_import_export')) {
-            $sftp_import = new class_wf_sftp_import_export();
-            if (!$sftp_import->connect($ftp_server, $ftp_user, $ftp_password, $ftp_port)) {
-                $error_message = "Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>. \n";
-            }
-
-            if (empty($server_file)) {
-                $error_message = "Please Complete fill the FTP Details. \n";
-            } else {
-                $file_contents = $sftp_import->get_contents($server_file);
-                if (!empty($file_contents)) {
-                    file_put_contents(ABSPATH . $local_file, $file_contents);
-                    $error_message = "";
-                    $success = true;
-                } else {
-                    $error_message = "Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n";
-                }
-            }
-        } else {
-
-            $ftp_conn = $use_ftps ? @ftp_ssl_connect($ftp_server, $ftp_port) : @ftp_connect($ftp_server, $ftp_port);
-
-            if ($ftp_conn == false) {
-                $error_message = "Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>. \n";
-            } else {
-                if (!@ftp_login($ftp_conn, $ftp_user, $ftp_password)) {
-                    $error_message = "Connected to FTP Server.<br/>But, not able to login please check <b>FTP User Name</b> and <b>Password.</b>\n";
-                }
-            }
-
-            if (empty($error_message)) {
-                if ($use_ftps) {
-                    ftp_pasv($ftp_conn, TRUE);
-                }
-                if (@ftp_get($ftp_conn, ABSPATH . $local_file, $server_file, FTP_BINARY)) {
-                    $error_message = "";
-                    $success = true;
-                } else {
-                    $error_message = "Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n";
-                }
-            }
-
-            if ($ftp_conn != false) {
-                ftp_close($ftp_conn);
-            }
-        }
-
-
-        if ($success) {
-            return $local_file;
-        } else {
-            die($error_message);
-        }
-        return true;
-    }
-    
 
     public function product_exists($title, $sku = '', $post_name = '') {
         global $wpdb;
@@ -1815,11 +1699,9 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
         update_post_meta($product_id, "_{$type}_ids", $ids);
     }
 
-    private function handle_ftp() {        
-        $enable_ftp_ie = !empty($_POST['pro_enable_ftp_ie']) ? true : false;    
-        
+    private function handle_ftp() {
+        $enable_ftp_ie = !empty($_POST['pro_enable_ftp_ie']) ? true : false;
         if ($enable_ftp_ie == false) {
-           
             $settings_in_db = get_option('wf_product_import_ftp', null);
             $settings_in_db['pro_enable_ftp_ie'] = false;
             update_option('wf_product_import_ftp', $settings_in_db);
@@ -1833,6 +1715,7 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
         $ftp_port = !empty($_POST['pro_ftp_port']) ? $_POST['pro_ftp_port'] : 21;
         $use_ftps = !empty($_POST['pro_use_ftps']) ? true : false;
 
+
         $settings = array();
         $settings['pro_ftp_server'] = $ftp_server;
         $settings['pro_ftp_user'] = $ftp_user;
@@ -1841,6 +1724,7 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
         $settings['pro_use_ftps'] = $use_ftps;
         $settings['pro_enable_ftp_ie'] = $enable_ftp_ie;
         $settings['pro_ftp_server_path'] = $ftp_server_path;
+
 
         $local_file = 'wp-content/plugins/product-csv-import-export-for-woocommerce/temp-import.csv';
         $server_file = $ftp_server_path;

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-class ACP_Sorting_Model_Media_FileSize extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class FileSize extends Model {
 
 	public function get_sorting_vars() {
 		$ids = array();

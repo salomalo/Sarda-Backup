@@ -1,20 +1,21 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Strategy;
+
+use ACP\Export\Strategy;
+use AC\ListScreen;
 
 /**
  * Exportability class for comments list screen
  *
  * @since 1.0
  */
-class ACP_Export_Strategy_Comment extends ACP_Export_Strategy {
+class Comment extends Strategy {
 
 	/**
-	 * @param AC_ListScreen_Comment $list_screen
+	 * @param ListScreen\Comment $list_screen
 	 */
-	public function __construct( AC_ListScreen_Comment $list_screen ) {
+	public function __construct( ListScreen\Comment $list_screen ) {
 		parent::__construct( $list_screen );
 	}
 
@@ -44,7 +45,7 @@ class ACP_Export_Strategy_Comment extends ACP_Export_Strategy {
 
 			remove_action( 'parse_comment_query', array( $this, __FUNCTION__ ), PHP_INT_MAX - 100 );
 
-			$modified_query = new WP_Comment_Query( $query->query_vars );
+			$modified_query = new \WP_Comment_Query( $query->query_vars );
 			$comments = $modified_query->get_comments();
 			$this->export( $comments );
 		}

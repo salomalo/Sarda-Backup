@@ -1,22 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Menu extends AC_Column_Post_Menu
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Export_Column {
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Sorting;
+
+class Menu extends AC\Column\Post\Menu
+	implements Sorting\Sortable, Editing\Editable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Menu( $this );
+		return new Editing\Model\Post\Menu( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

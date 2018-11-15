@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo;
 
-abstract class ACP_ThirdParty_YoastSeo_Column extends AC_Column {
+use AC;
+
+abstract class Column extends AC\Column {
 
 	public function __construct() {
 		$this->set_original( true );

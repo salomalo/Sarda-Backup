@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_User_Email extends AC_Column_User_Email
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+class Email extends AC\Column\User\Email
+	implements Editing\Editable, Filtering\Filterable, Export\Exportable {
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Email( $this );
+		return new Editing\Model\User\Email( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Email( $this );
+		return new Filtering\Model\User\Email( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_User_Email( $this );
+		return new Export\Model\User\Email( $this );
 	}
 
 }

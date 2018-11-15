@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model;
+
+use ACP\Export\Model;
 
 /**
  * Exportability model for outputting the column's output value
  *
  * @since 4.1
  */
-class ACP_Export_Model_Value extends ACP_Export_Model {
+class Value extends Model {
 
 	public function get_value( $id ) {
 		$value = $this->get_column()->get_value( $id );

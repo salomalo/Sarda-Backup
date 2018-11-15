@@ -1,25 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
-abstract class ACP_Editing_Strategy extends ACP_Strategy {
+use ACP;
+
+abstract class Strategy extends ACP\Strategy {
 
 	/**
-	 * @var ACP_Editing_Model
+	 * @var Model
 	 */
 	protected $model;
 
 	/**
-	 * @param ACP_Editing_Model $model
+	 * @param Model $model
 	 */
-	public function __construct( ACP_Editing_Model $model ) {
+	public function __construct( Model $model ) {
 		$this->model = $model;
 	}
 
 	/**
-	 * @return ACP_Editing_Model
+	 * @return Model
 	 */
 	public function get_model() {
 		return $this->model;

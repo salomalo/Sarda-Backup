@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-abstract class ACP_Column_NetworkSite_Property extends AC_Column {
+use AC;
+
+abstract class Property extends AC\Column {
 
 	abstract public function get_site_property();
 

@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
+
+use AC;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Media_Height extends AC_Column_Media_Height
-	implements ACP_Column_SortingInterface {
+class Height extends AC\Column\Media\Height
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Media_Height( $this );
+		return new Sorting\Model\Media\Height( $this );
 	}
 
 }

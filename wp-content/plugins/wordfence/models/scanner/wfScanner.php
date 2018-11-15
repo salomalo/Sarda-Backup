@@ -641,7 +641,7 @@ class wfScanner {
 		
 		$runningStatus = wfConfig::get_ser('scanStageStatuses', array(), false);
 		
-		if ($runningStatus[$stageID]['status'] == self::STATUS_RUNNING && ($status == wfIssues::STATUS_PROBLEM)) {
+		if ($runningStatus[$stageID]['status'] == self::STATUS_RUNNING && ($status == wfIssues::STATUS_PROBLEM || $status == wfIssues::STATUS_FAILED)) {
 			$runningStatus[$stageID]['status'] = self::STATUS_RUNNING_WARNING;
 		}
 		

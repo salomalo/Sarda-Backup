@@ -8,7 +8,6 @@ $wafConfigURL = network_admin_url('admin.php?page=WordfenceWAF&subpage=waf_optio
 $wafRemoveURL = network_admin_url('admin.php?page=WordfenceWAF&subpage=waf_options#removeAutoPrepend');
 /** @var array $wafData */
 ?>
-
 <div class="wf-row">
 	<div class="wf-col-xs-12">
 		<div class="wf-block wf-active">
@@ -179,7 +178,7 @@ $wafRemoveURL = network_admin_url('admin.php?page=WordfenceWAF&subpage=waf_optio
 	</div>
 </div>
 <div class="wf-row">
-	<div class="wf-col-xs-12 wf-col-lg-6 wf-col-lg-half-padding-right">
+	<div class="wf-col-xs-12 wf-col-sm-6 wf-col-sm-half-padding-right">
 		<!-- begin top ips blocked -->
 		<?php include(dirname(__FILE__) . '/dashboard/widget_ips.php'); ?>
 		<!-- end top ips blocked -->
@@ -187,7 +186,7 @@ $wafRemoveURL = network_admin_url('admin.php?page=WordfenceWAF&subpage=waf_optio
 		<?php include(dirname(__FILE__) . '/dashboard/widget_countries.php'); ?>
 		<!-- end countries blocked -->
 	</div> <!-- end content block -->
-	<div class="wf-col-xs-12 wf-col-lg-6 wf-col-lg-half-padding-left">
+	<div class="wf-col-xs-12 wf-col-sm-6 wf-col-sm-half-padding-left">
 		<!-- begin firewall summary site -->
 		<?php include(dirname(__FILE__) . '/dashboard/widget_localattacks.php'); ?>
 		<!-- end firewall summary site -->

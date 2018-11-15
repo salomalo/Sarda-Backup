@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Plugin\Update;
 
-class ACP_Plugin_Update_V4101 extends AC_Plugin_Update {
+use AC;
+use AC\Plugin\Update;
+
+class V4101 extends Update {
 
 	public function apply_update() {
 		$this->migrate_site_and_user_specific_settings();
@@ -89,7 +90,7 @@ class ACP_Plugin_Update_V4101 extends AC_Plugin_Update {
 				$key = rtrim( $key, get_current_blog_id() );
 
 				// Store as new preference
-				$preferences = new AC_Preferences_Site( $new, $row->user_id );
+				$preferences = new AC\Preferences\Site( $new, $row->user_id );
 				$preferences->set( $key, maybe_unserialize( $row->meta_value ) );
 			}
 
@@ -117,7 +118,7 @@ class ACP_Plugin_Update_V4101 extends AC_Plugin_Update {
 				$key = str_replace( $meta_key, '', $row->meta_key );
 
 				// Store as new preference
-				$preferences = new AC_Preferences_Site( $new, $row->user_id );
+				$preferences = new AC\Preferences\Site( $new, $row->user_id );
 				$preferences->set( $key, maybe_unserialize( $row->meta_value ) );
 			}
 

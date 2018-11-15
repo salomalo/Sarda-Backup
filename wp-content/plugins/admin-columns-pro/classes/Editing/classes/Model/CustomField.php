@@ -1,22 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model;
 
-class ACP_Editing_Model_CustomField extends ACP_Editing_Model {
+use AC;
+use ACP\Editing\Model;
+
+class CustomField extends Model {
 
 	/**
-	 * @var AC_Column_CustomField
+	 * @var AC\Column\CustomField
 	 */
 	protected $column;
 
-	public function __construct( AC_Column_CustomField $column ) {
+	public function __construct( AC\Column\CustomField $column ) {
 		parent::__construct( $column );
 	}
 
 	/**
-	 * @param ACP_Editing_Model $editable
+	 * @param Model             $editable
 	 * @param                   $id
 	 *
 	 * @return bool|mixed|null
@@ -35,7 +36,7 @@ class ACP_Editing_Model_CustomField extends ACP_Editing_Model {
 	}
 
 	/**
-	 * @param ACP_Editing_Model $editable
+	 * @param Model             $editable
 	 * @param                   $id
 	 * @param                   $value
 	 */
@@ -55,7 +56,7 @@ class ACP_Editing_Model_CustomField extends ACP_Editing_Model {
 		} else {
 
 			// Message
-			$message = new AC_Settings_Column_Message( $this->column );
+			$message = new AC\Settings\Column\Message( $this->column );
 			$message
 				->set_label( __( 'Inline Editing', 'codepress-admin-columns' ) )
 				->set_message( sprintf( __( 'Inline Editing for Custom Fields is not enabled. Enable inline editing for Custom Fields on the %s.', 'codepress-admin-columns' ), ac_helper()->html->link( AC()->admin()->get_link( 'settings' ), __( 'settings screen', 'codepress-admin-columns' ) ) ) );

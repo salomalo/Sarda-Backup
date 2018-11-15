@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Export;
 
 /**
  * @since 4.1
  */
-class ACP_Column_Comment_AuthorAvatar extends AC_Column_Comment_AuthorAvatar
-	implements ACP_Export_Column {
+class AuthorAvatar extends AC\Column\Comment\AuthorAvatar
+	implements Export\Exportable {
 
 	public function export() {
-		return new ACP_Export_Model_Comment_AuthorAvatar( $this );
+		return new Export\Model\Comment\AuthorAvatar( $this );
 	}
 
 }

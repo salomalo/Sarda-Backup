@@ -1,9 +1,9 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_Link extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+
+class Link extends Model\CustomField {
 
 }

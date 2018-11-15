@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting;
+
+use AC;
 
 /**
  * Sorting Addon class
  *
  * @since 1.0
  */
-class ACP_Sorting_Addon extends AC_Addon {
+class Addon extends AC\Addon {
 
 	const OPTIONS_KEY = 'ac_sorting';
 
@@ -17,7 +17,8 @@ class ACP_Sorting_Addon extends AC_Addon {
 	 * @since 1.0
 	 */
 	public function __construct() {
-		AC()->autoloader()->register_prefix( 'ACP_Sorting', $this->get_plugin_dir() . 'classes' );
+		AC\Autoloader::instance()->register_prefix( __NAMESPACE__, $this->get_dir() . 'classes' );
+		AC\Autoloader\Underscore::instance()->add_alias( __NAMESPACE__ . '\Sortable', 'ACP_Column_SortingInterface' );
 
 		// Column
 		add_action( 'ac/column/settings', array( $this, 'register_column_settings' ) );
@@ -46,18 +47,18 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * Get an instance of preferences for the current user
 	 *
-	 * @return AC_Preferences
+	 * @return AC\Preferences\Site
 	 */
 	public function preferences() {
-		return new AC_Preferences_Site( 'sorted_by' );
+		return new AC\Preferences\Site( 'sorted_by' );
 	}
 
 	/**
 	 * @since 4.0
 	 *
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 */
-	public function handle_sorting( AC_ListScreen $list_screen ) {
+	public function handle_sorting( AC\ListScreen $list_screen ) {
 
 		/**
 		 * @see WP_List_Table::get_column_info
@@ -82,7 +83,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 
 			$list_screen = $column->get_list_screen();
 
-			if ( ! $list_screen instanceof ACP_Sorting_ListScreen ) {
+			if ( ! $list_screen instanceof ListScreen ) {
 				continue;
 			}
 
@@ -94,6 +95,8 @@ class ACP_Sorting_Addon extends AC_Addon {
 	 * Get request var from $_GET
 	 *
 	 * Don't use filter_input(): $_GET is managed by Admin Columns and filter_input() uses the request headers
+	 *
+	 * @param string $key
 	 *
 	 * @return false|string
 	 */
@@ -120,14 +123,14 @@ class ACP_Sorting_Addon extends AC_Addon {
 	 *
 	 * @since 1.0
 	 *
-	 * @param string $label
+	 * @param AC\Column $column
 	 *
 	 * @return string Sanitized string
 	 */
-	public function get_sorting_label( AC_Column $column ) {
+	public function get_sorting_label( AC\Column $column ) {
 
 		// Make display label compatible with sorting label in the URL
-		if ( $column instanceof ACP_Column_SortingInterface ) {
+		if ( $column instanceof Sortable ) {
 			return $column->get_name();
 		}
 
@@ -141,11 +144,11 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * Is this column native sortable
 	 *
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 *
 	 * @return false|string Orderby parameter that will be used in the query string
 	 */
-	public function is_native_sortable( AC_Column $column ) {
+	public function is_native_sortable( AC\Column $column ) {
 		$native_sortables = $this->get_native_sortables( $column->get_list_screen() );
 
 		if ( ! isset( $native_sortables[ $column->get_type() ] ) ) {
@@ -156,13 +159,13 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 * @param string        $orderby Query string 'orderby' value
 	 *
 	 * @return string Column name
 	 */
-	private function get_sortable_column_name_from_orderby( AC_ListScreen $list_screen, $orderby ) {
-		if ( ! $list_screen instanceof AC_ListScreenWP ) {
+	private function get_sortable_column_name_from_orderby( AC\ListScreen $list_screen, $orderby ) {
+		if ( ! $list_screen instanceof AC\ListScreenWP ) {
 			return $orderby;
 		}
 
@@ -176,10 +179,12 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
+	 *
+	 * @return array
 	 */
-	private function get_native_sortables( AC_ListScreen $list_screen ) {
-		if ( ! $list_screen instanceof AC_ListScreenWP ) {
+	private function get_native_sortables( AC\ListScreen $list_screen ) {
+		if ( ! $list_screen instanceof AC\ListScreenWP ) {
 			return array();
 		}
 
@@ -195,7 +200,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * @since 1.0
 	 *
-	 * @param array $columns Column name or label
+	 * @param array $sortable_columns Column name or label
 	 *
 	 * @return array Column name or Sanitized Label
 	 */
@@ -207,7 +212,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 		}
 
 		// Stores the default columns on the listings screen
-		if ( ! AC()->is_doing_ajax() && AC()->user_can_manage_admin_columns() ) {
+		if ( ! AC()->is_doing_ajax() && current_user_can( AC\Capabilities::MANAGE ) ) {
 			$this->store_default_sortable_columns( $list_screen->get_key(), $sortable_columns );
 		}
 
@@ -233,7 +238,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 
 				// Native column
 				$setting = $column->get_setting( 'sort' );
-				if ( $setting instanceof ACP_Sorting_Settings && ! $setting->is_active() ) {
+				if ( $setting instanceof Settings && ! $setting->is_active() ) {
 					unset( $sortable_columns[ $column->get_name() ] );
 				}
 			}
@@ -253,7 +258,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_Admin_Page_Settings $settings
+	 * @param AC\Admin\Page\Settings $settings
 	 */
 	public function add_settings( $settings ) {
 		$settings->single_checkbox( array(
@@ -263,29 +268,31 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 *
-	 * @return ACP_Sorting_Model|false
+	 * @return Model|false
 	 */
 	public function get_sorting_model( $column ) {
-		if ( ! $column instanceof ACP_Column_SortingInterface ) {
+		if ( ! $column instanceof Sortable ) {
 			return false;
 		}
 
 		$list_screen = $column->get_list_screen();
 
-		if ( ! $list_screen instanceof ACP_Sorting_ListScreen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return false;
 		}
 
 		$model = $column->sorting();
 
-		return $model->set_strategy( $list_screen->sorting( $model ) );
+		$model->set_strategy( $list_screen->sorting( $model ) );
+
+		return $model;
 	}
 
 	/**
 	 * @param string $list_screen_key
-	 * @param string $column_names
+	 * @param array  $column_names
 	 */
 	private function store_default_sortable_columns( $list_screen_key, $column_names ) {
 		update_option( self::OPTIONS_KEY . '_' . $list_screen_key . "_default", $column_names );
@@ -305,7 +312,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * Register field settings for sorting
 	 *
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 */
 	public function register_column_settings( $column ) {
 
@@ -316,7 +323,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 
 		// Native columns
 		if ( $this->is_native_sortable( $column ) ) {
-			$setting = new ACP_Sorting_Settings( $column );
+			$setting = new Settings( $column );
 			$setting->set_default( 'on' );
 
 			$column->add_setting( $setting );
@@ -326,6 +333,9 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * Callback for the settings page to add settings for sorting
 	 *
+	 * @param array $groups
+	 *
+	 * @return array
 	 */
 	public function settings_group( $groups ) {
 		if ( isset( $groups['sorting'] ) ) {
@@ -358,7 +368,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	 *
 	 */
 	public function handle_settings_request() {
-		if ( ! AC()->user_can_manage_admin_columns() ) {
+		if ( ! current_user_can( AC\Capabilities::MANAGE ) ) {
 			return;
 		}
 		if ( ! wp_verify_nonce( filter_input( INPUT_POST, '_acnonce' ), 'reset-sorting-preference' ) ) {
@@ -367,13 +377,15 @@ class ACP_Sorting_Addon extends AC_Addon {
 
 		$this->preferences()->reset_for_all_users();
 
-		AC()->notice( __( 'All sorting preferences have been reset.', 'codepress-admin-columns' ) );
+		$notice = new AC\Message\Notice();
+		$notice->set_message( __( 'All sorting preferences have been reset.', 'codepress-admin-columns' ) )
+		       ->register();
 	}
 
 	/**
 	 * When you revisit a page, set the orderby variable so WordPress prints the columns headers properly
 	 *
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @since 4.0
 	 */
@@ -410,15 +422,15 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return array
 	 */
-	private function get_sorting_default( AC_ListScreen $list_screen ) {
+	private function get_sorting_default( AC\ListScreen $list_screen ) {
 
 		/**
 		 * @param string        $orderby [ string $column_name, bool $descending ]
-		 * @param AC_ListScreen $list_screen
+		 * @param AC\ListScreen $list_screen
 		 */
 		$default = apply_filters( 'acp/sorting/default', false, $list_screen );
 
@@ -431,11 +443,11 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return array|false
 	 */
-	private function get_sorting_preference( AC_ListScreen $list_screen ) {
+	private function get_sorting_preference( AC\ListScreen $list_screen ) {
 		$preference = $this->preferences()->get( $list_screen->get_storage_key() );
 
 		if ( empty( $preference['orderby'] ) ) {
@@ -455,7 +467,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * When the orderby (and order) are set, save the preference
 	 *
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @since 4.0
 	 */
@@ -469,7 +481,7 @@ class ACP_Sorting_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return bool
 	 */
@@ -480,10 +492,10 @@ class ACP_Sorting_Addon extends AC_Addon {
 	/**
 	 * @since 1.0
 	 *
-	 * @param $list_screen AC_ListScreen
+	 * @param $list_screen AC\ListScreen
 	 */
 	public function table_scripts( $list_screen ) {
-		wp_enqueue_script( 'acp-sorting', $this->get_plugin_url() . 'assets/js/table.js', array( 'jquery' ), ACP()->get_version() );
+		wp_enqueue_script( 'acp-sorting', $this->get_url() . 'assets/js/table.js', array( 'jquery' ), ACP()->get_version() );
 
 		wp_localize_script( 'acp-sorting', 'ACP_Sorting', array(
 			'reset_button' => array(
@@ -492,15 +504,15 @@ class ACP_Sorting_Addon extends AC_Addon {
 			),
 		) );
 
-		wp_enqueue_style( 'acp-sorting', $this->get_plugin_url() . 'assets/css/table.css', array(), ACP()->get_version() );
+		wp_enqueue_style( 'acp-sorting', $this->get_url() . 'assets/css/table.css', array(), ACP()->get_version() );
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return string|false Ordered by column name
 	 */
-	private function show_reset_button( AC_ListScreen $list_screen ) {
+	private function show_reset_button( AC\ListScreen $list_screen ) {
 		$default = $this->get_sorting_default( $list_screen );
 
 		if ( $this->get_orderby() === $default['orderby'] && $this->get_order() === $default['order'] ) {
@@ -522,13 +534,11 @@ class ACP_Sorting_Addon extends AC_Addon {
 	public function ajax_reset_sorting() {
 		check_ajax_referer( 'ac-ajax' );
 
-		$list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) );
+		$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ), filter_input( INPUT_POST, 'layout' ) );
 
 		if ( ! $list_screen ) {
 			wp_die();
 		}
-
-		$list_screen->set_layout_id( filter_input( INPUT_POST, 'layout' ) );
 
 		$deleted = $this->delete_sorting_preference( $list_screen );
 

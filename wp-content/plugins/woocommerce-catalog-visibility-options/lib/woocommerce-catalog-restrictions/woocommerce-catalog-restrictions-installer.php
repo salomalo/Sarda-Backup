@@ -29,7 +29,11 @@ function install_woocommerce_catalog_restrictions() {
 
 	if ( !get_option( 'woocommerce_choose_location_page_id' ) ) {
 
-		wc_create_page( esc_sql( _x( 'choose-location', 'page_slug', 'wc_catalog_restrictions' ) ), 'woocommerce_choose_location_page_id', __( 'Your Location', 'wc_catalog_restrictions' ), '[location_picker /]' );
+		if ( WC_Catalog_Visibility_Compatibility::is_wc_version_gte_2_1() ) {
+			wc_create_page( esc_sql( _x( 'choose-location', 'page_slug', 'wc_catalog_restrictions' ) ), 'woocommerce_choose_location_page_id', __( 'Your Location', 'wc_catalog_restrictions' ), '[location_picker /]' );
+		} else {
+			woocommerce_create_page( esc_sql( _x( 'choose-location', 'page_slug', 'wc_catalog_restrictions' ) ), 'woocommerce_choose_location_page_id', __( 'Your Location', 'wc_catalog_restrictions' ), '[location_picker /]' );
+		}
 	}
 
 	update_option( "woocommerce_catalog_restrictions_db_version", $wc_catalog_restrictions->version );

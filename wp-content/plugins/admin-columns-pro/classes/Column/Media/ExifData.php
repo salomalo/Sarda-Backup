@@ -1,18 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_ExifData extends AC_Column_Media_ExifData
-	implements ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Export;
+use ACP\Sorting;
+
+class ExifData extends AC\Column\Media\ExifData
+	implements Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Value( $this );
+		return new Sorting\Model\Value( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Value( $this );
+		return new Export\Model\Value( $this );
 	}
 
 }

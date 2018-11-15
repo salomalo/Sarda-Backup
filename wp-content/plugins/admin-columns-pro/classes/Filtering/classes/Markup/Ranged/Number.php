@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Markup\Ranged;
 
-class ACP_Filtering_Markup_Ranged_Number extends ACP_Filtering_Markup_Ranged {
+use ACP\Filtering\Markup\Ranged;
+
+class Number extends Ranged {
 
 	public function __construct( $name, $label, $min, $max ) {
 		parent::__construct( $name, $label, $min, $max );

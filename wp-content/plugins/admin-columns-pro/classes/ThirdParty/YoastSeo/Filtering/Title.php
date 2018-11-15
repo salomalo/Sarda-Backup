@@ -1,13 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Filtering;
 
-class ACP_ThirdParty_YoastSeo_Filtering_Title extends ACP_Filtering_Model {
+use ACP\Filtering;
+
+class Title extends Filtering\Model {
 
 	public function get_filtering_data() {
-
 		return array(
 			'options' => array(
 				'default_title' => __( 'Has Default Title', 'codepress-admin-columns' ),

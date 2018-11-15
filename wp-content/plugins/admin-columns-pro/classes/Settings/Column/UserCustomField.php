@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column;
 
-class ACP_Settings_Column_UserCustomField extends ACP_Settings_Column_CustomField {
+class UserCustomField extends CustomField {
 
 	protected function get_post_type() {
 		return false;

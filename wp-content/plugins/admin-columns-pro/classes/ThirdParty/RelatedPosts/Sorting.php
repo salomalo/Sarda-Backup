@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\RelatedPosts;
 
-class ACP_ThirdParty_RelatedPosts_Sorting extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Sorting extends Model {
 
 	public function get_sorting_vars() {
 		$post_ids = array();

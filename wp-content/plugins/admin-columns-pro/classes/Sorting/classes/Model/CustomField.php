@@ -1,22 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model;
+
+use AC;
+use ACP\Sorting\Model;
 
 /**
- * @property AC_Column_CustomField $column
+ * @property AC\Column\CustomField $column
  */
-class ACP_Sorting_Model_CustomField extends ACP_Sorting_Model_Meta {
+class CustomField extends Model\Meta {
 
-	public function __construct( AC_Column_CustomField $column ) {
+	public function __construct( AC\Column\CustomField $column ) {
 		parent::__construct( $column );
 	}
 
 	public function get_sorting_vars() {
 		$ids = $this->strategy->get_results( parent::get_sorting_vars() );
 
-		$query = new AC_Meta_QueryColumn( $this->column );
+		$query = new AC\Meta\QueryColumn( $this->column );
 		$query->select( 'id, meta_value' )
 		      ->where_in( $ids );
 

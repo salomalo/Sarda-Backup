@@ -1,16 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\CustomField;
 
-class ACP_Filtering_Model_CustomField_UserById extends ACP_Filtering_Model_CustomField {
+use ACP\Filtering\Model;
+
+class UserById extends Model\CustomField {
 
 	public function get_filtering_data() {
 		$options = array();
 
 		foreach ( $this->get_meta_values() as $value ) {
-			$options[ $value ] = $this->column->get_setting('user')->format( $value, $value );
+			$options[ $value ] = $this->column->get_setting( 'user' )->format( $value, $value );
 		}
 
 		return array(

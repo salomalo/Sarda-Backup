@@ -19,22 +19,6 @@ class WC_Admin_API_Keys {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'actions' ) );
 		add_action( 'woocommerce_settings_page_init', array( $this, 'screen_option' ) );
-		add_filter( 'woocommerce_save_settings_advanced_keys', array( $this, 'allow_save_settings' ) );
-	}
-
-	/**
-	 * Check if should allow save settings.
-	 * This prevents "Your settings have been saved." notices on the table list.
-	 *
-	 * @param  bool $allow If allow save settings.
-	 * @return bool
-	 */
-	public function allow_save_settings( $allow ) {
-		if ( ! isset( $_GET['create-key'], $_GET['edit-key'] ) ) { // WPCS: input var okay, CSRF ok.
-			return false;
-		}
-
-		return $allow;
 	}
 
 	/**
@@ -97,7 +81,7 @@ class WC_Admin_API_Keys {
 			$keys_table_list->prepare_items();
 
 			echo '<input type="hidden" name="page" value="wc-settings" />';
-			echo '<input type="hidden" name="tab" value="advanced" />';
+			echo '<input type="hidden" name="tab" value="api" />';
 			echo '<input type="hidden" name="section" value="keys" />';
 
 			$keys_table_list->views();
@@ -157,12 +141,12 @@ class WC_Admin_API_Keys {
 	public function actions() {
 		if ( $this->is_api_keys_settings_page() ) {
 			// Revoke key.
-			if ( isset( $_REQUEST['revoke-key'] ) ) { // WPCS: input var okay, CSRF ok.
+			if ( isset( $_GET['revoke-key'] ) ) { // WPCS: input var okay, CSRF ok.
 				$this->revoke_key();
 			}
 
 			// Bulk actions.
-			if ( isset( $_REQUEST['action'] ) && isset( $_REQUEST['key'] ) ) { // WPCS: input var okay, CSRF ok.
+			if ( isset( $_GET['action'] ) && isset( $_GET['key'] ) ) { // WPCS: input var okay, CSRF ok.
 				$this->bulk_actions();
 			}
 		}
@@ -172,11 +156,8 @@ class WC_Admin_API_Keys {
 	 * Notices.
 	 */
 	public static function notices() {
-		if ( isset( $_GET['revoked'] ) ) { // WPCS: input var okay, CSRF ok.
-			$revoked = absint( $_GET['revoked'] ); // WPCS: input var okay, CSRF ok.
-
-			/* translators: %d: count */
-			WC_Admin_Settings::add_message( sprintf( _n( '%d API key permanently revoked.', '%d API keys permanently revoked.', $revoked, 'woocommerce' ), $revoked ) );
+		if ( isset( $_GET['revoked'] ) && 1 === $_GET['revoked'] ) { // WPCS: input var okay, CSRF ok.
+			WC_Admin_Settings::add_message( __( 'API key revoked successfully.', 'woocommerce' ) );
 		}
 	}
 
@@ -186,15 +167,15 @@ class WC_Admin_API_Keys {
 	private function revoke_key() {
 		check_admin_referer( 'revoke' );
 
-		if ( isset( $_REQUEST['revoke-key'] ) ) { // WPCS: input var okay, CSRF ok.
-			$key_id = absint( $_REQUEST['revoke-key'] ); // WPCS: input var okay, CSRF ok.
+		if ( isset( $_GET['revoke-key'] ) ) { // WPCS: input var okay, CSRF ok.
+			$key_id = absint( $_GET['revoke-key'] ); // WPCS: input var okay, CSRF ok.
 
 			if ( $key_id ) {
 				$this->remove_key( $key_id );
 			}
 		}
 
-		wp_safe_redirect( esc_url_raw( add_query_arg( array( 'revoked' => 1 ), admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys' ) ) ) );
+		wp_redirect( esc_url_raw( add_query_arg( array( 'revoked' => 1 ), admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys' ) ) ) );
 		exit();
 	}
 
@@ -208,9 +189,9 @@ class WC_Admin_API_Keys {
 			wp_die( esc_html__( 'You do not have permission to edit API Keys', 'woocommerce' ) );
 		}
 
-		if ( isset( $_REQUEST['action'] ) ) { // WPCS: input var okay, CSRF ok.
-			$action = sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ); // WPCS: input var okay, CSRF ok.
-			$keys   = isset( $_REQUEST['key'] ) ? array_map( 'absint', (array) $_REQUEST['key'] ) : array(); // WPCS: input var okay, CSRF ok.
+		if ( isset( $_GET['action'] ) ) { // WPCS: input var okay, CSRF ok.
+			$action = sanitize_text_field( wp_unslash( $_GET['action'] ) ); // WPCS: input var okay, CSRF ok.
+			$keys   = isset( $_GET['key'] ) ? array_map( 'absint', (array) $_GET['key'] ) : array(); // WPCS: input var okay, CSRF ok.
 
 			if ( 'revoke' === $action ) {
 				$this->bulk_revoke_key( $keys );
@@ -224,18 +205,9 @@ class WC_Admin_API_Keys {
 	 * @param array $keys API Keys.
 	 */
 	private function bulk_revoke_key( $keys ) {
-		$qty = 0;
 		foreach ( $keys as $key_id ) {
-			$result = $this->remove_key( $key_id );
-
-			if ( $result ) {
-				$qty++;
-			}
+			$this->remove_key( $key_id );
 		}
-
-		// Redirect to webhooks page.
-		wp_safe_redirect( esc_url_raw( add_query_arg( array( 'revoked' => $qty ), admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys' ) ) ) );
-		exit();
 	}
 
 	/**

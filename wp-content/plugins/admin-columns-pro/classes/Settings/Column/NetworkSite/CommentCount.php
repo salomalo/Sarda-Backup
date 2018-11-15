@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_CommentCount extends AC_Settings_Column_CommentCount {
+use AC\Settings\Column;
+
+class CommentCount extends Column\CommentCount {
 
 	/**
 	 * @param int $blog_id
@@ -42,8 +42,8 @@ class ACP_Settings_Column_NetworkSite_CommentCount extends AC_Settings_Column_Co
 	/**
 	 * Display a comment count bubble
 	 *
-	 * @param int      $blog_id
-	 * @param stdClass $comments
+	 * @param int    $blog_id
+	 * @param object $comments
 	 *
 	 * @see WP_List_Table::comments_bubble()
 	 *

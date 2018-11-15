@@ -2140,7 +2140,7 @@
 			$args = array_merge( $args, $get_terms_args );
 			$args['taxonomy'] = $term;
 
-			$exclude = apply_filters( 'prdctfltr_exclude_categories', array( 'uncategorized' ) );
+			$exclude = apply_filters( 'prdctfltr_exclude_categories', array( get_option( 'default_product_cat' ) ) );
 			if ( !empty( $exclude ) && is_array( $exclude ) ) {
 				$args['exclude'] = $exclude;
 			}

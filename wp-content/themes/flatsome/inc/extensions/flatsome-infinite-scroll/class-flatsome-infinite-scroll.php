@@ -22,7 +22,7 @@ class Flatsome_Infinite_Scroll {
 	 *
 	 * @var string
 	 */
-	private $version = '1.4';
+	private $version = '1.2';
 
 	/**
 	 * Holds loader type selected from theme settings.
@@ -96,7 +96,6 @@ class Flatsome_Infinite_Scroll {
 			'fade_in_duration' => 300,
 			'type'             => $this->loader_type,
 			'list_style'       => $this->list_style,
-			'history'          => 'push',
 		);
 
 		wp_localize_script( 'flatsome-infinite-scroll', 'flatsome_infinite_scroll', apply_filters( 'flatsome_infinite_scroll_params', $params ) );

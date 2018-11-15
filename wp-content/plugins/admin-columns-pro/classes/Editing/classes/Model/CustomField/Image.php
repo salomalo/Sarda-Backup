@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_Image extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+
+class Image extends Model\CustomField {
 
 	public function get_view_settings() {
 		$data = parent::get_view_settings();

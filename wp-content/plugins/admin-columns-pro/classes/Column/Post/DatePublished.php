@@ -1,28 +1,31 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.4
  */
-class ACP_Column_Post_DatePublished extends AC_Column_Post_DatePublished
-	implements ACP_Column_SortingInterface, ACP_Column_FilteringInterface, ACP_Column_EditingInterface {
+class DatePublished extends AC\Column\Post\DatePublished
+	implements Sorting\Sortable, Filtering\Filterable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'date' );
 
 		return $model;
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Date( $this );
+		return new Filtering\Model\Post\Date( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Date( $this );
+		return new Editing\Model\Post\Date( $this );
 	}
 
 }

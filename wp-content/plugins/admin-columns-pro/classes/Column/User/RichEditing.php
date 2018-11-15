@@ -1,22 +1,25 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
 
-class ACP_Column_User_RichEditing extends AC_Column_User_RichEditing
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
+
+class RichEditing extends AC\Column\User\RichEditing
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function editing() {
-		return new ACP_Editing_Model_User_RichEditing( $this );
+		return new Editing\Model\User\RichEditing( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_RichEditing( $this );
+		return new Filtering\Model\User\RichEditing( $this );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 }

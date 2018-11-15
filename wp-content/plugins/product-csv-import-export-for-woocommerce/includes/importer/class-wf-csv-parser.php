@@ -37,7 +37,6 @@ class WF_CSV_Parser {
 			'external'	=> $external_term->term_id
 			);
 
-                
 		// Subscription product types
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			$subscription_term                                    = get_term_by( 'slug', 'subscription', 'product_type' );
@@ -99,8 +98,6 @@ class WF_CSV_Parser {
 				$this->allowed_product_types['photography'] = $photography_term->term_id;
 			}
 		}
-                
-                $this->allowed_product_types = apply_filters('hf_woocommerce_csv_product_import_allowed_product_types', $this->allowed_product_types);
 	}
 
 	/**
@@ -143,9 +140,7 @@ class WF_CSV_Parser {
 				$row = array();
 				
 				foreach ( $header as $key => $heading ) {
-                                        if (!$heading)
-                                            continue;
-                                        $s_heading = strtolower($heading);
+					$s_heading = $heading;
 
 	            	// Check if this heading is being mapped to a different field
 					if ( isset( $mapping[$s_heading] ) ) {
@@ -169,7 +164,9 @@ class WF_CSV_Parser {
 							}
 						}
 					}
-					
+
+					if ( $s_heading == '' )
+						continue;
 
 					if($s_heading=='Images')// added for prevent 'if' condition going to false on function parse_product 
                                             $s_heading='images';
@@ -773,7 +770,7 @@ class WF_CSV_Parser {
 								 */
 								$term_may_exist = term_exists( $term, $taxonomy, absint( $parent ) );
 
-								$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > (' . __LINE__ . ') Term %s (%s) exists? %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), esc_html( $taxonomy ), $term_may_exist ? print_r( $term_may_exist, true ) : '-' ) );
+								$WF_CSV_Product_Import->hf_log_data_change( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Term %s (%s) exists? %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), esc_html( $taxonomy ), $term_may_exist ? print_r( $term_may_exist, true ) : '-' ) );
 
 								if ( is_array( $term_may_exist ) ) {
 									$possible_term = get_term( $term_may_exist['term_id'], 'product_cat' );
@@ -793,7 +790,7 @@ class WF_CSV_Parser {
 									if ( ! is_wp_error( $t ) ) {
 										$term_id = $t['term_id'];
 									} else {
-										$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > (' . __LINE__ . ') Failed to import term %s, parent %s - %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), sanitize_text_field( $parent ), sanitize_text_field( $taxonomy ) ) );
+										$WF_CSV_Product_Import->hf_log_data_change( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Failed to import term %s, parent %s - %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), sanitize_text_field( $parent ), sanitize_text_field( $taxonomy ) ) );
 										break;
 									}
 								}
@@ -881,8 +878,6 @@ class WF_CSV_Parser {
 					if ( ! taxonomy_exists( $taxonomy ) ) {
 
 						$nicename = sanitize_title( str_replace( 'pa_', '', $taxonomy ) );
-                                                
-                                                $attribute_label = ucwords(str_replace('-',' ',$nicename)); // for importing attribute name as human readable string
 
 						$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > Attribute taxonomy "%s" does not exist. Adding it. Nicename: %s', 'wf_csv_import_export'), $taxonomy, $nicename ) );
 
@@ -890,7 +885,7 @@ class WF_CSV_Parser {
 
 						if ( ! $exists_in_db ) {
 							// Create the taxonomy
-							$wpdb->insert( $wpdb->prefix . "woocommerce_attribute_taxonomies", array( 'attribute_name' => $nicename, 'attribute_label' => $attribute_label, 'attribute_type' => 'select', 'attribute_orderby' => 'menu_order' ) );
+							$wpdb->insert( $wpdb->prefix . "woocommerce_attribute_taxonomies", array( 'attribute_name' => $nicename, 'attribute_label' => $nicename, 'attribute_type' => 'select', 'attribute_orderby' => 'menu_order' ) );
 						} else {
 							$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > Attribute taxonomy %s already exists in DB.', 'wf_csv_import_export'), $taxonomy ) );
 						}

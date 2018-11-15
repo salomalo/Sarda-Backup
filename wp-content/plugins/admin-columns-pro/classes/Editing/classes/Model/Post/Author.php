@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Author extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Author extends Model {
 
 	public function get_edit_value( $id ) {
 		$user = get_userdata( ac_helper()->post->get_raw_field( 'post_author', $id ) );

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model;
 
-class ACP_Editing_Model_Disabled extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Disabled extends Model {
 
 	public function register_settings() {
 		// Settings Disabled. Leave empty.

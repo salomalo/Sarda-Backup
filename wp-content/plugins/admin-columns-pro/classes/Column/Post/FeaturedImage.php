@@ -1,29 +1,33 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Post_FeaturedImage extends AC_Column_Post_FeaturedImage
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class FeaturedImage extends AC\Column\Post\FeaturedImage
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Meta( $this );
+		return new Sorting\Model\Meta( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_FeaturedImage( $this );
+		return new Filtering\Model\Post\FeaturedImage( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_FeaturedImage( $this );
+		return new Editing\Model\Post\FeaturedImage( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_AttachmentURLFromAttachmentId( $this );
+		return new Export\Model\AttachmentURLFromAttachmentId( $this );
 	}
 
 }

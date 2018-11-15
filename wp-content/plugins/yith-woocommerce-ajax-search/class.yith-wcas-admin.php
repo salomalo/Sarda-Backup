@@ -2,7 +2,7 @@
 /**
  * Admin class
  *
- * @author YITH
+ * @author Yithemes
  * @package YITH WooCommerce Ajax Search
  * @version 1.1.1
  */
@@ -76,8 +76,8 @@ if( !class_exists( 'YITH_WCAS_Admin' ) ) {
             add_action( 'admin_menu', array( $this, 'register_panel' ), 5) ;
 
             //Add action links
-			add_filter( 'plugin_action_links_' . plugin_basename( YITH_WCAS_DIR . '/' . basename( YITH_WCAS_FILE ) ), array( $this, 'action_links' ) );
-			add_filter( 'yith_show_plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 5 );
+            add_filter( 'plugin_action_links_' . plugin_basename( YITH_WCAS_DIR . '/' . basename( YITH_WCAS_FILE ) ), array( $this, 'action_links') );
+            add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
 
             add_action( 'yith_ajax_search_premium', array( $this, 'premium_tab' ) );
 
@@ -101,10 +101,13 @@ if( !class_exists( 'YITH_WCAS_Admin' ) ) {
          * @return mixed
          * @use plugin_action_links_{$plugin_file_name}
          */
-	    public function action_links( $links ) {
-		    $links = yith_add_action_links( $links, $this->_panel_page, false );
-		    return $links;
-	    }
+        public function action_links( $links ) {
+
+            $links[] = '<a href="' . admin_url( "admin.php?page={$this->_panel_page}" ) . '">' . __( 'Settings', 'yith-woocommerce-ajax-search' ) . '</a>';
+            $links[] = '<a href="' . $this->get_premium_landing_uri() . '" target="_blank">' . __( 'Premium Version', 'yith-woocommerce-ajax-search' ) . '</a>';
+
+            return $links;
+        }
 
         /**
          * Add a panel under YITH Plugins tab
@@ -181,13 +184,13 @@ if( !class_exists( 'YITH_WCAS_Admin' ) ) {
          * @author   Andrea Grillo <andrea.grillo@yithemes.com>
          * @use plugin_row_meta
          */
-	    public function plugin_row_meta( $new_row_meta_args, $plugin_meta, $plugin_file, $plugin_data, $status, $init_file = 'YITH_WCAS_FREE_INIT' ) {
-		    if ( defined( $init_file ) && constant( $init_file ) == $plugin_file ) {
-			    $new_row_meta_args['slug'] = YITH_WCAS_SLUG;
-		    }
+        public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 
-		    return $new_row_meta_args;
-	    }
+            if ( defined( 'YITH_WCAS_FREE_INIT' ) && YITH_WCAS_FREE_INIT == $plugin_file ) {
+                $plugin_meta[] = '<a href="' . $this->doc_url . '" target="_blank">' . __( 'Plugin Documentation', 'yith-woocommerce-ajax-search' ) . '</a>';
+            }
+            return $plugin_meta;
+        }
 
 
         public function register_pointer(){

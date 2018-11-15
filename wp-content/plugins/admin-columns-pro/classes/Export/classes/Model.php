@@ -1,8 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export;
+
+use ACP;
 
 /**
  * Exportability model, which can be attached as an extension to a column. It handles custom
@@ -10,23 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0
  */
-abstract class ACP_Export_Model {
-
-	/**
-	 * @var AC_Column
-	 */
-	protected $column;
-
-	public function __construct( AC_Column $column ) {
-		$this->column = $column;
-	}
-
-	/**
-	 * @return AC_Column
-	 */
-	public function get_column() {
-		return $this->column;
-	}
+abstract class Model extends ACP\Model {
 
 	/**
 	 * Retrieve the value to be exported by the column for a specific item
@@ -39,7 +23,6 @@ abstract class ACP_Export_Model {
 
 	/**
 	 * @since 1.0
-	 * @see   ACP_Model::is_active()
 	 */
 	public function is_active() {
 		return true;

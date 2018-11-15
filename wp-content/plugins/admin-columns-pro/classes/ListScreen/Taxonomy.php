@@ -1,11 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ListScreen;
 
-class ACP_ListScreen_Taxonomy extends AC_ListScreenWP
-	implements ACP_Editing_ListScreen, ACP_Export_ListScreen {
+use AC;
+use ACP\Column;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class Taxonomy extends AC\ListScreenWP
+	implements Editing\ListScreen, Export\ListScreen, Filtering\ListScreen, Sorting\ListScreen {
 
 	/**
 	 * @var string Taxonomy name
@@ -19,19 +24,23 @@ class ACP_ListScreen_Taxonomy extends AC_ListScreenWP
 	 */
 	public function __construct( $taxonomy ) {
 
-		$this->set_meta_type( 'term' );
-		$this->set_screen_base( 'edit-tags' );
-		$this->set_screen_id( 'edit-' . $taxonomy );
-		$this->set_key( 'wp-taxonomy_' . $taxonomy );
-		$this->set_taxonomy( $taxonomy );
-		$this->set_group( 'taxonomy' );
+		$this->set_taxonomy( $taxonomy )
+		     ->set_meta_type( 'term' )
+		     ->set_screen_base( 'edit-tags' )
+		     ->set_screen_id( 'edit-' . $taxonomy )
+		     ->set_key( 'wp-taxonomy_' . $taxonomy )
+		     ->set_group( 'taxonomy' );
 	}
 
 	/**
 	 * @param string $taxonomy
+	 *
+	 * @return self
 	 */
 	protected function set_taxonomy( $taxonomy ) {
 		$this->taxonomy = (string) $taxonomy;
+
+		return $this;
 	}
 
 	/**
@@ -49,12 +58,12 @@ class ACP_ListScreen_Taxonomy extends AC_ListScreenWP
 	}
 
 	/**
-	 * @return WP_Terms_List_Table
+	 * @return \WP_Terms_List_Table
 	 */
 	public function get_list_table() {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-terms-list-table.php' );
 
-		return new WP_Terms_List_Table( array( 'screen' => $this->get_screen_id() ) );
+		return new \WP_Terms_List_Table( array( 'screen' => $this->get_screen_id() ) );
 	}
 
 	/**
@@ -62,7 +71,7 @@ class ACP_ListScreen_Taxonomy extends AC_ListScreenWP
 	 *
 	 * @param int $term_id
 	 *
-	 * @return WP_Term
+	 * @return \WP_Term
 	 */
 	protected function get_object( $term_id ) {
 		return get_term_by( 'id', $term_id, $this->get_taxonomy() );
@@ -138,18 +147,25 @@ class ACP_ListScreen_Taxonomy extends AC_ListScreenWP
 	}
 
 	protected function register_column_types() {
-		$this->register_column_type( new ACP_Column_CustomField );
-		$this->register_column_type( new ACP_Column_Actions );
-
-		$this->register_column_types_from_dir( ACP()->get_plugin_dir() . 'classes/Column/Taxonomy', ACP()->get_prefix() );
+		$this->register_column_type( new Column\CustomField );
+		$this->register_column_type( new Column\Actions );
+		$this->register_column_types_from_dir( 'ACP\Column\Taxonomy' );
 	}
 
 	public function editing( $model ) {
-		return new ACP_Editing_Strategy_Taxonomy( $model );
+		return new Editing\Strategy\Taxonomy( $model );
+	}
+
+	public function filtering( $model ) {
+		return new Filtering\Strategy\Taxonomy( $model );
+	}
+
+	public function sorting( $model ) {
+		return new Sorting\Strategy\Taxonomy( $model );
 	}
 
 	public function export() {
-		return new ACP_Export_Strategy_Taxonomy( $this );
+		return new Export\Strategy\Taxonomy( $this );
 	}
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo;
 
-final class ACP_ThirdParty_YoastSeo_Addon {
+use AC;
+
+final class Addon {
 
 	public function __construct() {
 		add_action( 'ac/column_types', array( $this, 'set_columns' ) );
@@ -13,16 +13,16 @@ final class ACP_ThirdParty_YoastSeo_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 */
 	public function set_columns( $list_screen ) {
 		if ( $this->is_active() ) {
-			$list_screen->register_column_types_from_dir( plugin_dir_path( __FILE__ ) . 'Column', ACP()->get_prefix() );
+			$list_screen->register_column_types_from_dir( __NAMESPACE__ . '\Column' );
 		}
 	}
 
 	/**
-	 * @param AC_Groups $groups
+	 * @param AC\Groups $groups
 	 */
 	public function set_groups( $groups ) {
 		$groups->register_group( 'yoast-seo', __( 'Yoast SEO', 'wordpress-seo' ), 25 );

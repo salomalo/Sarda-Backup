@@ -12,7 +12,11 @@ if ( !defined( 'ABSPATH' ) ) {
 ?>
 <div class="wrap">
 	
-	<h2><?php _e( 'Popup Anything On Click - Features', 'popup-anything-on-click' ); ?></h2><br />	
+	<h2><?php _e( 'Popup Anything On Click - Features', 'popup-anything-on-click' ); ?></h2><br />
+
+	<div class="wprps-notice">
+		<a href="https://www.wponlinesupport.com/checkout/?edd_action=add_to_cart&download_id=65474&edd_options[price_id]=3&ref=wposthemeplugin" target="_blank">Upgrade</a> a plugin within a minute and unloack many features now!!!
+	</div>
 
 	<style>
 		.wprps-notice{padding: 10px; color: #3c763d; background-color: #dff0d8; border:1px solid #d6e9c6; margin: 0 0 20px 0;}
@@ -30,8 +34,7 @@ if ( !defined( 'ABSPATH' ) ) {
 		/* Tablehead */
 		.wpos-plugin-pricing-table thead th {background-color: #fff; background:linear-gradient(to bottom, #ffffff 0%, #ffffff 100%); text-align: center; position: relative; border-bottom: 1px solid #ccc; padding: 1em 0 1em; font-weight:400; color:#999;}
 		.wpos-plugin-pricing-table thead th:nth-child(1) {background: transparent;}
-		.wpos-plugin-pricing-table thead th:nth-child(3) {padding:1em 2px 3.5em 2px; }	
-		.wpos-plugin-pricing-table thead th:nth-child(3) p{color:#000;}		
+		.wpos-plugin-pricing-table thead th:nth-child(3) {padding:1em 0 3.5em 0;}		
 		.wpos-plugin-pricing-table thead th p.promo {font-size: 14px; color: #fff; position: absolute; bottom:0; left: -17px; z-index: 1000; width: 100%; margin: 0; padding: .625em 17px .75em; background-color: #ca4a1f; box-shadow: 0 2px 4px rgba(0,0,0,.25); border-bottom: 1px solid #ca4a1f;}
 		.wpos-plugin-pricing-table thead th p.promo:before {content: ""; position: absolute; display: block; width: 0px; height: 0px; border-style: solid; border-width: 0 7px 7px 0; border-color: transparent #900 transparent transparent; bottom: -7px; left: 0;}
 		.wpos-plugin-pricing-table thead th p.promo:after {content: ""; position: absolute; display: block; width: 0px; height: 0px; border-style: solid; border-width: 7px 7px 0 0; border-color: #900 transparent transparent transparent; bottom: -7px; right: 0;}
@@ -51,8 +54,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 		/* Table Footer */
 		.wpos-plugin-pricing-table tfoot th, .wpos-plugin-pricing-table tfoot td{text-align: center; border-top: 1px solid #ccc;}
-		.pricing-footer a{margin-bottom:5px;}
-		.wpos-plugin-pricing-table tfoot .wpos-button{font-weight: 600; color: #fff; text-decoration: none; border:0px; cursor:pointer; text-transform: uppercase; display: inline-block; padding: 1em 2em; background: #59c7fb; border-radius: .2em;}
+		.wpos-plugin-pricing-table tfoot a{font-weight: 600; color: #fff; text-decoration: none; text-transform: uppercase; display: inline-block; padding: 1em 2em; background: #59c7fb; border-radius: .2em;}
 	</style>
 
 	<table class="wpos-plugin-pricing-table">
@@ -68,7 +70,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	    		</th>
 	    		<th>
 	    			<h2>Premium</h2>
-	    			<p>Gain access to <strong>Popup Anything On Click</strong> and <strong>all other products</strong> with a single purchase.</p>
+	    			<p>$12 USD</p>
 	    			<p class="promo">Our most valuable package!</p>
 	    		</th>	    		
 	    	</tr>
@@ -78,10 +80,10 @@ if ( !defined( 'ABSPATH' ) ) {
 	    	<tr>
 	    		<th></th>
 	    		<td></td>
-	    		<td><p>Gain access to <strong>Popup Anything On Click</strong> and <strong>all other products</strong> with a single purchase.</p>
-				<a href="https://www.wponlinesupport.com/pricing/?ref=WposPratik" class="wpos-button" target="_blank">View Pricing Options</a></td>
+	    		<td><a href="https://www.wponlinesupport.com/checkout/?edd_action=add_to_cart&download_id=65474&edd_options[price_id]=3&ref=wposthemeplugin" target="_blank">Upgrade Now</a></td>
 	    	</tr>
 	    </tfoot>
+
 	    <tbody>
 	    	<tr>
 	    		<th>Create Unlimited Popups  <span>Create and manage as many popups as you want</span></th>

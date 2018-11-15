@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model;
 
-class ACP_Sorting_Model_Value extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Value extends Model {
 
 	public function get_sorting_vars() {
 		$ids = array();

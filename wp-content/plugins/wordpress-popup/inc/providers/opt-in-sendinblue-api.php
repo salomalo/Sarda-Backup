@@ -42,52 +42,57 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 				'sslverify'    => apply_filters( 'opt_in_sendinblue_sslverify', $ssl_verify ),
 				'headers'      => array(
 					'api-key'      => $this->api_key,
-					'Content-Type' => 'application/json',
-				),
+					'Content-Type' => 'application/json'),
 			);
 			$args['body'] = $input;
-
+			
 			$response   = wp_remote_request( $called_url, $args );
 			if ( !is_wp_error( $response ) ) {
 				$data    = wp_remote_retrieve_body( $response );
-
+				
 				if ( is_wp_error( $data ) ) {
 					return $data;
 				}
 
-				return json_decode( $data, true );
+				return json_decode( $data,true );
 			}
-
+			
 			return $response;
 		}
 
-		public function get( $resource, $input ) {
-			return $this->do_request($resource, "GET", $input);
+		public function get($resource,$input)
+		{
+			return $this->do_request($resource,"GET",$input);
 		}
-		public function put( $resource, $input ) {
-			return $this->do_request($resource, "PUT", wp_json_encode($input));
+		public function put($resource,$input)
+		{
+			return $this->do_request($resource,"PUT",json_encode($input));
 		}
-		public function post( $resource, $input ) {
-			return $this->do_request($resource, "POST", wp_json_encode($input));
+		public function post($resource,$input)
+		{
+			return $this->do_request($resource,"POST",json_encode($input));
 		}
-		public function delete( $resource, $input ) {
-			return $this->do_request($resource, "DELETE", $input);
+		public function delete($resource,$input)
+		{
+			return $this->do_request($resource,"DELETE",$input);
 		}
 
 		/*
 			Get Account.
 			No input required
 		*/
-		public function get_account() {
-			return $this->get("account", "");
+		public function get_account()
+		{
+			return $this->get("account","");
 		}
 
 		/*
 			Get SMTP details.
 			No input required
 		*/
-		public function get_smtp_details() {
-			return $this->get("account/smtpdetail", "");
+		public function get_smtp_details()
+		{
+			return $this->get("account/smtpdetail","");
 		}
 
 		/*
@@ -103,8 +108,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 				- sms_credit {Integer} Number of sms credts
 			@options data {Array} associate_ip: Associate dedicated IPs to reseller child. You can use commas to separate multiple IPs [Optional]
 		*/
-		public function create_child_account($data) {
-			return $this->post("account", $data);
+		public function create_child_account($data)
+		{
+			return $this->post("account",$data);
 		}
 
 		/*
@@ -118,8 +124,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} associate_ip: Associate dedicated IPs to reseller child. You can use commas to separate multiple IPs [Optional]
 			@options data {Array} disassociate_ip: Disassociate dedicated IPs from reseller child. You can use commas to separate multiple IPs [Optional]
 		*/
-		public function update_child_account($data) {
-			return $this->put("account", $data);
+		public function update_child_account($data)
+		{
+			return $this->put("account",$data);
 		}
 
 		/*
@@ -127,8 +134,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@param {Array} data contains php array with key value pair.
 			@options data {String} auth_key: 16 character authorization key of Reseller child to be deleted [Mandatory]
 		*/
-		public function delete_child_account($data) {
-			return $this->delete("account/".$data['auth_key'], "");
+		public function delete_child_account($data)
+		{
+			return $this->delete("account/".$data['auth_key'],"");
 		}
 
 		/*
@@ -136,8 +144,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@param {Array} data contains php array with key value pair.
 			@options data {String} auth_key: 16 character authorization key of Reseller child. Example : To get the details of more than one child account, use, {"key1":"abC01De2fGHI3jkL","key2":"mnO45Pq6rSTU7vWX"} [Mandatory]
 		*/
-		public function get_reseller_child($data) {
-			return $this->post("account/getchildv2", $data);
+		public function get_reseller_child($data)
+		{
+			return $this->post("account/getchildv2",$data);
 		}
 
 		/*
@@ -151,8 +160,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 				- email_credit {Integer} number of email credits
 				- sms_credit {Integer} Number of sms credts
 		*/
-		public function add_remove_child_credits($data) {
-			return $this->post("account/addrmvcredit", $data);
+		public function add_remove_child_credits($data)
+		{
+			return $this->post("account/addrmvcredit",$data);
 		}
 
 		/*
@@ -160,8 +170,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@param {Array} data contains php array with key value pair.
 			@options data {Integer} id: Unique Id of the campaign [Mandatory]
 		*/
-		public function get_campaign_v2($data) {
-			return $this->get("campaign/".$data['id']."/detailsv2", "");
+		public function get_campaign_v2($data)
+		{
+			return $this->get("campaign/".$data['id']."/detailsv2","");
 		}
 
 		/*
@@ -172,8 +183,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} page: Maximum number of records per request is 500, if there are more than 500 campaigns then you can use this parameter to get next 500 results [Optional]
 			@options data {Integer} page_limit: This should be a valid number between 1-500 [Optional]
 		*/
-		public function get_campaigns_v2($data) {
-			return $this->get("campaign/detailsv2", $data);
+		public function get_campaigns_v2($data)
+		{
+			return $this->get("campaign/detailsv2",$data);
 		}
 
 		/*
@@ -198,8 +210,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 
 		*/
-		public function create_campaign($data) {
-			return $this->post("campaign", $data);
+		public function create_campaign($data)
+		{
+			return $this->post("campaign",$data);
 		}
 
 		/*
@@ -224,10 +237,11 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
 			@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 		*/
-		public function update_campaign($data) {
+		public function update_campaign($data)
+		{
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("campaign/".$id, $data);
+			return $this->put("campaign/".$id,$data);
 		}
 
 		/*
@@ -235,8 +249,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@param {Array} data contains php array with key value pair.
 			@options data {Integer} id: Id of campaign to be deleted [Mandatory]
 		*/
-		public function delete_campaign($data) {
-			return $this->delete("campaign/".$data['id'], "");
+		public function delete_campaign($data)
+		{
+			return $this->delete("campaign/".$data['id'],"");
 		}
 
 		/*
@@ -251,10 +266,11 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} email_cc: Same as email_to but for Cc [Optional]
 			@options data {String} email_body: Body of the message [Mandatory]
 		*/
-		public function campaign_report_email($data) {
+		public function campaign_report_email($data)
+		{
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->post("campaign/".$id."/report", $data);
+			return $this->post("campaign/".$id."/report",$data);
 		}
 
 		/*
@@ -264,10 +280,11 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} notify_url: URL that will be called once the export process is finished [Mandatory]
 			@options data {String} type: Type of recipients. Possible values – all, non_clicker, non_opener, clicker, opener, soft_bounces, hard_bounces & unsubscribes [Mandatory]
 		*/
-		public function campaign_recipients_export($data) {
+		public function campaign_recipients_export($data)
+		{
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->post("campaign/".$id."/recipients", $data);
+			return $this->post("campaign/".$id."/recipients",$data);
 		}
 
 		/*
@@ -276,8 +293,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} camp_ids: Id of campaign to get share link. You can use commas to separate multiple ids [Mandatory]
 		*/
 
-		public function share_campaign($data) {
-			return $this->post("campaign/sharelinkv2", $data);
+		public function share_campaign($data)
+		{
+			return $this->post("campaign/sharelinkv2",$data);
 		}
 
 		/*
@@ -286,10 +304,11 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of the campaign [Mandatory]
 			@options data {Array} emails: Email address of recipient(s) existing in the one of the lists & should not be blacklisted. Example: "test@example.net". You can use commas to separate multiple recipients [Mandatory]
 		*/
-		public function send_bat_email($data) {
+		public function send_bat_email($data)
+		{
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->post("campaign/".$id."/test", $data);
+			return $this->post("campaign/".$id."/test",$data);
 		}
 
 		/*
@@ -298,10 +317,11 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of campaign to update its status [Mandatory]
 			@options data {String} status: Types of status. Possible values – suspended, archive, darchive, sent, queued, replicate and replicate_template ( case sensitive ) [Mandatory]
 		*/
-		public function update_campaign_status($data) {
+		public function update_campaign_status($data)
+		{
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("campaign/".$id."/updatecampstatus", $data);
+			return $this->put("campaign/".$id."/updatecampstatus",$data);
 		}
 
 		/*
@@ -326,8 +346,9 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} mirror_active: Status of mirror links in campaign. Possible values = 0 & 1 (default). mirror_active = 0 means mirror links are deactivated, & mirror_active = 1 means mirror links are activated, in the campaign [Optional]
 			@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 		*/
-		public function create_trigger_campaign($data) {
-			return $this->post("campaign", $data);
+		public function create_trigger_campaign($data)
+		{
+			return $this->post("campaign",$data);
 		}
 
 		/*
@@ -356,7 +377,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_trigger_campaign($data) {
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("campaign/".$id, $data);
+			return $this->put("campaign/".$id,$data);
 		}
 
 		/*
@@ -366,7 +387,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 		*/
 		public function get_folders($data) {
-			return $this->get("folder", $data);
+			return $this->get("folder",$data);
 		}
 
 		/*
@@ -375,7 +396,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of folder to get details [Mandatory]
 		*/
 		public function get_folder($data) {
-			return $this->get("folder/".$data['id'], "");
+			return $this->get("folder/".$data['id'],"");
 		}
 
 		/*
@@ -384,7 +405,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} name: Desired name of the folder to be created [Mandatory]
 		*/
 		public function create_folder($data) {
-			return $this->post("folder", $data);
+			return $this->post("folder",$data);
 		}
 
 		/*
@@ -393,7 +414,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of folder to be deleted [Mandatory]
 		*/
 		public function delete_folder($data) {
-			return $this->delete("folder/".$data['id'], "");
+			return $this->delete("folder/".$data['id'],"");
 		}
 
 		/*
@@ -405,7 +426,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_folder($data) {
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("folder/".$id, $data);
+			return $this->put("folder/".$id,$data);
 		}
 
 		/*
@@ -416,7 +437,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 		*/
 		public function get_lists($data) {
-			return $this->get("list", $data);
+			return $this->get("list",$data);
 		}
 
 		/*
@@ -425,7 +446,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of list to get details [Mandatory]
 		*/
 		public function get_list($data) {
-			return $this->get("list/".$data['id'], "");
+			return $this->get("list/".$data['id'],"");
 		}
 
 		/*
@@ -435,7 +456,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} list_parent: Folder ID [Mandatory]
 		*/
 		public function create_list($data) {
-			return $this->post("list", $data);
+			return $this->post("list",$data);
 		}
 
 		/*
@@ -448,7 +469,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_list($data) {
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("list/".$id, $data);
+			return $this->put("list/".$id,$data);
 		}
 
 		/*
@@ -457,7 +478,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of list to be deleted [Mandatory]
 		*/
 		public function delete_list($data) {
-			return $this->delete("list/".$data['id'], "");
+			return $this->delete("list/".$data['id'],"");
 		}
 
 		/*
@@ -469,7 +490,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} page_limit: This should be a valid number between 1-500 [Optional]
 		*/
 		public function display_list_users($data) {
-			return $this->post("list/display", $data);
+			return $this->post("list/display",$data);
 		}
 
 		/*
@@ -482,7 +503,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function add_users_list($data) {
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->post("list/".$id."/users", $data);
+			return $this->post("list/".$id."/users",$data);
 		}
 
 		/*
@@ -494,7 +515,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function delete_users_list($data) {
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->delete("list/".$id."/delusers", $data);
+			return $this->delete("list/".$id."/delusers",$data);
 		}
 
 		/*
@@ -502,7 +523,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			No input required
 		*/
 		public function get_attributes() {
-			return $this->get("attribute", "");
+			return $this->get("attribute","");
 		}
 
 		/*
@@ -511,7 +532,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} type: Type of attribute. Possible values – normal, transactional, category, calculated & global [Optional]
 		*/
 		public function get_attribute($data) {
-			return $this->get("attribute/".$data['type'], "");
+			return $this->get("attribute/".$data['type'],"");
 		}
 
 		/*
@@ -522,7 +543,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			The name and data value of ‘category’, ‘calculated’ & ‘global’, should be sent as JSON string. Example: ‘[{ "name":"ATTRIBUTE_NAME1", "value":"Attribute_value1" }, { "name":"ATTRIBUTE_NAME2", "value":"Attribute_value2" }]’. You can use commas to separate multiple attributes [Mandatory]
 		*/
 		public function create_attribute($data) {
-			return $this->post("attribute/", $data);
+			return $this->post("attribute/",$data);
 		}
 
 		/*
@@ -530,10 +551,10 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@param {Array} data contains php array with key value pair.
 			@options data {Integer} type: Type of attribute to be deleted [Mandatory]
 		*/
-		public function delete_attribute($type, $data) {
+		public function delete_attribute($type,$data) {
 			$type = $data['type'];
 			unset($data['type']);
-			return $this->post("attribute/".$type, $data);
+			return $this->post("attribute/".$type,$data);
 		}
 
 		/*
@@ -547,7 +568,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} blacklisted_sms: This is used to blacklist/ Unblacklist a user’s SMS number. Possible values – 0 & 1. blacklisted_sms = 1 means user’s SMS number has been blacklisted [Optional]
 		*/
 		public function create_update_user($data){
-			return $this->post("user/createdituser", $data);
+			return $this->post("user/createdituser",$data);
 		}
 
 		/*
@@ -556,7 +577,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} email: Email address of the already existing user in the SendinBlue contacts [Mandatory]
 		*/
 		public function get_user($data){
-			return $this->get("user/".$data['email'], "");
+			return $this->get("user/".$data['email'],"");
 		}
 
 		/*
@@ -565,7 +586,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} email: Email address of the already existing user in the SendinBlue contacts to be unlinked from all lists [Mandatory]
 		*/
 		public function delete_user($data){
-			return $this->delete("user/".$data['email'], "");
+			return $this->delete("user/".$data['email'],"");
 		}
 
 		/*
@@ -579,7 +600,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} list_parent: This is the existing folder id & can be used with name parameter to make newly created list’s desired parent [Optional]
 		*/
 		public function import_users($data){
-			return $this->post("user/import", $data);
+			return $this->post("user/import",$data);
 		}
 
 		/*
@@ -590,7 +611,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} notify_url: URL that will be called once the export process is finished [Optional]
 		*/
 		public function export_users($data){
-			return $this->post("user/export", $data);
+			return $this->post("user/export",$data);
 		}
 
 		/*
@@ -600,7 +621,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 		*/
 		public function get_processes($data){
-			return $this->get("process", $data);
+			return $this->get("process",$data);
 		}
 
 		/*
@@ -609,7 +630,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of process to get details [Mandatory]
 		*/
 		public function get_process($data){
-			return $this->get("process/".$data['id'], "");
+			return $this->get("process/".$data['id'],"");
 		}
 
 		/*
@@ -618,7 +639,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} is_plat: Flag to get webhooks. Possible values – 0 & 1. Example: to get Transactional webhooks, use $is_plat=0, to get Marketing webhooks, use $is_plat=1, & to get all webhooks, use $is_plat="" [Optional]
 		*/
 		public function get_webhooks($data){
-			return $this->get("webhook", $data);
+			return $this->get("webhook",$data);
 		}
 
 		/*
@@ -627,7 +648,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of webhook to get details [Mandatory]
 		*/
 		public function get_webhook($data){
-			return $this->get("webhook/".$data['id'], "");
+			return $this->get("webhook/".$data['id'],"");
 		}
 
 		/*
@@ -639,7 +660,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} is_plat: Flag to create webhook type. Possible values – 0 (default) & 1. Example: to create Transactional webhooks, use $is_plat=0, & to create Marketing webhooks, use $is_plat=1 [Optional]
 		*/
 		public function create_webhook($data){
-			return $this->post("webhook", $data);
+			return $this->post("webhook",$data);
 		}
 
 		/*
@@ -648,7 +669,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of webhook to be deleted [Mandatory]
 		*/
 		public function delete_webhook($data){
-			return $this->delete("webhook/".$data['id'], "");
+			return $this->delete("webhook/".$data['id'],"");
 		}
 
 		/*
@@ -662,7 +683,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_webhook($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("webhook/".$id, $data);
+			return $this->put("webhook/".$id,$data);
 		}
 
 		/*
@@ -671,7 +692,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} option: Options to get senders. Possible options – IP-wise, & Domain-wise ( only for dedicated IP clients ). Example: to get senders with specific IP, use $option=’1.2.3.4′, to get senders with specific domain use, $option=’domain.com’, & to get all senders, use $option="" [Optional]
 		*/
 		public function get_senders($data){
-			return $this->get("advanced", $data);
+			return $this->get("advanced",$data);
 		}
 
 		/*
@@ -682,7 +703,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} ip_domain: Pass pipe ( | ) separated Dedicated IP and its associated Domain. Example: "1.2.3.4|mydomain.com". You can use commas to separate multiple ip_domain’s [Mandatory: Only for Dedicated IP clients, for Shared IP clients, it should be kept blank]
 		*/
 		public function create_sender($data){
-			return $this->post("advanced", $data);
+			return $this->post("advanced",$data);
 		}
 
 		/*
@@ -695,7 +716,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_sender($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("advanced/".$id, $data);
+			return $this->put("advanced/".$id,$data);
 		}
 
 		/*
@@ -704,7 +725,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} id: Id of sender to be deleted [Mandatory]
 		*/
 		public function delete_sender($data){
-			return $this->delete("advanced/".$data['id'], "");
+			return $this->delete("advanced/".$data['id'],"");
 		}
 
 		/*
@@ -723,7 +744,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Array} inline_image: Pass your inline image/s filename & its base64 encoded chunk data as an associative array. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple inline images [Optional]
 		*/
 		public function send_email($data){
-			return $this->post("email", $data);
+			return $this->post("email",$data);
 		}
 
 		/*
@@ -736,7 +757,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} tag: The tag you will specify to retrieve detailed stats. It must be an existing tag that has statistics [Optional]
 		*/
 		public function get_statistics($data){
-			return $this->post("statistics", $data);
+			return $this->post("statistics",$data);
 		}
 
 		/*
@@ -751,7 +772,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} email: Email address to search report for [Optional]
 		*/
 		public function get_report($data){
-			return $this->post("report", $data);
+			return $this->post("report",$data);
 		}
 
 		/*
@@ -762,7 +783,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} email: Email address to delete its bounces [Optional]
 		*/
 		public function delete_bounces($data){
-			return $this->post("bounces", $data);
+			return $this->post("bounces",$data);
 		}
 
 		/*
@@ -779,7 +800,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function send_transactional_template($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("template/".$id, $data);
+			return $this->put("template/".$id,$data);
 		}
 
 		/*
@@ -798,7 +819,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} attachment: Status of attachment. Possible values = 0 (default) & 1. attach = 0 means an attachment can’t be sent, & attach = 1 means an attachment can be sent, in the email [Optional]
 		*/
 		public function create_template($data){
-			return $this->post("template", $data);
+			return $this->post("template",$data);
 		}
 
 		/*
@@ -820,7 +841,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_template($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("template/".$id, $data);
+			return $this->put("template/".$id,$data);
 		}
 
 		/*
@@ -834,7 +855,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {String} type: Type of message. Possible values – marketing (default) & transactional. You can use marketing for sending marketing SMS, & for sending transactional SMS, use transactional type [Optional]
 		*/
 		public function send_sms($data) {
-			return $this->post("sms", $data);
+			return $this->post("sms",$data);
 		}
 
 		/*
@@ -850,7 +871,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 			@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 		*/
 		public function create_sms_campaign($data){
-			return $this->post("sms", $data);
+			return $this->post("sms",$data);
 		}
 
 		/*
@@ -869,7 +890,7 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function update_sms_campaign($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->put("sms/".$id, $data);
+			return $this->put("sms/".$id,$data);
 		}
 
 		/*
@@ -881,56 +902,58 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 		public function send_bat_sms($data){
 			$id = $data['id'];
 			unset($data['id']);
-			return $this->get("sms/".$id, $data);
+			return $this->get("sms/".$id,$data);
 		}
 		/*
 		* */
 		public function get_access_tokens(){
-			return $this->get("account/token", "");
+			return $this->get("account/token","");
 		}
 
 		public function delete_token($key){
-			return $this->post("account/deletetoken", wp_json_encode(array("token"=>$key)));
+			return $this->post("account/deletetoken", json_encode(array("token"=>$key)));
 		}
 
 		/**
 		* Method is used to update the user info using web service in SendinBlue.
 		*/
-		public function updateUser($data = array()) {
+		public function updateUser($data=array()) {
 			$data['key'] = $this->api_key;
 			$data['webaction'] = 'USERCREADIT';
 			//$data['timezone'] = date_default_timezone_get();
-			$result = json_decode($this->curlRequest($data), true);
+			$result = json_decode($this->curlRequest($data),true);
 			return $result['result'];
 		}
 
 		/**
 		* Method is used to add the partner's name in SendinBlue.
-		* In this case its "WordPress".
+		* In this case its "WORDPRESS".
 		*/
 		public function partnerWordpress() {
 			$data = array();
 			$data['key'] = $this->api_key;
 			$data['webaction'] = 'MAILIN-PARTNER';
-			$data['partner'] = 'WORDPRESS';  //phpcs:ignore
+			$data['partner'] = 'WORDPRESS';
 			$this->curlRequest($data);
 		}
 		/**
 		* Get default config of user
 		*/
-		public function getPluginConfig() {
+		public function getPluginConfig()
+		{
 			return $this->get("account/plugin_config", "");
 		}
 		/**
 		*  CURL function to send request to the SendinBlue API server
 		*/
-		public function curlRequest($data) {
+		public function curlRequest($data)
+		{
 			// prepare data for curl post
 			$ndata = '';
-			$data['source'] = 'Wordpress';  //phpcs:ignore
+			$data['source'] = 'Wordpress';
 			if (is_array($data))
 				foreach ($data as $key => $value)
-					$ndata .= $key.'='.rawurlencode($value).'&';
+					$ndata .= $key.'='.urlencode($value).'&';
 			else
 				$ndata = $data;
 			$url = 'http://ws.mailin.fr/';
@@ -950,7 +973,8 @@ if ( ! class_exists( 'Opt_In_SendinBlue_Api' ) ) :
 				return $data;
 			}
 			$data = wp_remote_retrieve_body($response);
-			return json_decode($data, true);
+			return json_decode($data,true);
 		}
 	}
 endif;
+?>

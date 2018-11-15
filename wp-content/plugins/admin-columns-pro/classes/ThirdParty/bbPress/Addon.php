@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\bbPress;
 
-final class ACP_ThirdParty_bbPress_Addon {
+use AC;
+use ACP;
+
+final class Addon {
 
 	public function __construct() {
 
@@ -22,21 +23,21 @@ final class ACP_ThirdParty_bbPress_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 */
 	public function set_columns( $list_screen ) {
-		$list_screen->register_column_types_from_dir( plugin_dir_path( __FILE__ ) . 'Column', ACP()->get_prefix() );
+		$list_screen->register_column_types_from_dir( __NAMESPACE__ . '\Column' );
 	}
 
 	/**
-	 * @param AC_Groups $groups
+	 * @param AC\Groups $groups
 	 */
 	public function register_column_group( $groups ) {
 		$groups->register_group( 'bbpress', __( 'bbPress' ), 25 );
 	}
 
 	/**
-	 * @param AC_Groups $groups
+	 * @param AC\Groups $groups
 	 */
 	public function register_list_screen_group( $groups ) {
 		$groups->register_group( 'bbpress', __( 'bbPress' ), 8 );
@@ -44,15 +45,16 @@ final class ACP_ThirdParty_bbPress_Addon {
 
 	/**
 	 * @since 4.0
-	 * @param AC_ListScreen $list_screen
+	 *
+	 * @param AC\AdminColumns $admin_columns
 	 */
-	public function register_list_screens() {
+	public function register_list_screens( $admin_columns ) {
 		foreach ( $this->get_post_types() as $post_type ) {
 
-			$list_screen = new ACP_ListScreen_Post( $post_type );
+			$list_screen = new ACP\ListScreen\Post( $post_type );
 			$list_screen->set_group( 'bbpress' );
 
-			AC()->register_list_screen( $list_screen );
+			$admin_columns->register_list_screen( $list_screen );
 		}
 	}
 

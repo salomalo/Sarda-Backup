@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_Theme extends AC_Settings_Column
-	implements AC_Settings_FormatValueInterface {
+use AC\Settings;
+use AC\View;
+
+class Theme extends Settings\Column
+	implements Settings\FormatValue {
 
 	private $theme_status;
 
@@ -19,7 +20,7 @@ class ACP_Settings_Column_NetworkSite_Theme extends AC_Settings_Column
 			->set_attribute( 'data-label', 'update' )
 			->set_options( $this->get_display_options() );
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'label'   => __( 'Display', 'codepress-admin-columns' ),
 			'setting' => $select,
 		) );
@@ -80,16 +81,14 @@ class ACP_Settings_Column_NetworkSite_Theme extends AC_Settings_Column
 		foreach ( $themes as $k => $theme ) {
 			$tooltip = array();
 
-			/* @var WP_Theme $theme */
+			/* @var \WP_Theme $theme */
 			if ( $theme->get_stylesheet() === $active_theme->get_stylesheet() ) {
 				$tooltip[] = __( 'Active', 'codepress-admin-columns' );
 			}
 
 			if ( $theme->is_allowed( 'network', $blog_id ) ) {
 				$tooltip[] = __( 'Network Enabled', 'codepress-admin-columns' );
-			}
-
-			else if ( $theme->is_allowed( 'site', $blog_id ) ) {
+			} else if ( $theme->is_allowed( 'site', $blog_id ) ) {
 				$tooltip[] = __( 'Site Enabled', 'codepress-admin-columns' );
 			}
 

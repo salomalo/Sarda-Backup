@@ -133,6 +133,6 @@ class AddContacts extends Component
                 }
             }
         }
-        return wp_json_encode($this);
+        return json_encode($this);
     }
 }

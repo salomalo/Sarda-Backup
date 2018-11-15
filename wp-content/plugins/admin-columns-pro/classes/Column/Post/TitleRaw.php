@@ -1,24 +1,26 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_TitleRaw extends AC_Column_Post_TitleRaw
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+class TitleRaw extends AC\Column\Post\TitleRaw
+	implements Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'title' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_TitleRaw( $this );
+		return new Editing\Model\Post\TitleRaw( $this );
 	}
 
 }

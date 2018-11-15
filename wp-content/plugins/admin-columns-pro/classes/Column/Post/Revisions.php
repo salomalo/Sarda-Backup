@@ -1,14 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
 
 /**
  * @since 4.0.12
  */
-class ACP_Column_Post_Revisions extends AC_Column
-	implements AC_Column_AjaxValue {
+class Revisions extends AC\Column
+	implements AC\Column\AjaxValue {
 
 	public function __construct() {
 		$this->set_type( 'column-revisions' );

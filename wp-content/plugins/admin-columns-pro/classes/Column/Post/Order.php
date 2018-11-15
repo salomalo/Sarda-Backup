@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Order extends AC_Column_Post_Order
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+use AC;
+use ACP\Editing;
+use ACP\Sorting;
+
+class Order extends AC\Column\Post\Order
+	implements Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'menu_order' );
 
 		return $model;
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Order( $this );
+		return new Editing\Model\Post\Order( $this );
 	}
 
 }

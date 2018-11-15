@@ -13,14 +13,8 @@ final class NF_Database_Models_Form extends NF_Abstracts_Model
 
     protected $_columns = array(
         'title',
-        'created_at',
-        'form_title',
-        'default_label_pos',
-        'show_title',
-        'clear_complete',
-        'hide_complete',
-        'logged_in',
-        'seq_num'
+        'key',
+        'created_at'
     );
 
     protected $_fields;
@@ -125,21 +119,10 @@ final class NF_Database_Models_Form extends NF_Abstracts_Model
         , $form_id ) );
 
         if( $last_seq_num ) {
-            $wpdb->update( $wpdb->prefix . 'nf3_form_meta', array( 'value' => $last_seq_num + 1,
-                'meta_value' => $last_seq_num + 1, 'meta_key' => '_seq_num' )
-	            , array( 'key' => '_seq_num', 'parent_id'
-            => $form_id ) );
-            $wpdb->update( $wpdb->prefix . 'nf3_forms', array( 'seq_num' => $last_seq_num + 1 ), array( 'id' => $form_id ) );
+            $wpdb->update( $wpdb->prefix . 'nf3_form_meta', array( 'value' => $last_seq_num + 1 ), array( 'key' => '_seq_num', 'parent_id' => $form_id ) );
         } else {
             $last_seq_num = 1;
-            $wpdb->insert( $wpdb->prefix . 'nf3_form_meta',
-	            array( 'key' => '_seq_num',
-	                   'value' => $last_seq_num + 1,
-	                   'parent_id' => $form_id,
-		                'meta_key' => '_seq_num',
-		                'meta_value' => $last_seq_num + 1
-	            ) );
-	        $wpdb->update( $wpdb->prefix . 'nf3_forms', array( 'seq_num' => $last_seq_num + 1 ), array( 'id' => $form_id ) );
+            $wpdb->insert( $wpdb->prefix . 'nf3_form_meta', array( 'key' => '_seq_num', 'value' => $last_seq_num + 1, 'parent_id' => $form_id ) );
         }
 
         return $last_seq_num;
@@ -316,14 +299,6 @@ final class NF_Database_Models_Form extends NF_Abstracts_Model
             ));
         }
 
-        /*
-         * In order for our new form and form_meta fields to populate on
-         * duplicate we need to update_settings and save
-         */
-        $new_form = Ninja_Forms()->form( $new_form_id )->get();
-        $new_form->update_settings( $new_form->get_settings() );
-        $new_form->save();
-
         return $new_form_id;
     }
 
@@ -347,19 +322,13 @@ final class NF_Database_Models_Form extends NF_Abstracts_Model
         $fields = Ninja_Forms()->form( $form_id )->get_fields();
 
         foreach( $fields as $field ){
-            // If the field is set.
-            if ( ! is_null( $field ) && ! empty( $field ) ) {
-                $export['fields'][] = $field->get_settings();
-            }
+            $export['fields'][] = $field->get_settings();
         }
 
         $actions = Ninja_Forms()->form( $form_id )->get_actions();
 
         foreach( $actions as $action ){
-            // If the action is set.
-            if ( ! is_null( $action ) && ! empty( $action ) ) {
-                $export[ 'actions' ][] = $action->get_settings();
-            }
+            $export[ 'actions' ][] = $action->get_settings();
         }
 
         if( $return ){

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\CustomField;
 
-class ACP_Export_Model_CustomField_Date extends ACP_Export_Model {
+use ACP\Export\Model;
+
+class Date extends Model {
 
 	public function get_value( $id ) {
 		$timestamp = ac_helper()->date->strtotime( $this->column->get_raw_value( $id ) );

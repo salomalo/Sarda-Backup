@@ -1,8 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * Column displaying whether an item is open for comments, i.e. whether users can
@@ -10,19 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0
  */
-class ACP_Column_Post_CommentStatus extends AC_Column_Post_CommentStatus
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class CommentStatus extends AC\Column\Post\CommentStatus
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_CommentStatus( $this );
+		return new Editing\Model\Post\CommentStatus( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_CommentStatus( $this );
+		return new Filtering\Model\Post\CommentStatus( $this );
 	}
 
 }

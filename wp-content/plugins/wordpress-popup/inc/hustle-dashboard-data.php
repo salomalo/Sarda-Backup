@@ -1,29 +1,30 @@
 <?php
 
 
-class Hustle_Dashboard_Data {
-
+class Hustle_Dashboard_Data
+{
+	
 	const CURRENT_COLOR_INDEX = 'hustle_color_index';
 	const MODULE_GRAPH_COLOR = 'graph_color';
+	
+	var $modules = array();
+	var $popups = array();
+	var $slideins = array();
+	var $embeds = array();
+	var $social_sharings = array();
+	var $active_modules = array();
+	var $top_active_modules = array();
+	var $today_total_conversions = 0;
+	var $conversions_today = 0;
+	var $most_converted_module = '-';
+	var $ss_share_stats_data = array();
+	var $ss_total_share_stats = 0;
+	var $graph_date_conversions = array();
+	var $graph_dates = array();
 
-	public $modules = array();
-	public $popups = array();
-	public $slideins = array();
-	public $embeds = array();
-	public $social_sharings = array();
-	public $active_modules = array();
-	public $top_active_modules = array();
-	public $today_total_conversions = 0;
-	public $conversions_today = 0;
-	public $most_converted_module = '-';
-	public $ss_share_stats_data = array();
-	public $ss_total_share_stats = 0;
-	public $graph_date_conversions = array();
-	public $graph_dates = array();
-
-	public $color = 0;
-	public $types = array();
-	public $colors = array(
+	var $color = 0;
+	var $types = array();
+	var  $colors = array(
 		'#FF0000',
 		'#FFFF00',
 		'#00EAFF',
@@ -47,12 +48,13 @@ class Hustle_Dashboard_Data {
 		'#4F8F23',
 		'#000000',
 	);
+	
 
-
-	public function __construct() {
+	function __construct()
+	{
 		$this->_prepare_data();
 	}
-
+	
 	private function _prepare_data() {
 		$module_instance = Hustle_Module_Collection::instance();
 
@@ -60,55 +62,53 @@ class Hustle_Dashboard_Data {
 		$this->slideins = $module_instance->get_all( null, array( 'module_type' => 'slidein' ) );
 		$this->embeds = $module_instance->get_all( null, array( 'module_type' => 'embedded' ) );
 		$this->social_sharings = $module_instance->get_all( null, array( 'module_type' => 'social_sharing' ) );
-
+		
 		$this->active_modules = $module_instance->get_all(true, array(
 			'except_types' => array( 'social_sharing' )
 		));
-
+		
 		if ( is_array( $this->social_sharings ) && count( $this->social_sharings ) ) {
-			$this->ss_share_stats_data = $module_instance->get_share_stats(0, 5);
+			$this->ss_share_stats_data = $module_instance->get_share_stats(0,5);
 			$this->ss_total_share_stats = $module_instance->get_total_share_stats();
 		}
-
+		
 		$end_day = strtotime( 'now' );
 		$first_day = strtotime( "-1 month" );
 		$last_week = date( 'Ymd', ( $end_day - WEEK_IN_SECONDS) );
 		$prev_month = date( 'Ymd', $first_day );
 		$today = date( 'Ymd', $end_day );
-
+		
 		$today_total_conversions = $module_instance->get_today_total_conversion( $today );
 		$this->today_total_conversions = ( empty($today_total_conversions) ) ? 0 : $this->_parse_today_conversions($today_total_conversions);
 		$top_conversions = $module_instance->get_top_module_conversion_without_ss( $prev_month, $today, 0, 5 );
 		$most_converted = $module_instance->get_top_module_conversion_without_ss( null, null, 0, 1 );
 		$this->most_converted_module = ( empty($most_converted) ) ? '-' : $this->_parse_most_converted($most_converted);
-
+		
 		// to be replaced
 		$temp_index = 0;
 		$this->color = (int) get_option( self::CURRENT_COLOR_INDEX, 0 );
-
+		
 		foreach( $top_conversions as $t ) {
 			$module = Hustle_Module_Model::instance()->get( $t->module_id );
 			$is_active = (bool) $module->active;
-
+			
 			if ( $is_active ) {
-
+				
 				$past_week = $module->get_module_conversion( $last_week, $today, false );
 				$past_week = empty($past_week) ? 0 : $this->_parse_total_conversion($past_week);
-
+				
 				$all_time = $module->get_statistics($module->module_type)->conversions_count;
 				$conversion_list = $module->get_module_conversion( $prev_month, $today, true );
-
+				
 				if ( !empty($conversion_list) ) {
 					$conversion_list = $this->_parse_dates_for_graph($conversion_list);
 				}
-
+				
 				$total_views = $module->get_statistics($module->module_type)->views_count;
 				$rate = $module->get_statistics($module->module_type)->conversion_rate;
-
-				if( is_array( $this->colors ) && ( $this->color >= count( $this->colors ) ) ) {
-					$this->color = 0;
-				}
-
+				
+				if( is_array( $this->colors ) && ( $this->color >= count( $this->colors ) ) ) $this->color = 0;
+				
 				$color = $module->get_meta( self::MODULE_GRAPH_COLOR );
 
 				if ( empty( $color ) ) {
@@ -116,7 +116,7 @@ class Hustle_Dashboard_Data {
 					$module->update_meta( self::MODULE_GRAPH_COLOR, $color );
 					$this->color++;
 				}
-
+				
 				array_push( $this->top_active_modules, wp_parse_args(
 					$module->get_data(),
 					array(
@@ -132,16 +132,16 @@ class Hustle_Dashboard_Data {
 				) );
 			}
 		}
-
+		
 		// Update color index
 		update_option( self::CURRENT_COLOR_INDEX, $this->color );
-
+		
 		// parse data for graph
 		if ( !empty( $this->graph_dates ) ) {
 			$this->_parse_conversions_for_graph($this->top_active_modules);
 		}
 	}
-
+	
 	private function _parse_total_conversion( $conversions ) {
 		$sum = 0;
 		foreach( $conversions as $conversion ) {
@@ -149,7 +149,7 @@ class Hustle_Dashboard_Data {
 		}
 		return $sum;
 	}
-
+	
 	private function _parse_most_converted( $most_converted ) {
 		$module_id = 0;
 		if ( isset($most_converted[0]) && isset($most_converted[0]->module_id) ) {
@@ -161,7 +161,7 @@ class Hustle_Dashboard_Data {
 		}
 		return '-';
 	}
-
+	
 	private function _parse_today_conversions( $today_conversions ) {
 		$total = 0;
 		if ( isset($today_conversions->conversions) ) {
@@ -169,7 +169,7 @@ class Hustle_Dashboard_Data {
 		}
 		return $total;
 	}
-
+	
 	private function _parse_conversions_for_graph( $top_active_modules ) {
 		$this->graph_date_conversions = array();
 		foreach( $this->graph_dates as $key => $dates ) {
@@ -190,7 +190,7 @@ class Hustle_Dashboard_Data {
 			);
 		}
 	}
-
+	
 	private function _parse_dates_for_graph( $conversions ) {
 		$updated_conversions = array();
 		foreach( $conversions as $key => $conversion ) {
@@ -202,7 +202,7 @@ class Hustle_Dashboard_Data {
 	}
 
 	public static function uasort( $a, $b ) {
-		if ( (int)$a['month'] === (int)$b['month'] ) {
+		if ( $a['month'] == $b['month'] ) {
 			return 0;
 		} elseif ( $a['month'] > $b['month'] ) {
 			return 1;

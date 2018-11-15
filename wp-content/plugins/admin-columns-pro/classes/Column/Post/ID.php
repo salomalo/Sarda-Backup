@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_ID extends AC_Column_Post_ID
-	implements ACP_Column_SortingInterface, ACP_Column_FilteringInterface {
+use AC;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class ID extends AC\Column\Post\ID
+	implements Sorting\Sortable, Filtering\Filterable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'ID' );
 
 		return $model;
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_ID( $this );
+		return new Filtering\Model\Post\ID( $this );
 	}
 
 }

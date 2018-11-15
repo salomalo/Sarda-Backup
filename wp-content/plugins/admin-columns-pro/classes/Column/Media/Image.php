@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
+
+use AC;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Media_Image extends AC_Column {
+class Image extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'column-image' );
@@ -19,7 +19,7 @@ class ACP_Column_Media_Image extends AC_Column {
 	}
 
 	public function register_settings() {
-		$this->add_setting( new AC_Settings_Column_Image( $this ) );
+		$this->add_setting( new AC\Settings\Column\Image( $this ) );
 	}
 
 }

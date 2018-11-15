@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
+
+use AC;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Taxonomy_Count extends AC_Column {
+class Count extends AC\Column {
 
 	public function __construct() {
 		$this->set_original( true );

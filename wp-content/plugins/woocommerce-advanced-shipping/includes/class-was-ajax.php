@@ -2,11 +2,13 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
- * AJAX class.
+ * Class WAS_Ajax.
  *
- * Handles all AJAX related calls.
+ * Initialize the AJAX class.
  *
+ * @class		WAS_Ajax
  * @author		Jeroen Sormani
+ * @package		WooCommerce Advanced Shipping
  * @version		1.0.0
  */
 class WAS_Ajax {
@@ -22,15 +24,15 @@ class WAS_Ajax {
 	public function __construct() {
 
 		// Add elements
-		add_action( 'wp_ajax_was_add_condition', array( $this, 'add_condition' ) );
-		add_action( 'wp_ajax_was_add_condition_group', array( $this, 'add_condition_group' ) );
+		add_action( 'wp_ajax_was_add_condition', array( $this, 'was_add_condition' ) );
+		add_action( 'wp_ajax_was_add_condition_group', array( $this, 'was_add_condition_group' ) );
 
 		// Update elements
-		add_action( 'wp_ajax_was_update_condition_value', array( $this, 'update_condition_value' ) );
-		add_action( 'wp_ajax_was_update_condition_description', array( $this, 'update_condition_description' ) );
+		add_action( 'wp_ajax_was_update_condition_value', array( $this, 'was_update_condition_value' ) );
+		add_action( 'wp_ajax_was_update_condition_description', array( $this, 'was_update_condition_description' ) );
 
-		// Save post ordering
-		add_action( 'wp_ajax_was_save_post_order', array( $this, 'save_post_order' ) );
+		// Save shipping method ordering
+		add_action( 'wp_ajax_was_save_shipping_rates_table', array( $this, 'save_shipping_rates_table' ) );
 
 	}
 
@@ -38,17 +40,15 @@ class WAS_Ajax {
 	/**
 	 * Add condition.
 	 *
-	 * Output the HTML of a new condition row.
+	 * Create a new WAS_Condition class and render.
 	 *
 	 * @since 1.0.0
 	 */
-	public function add_condition() {
+	public function was_add_condition() {
 
-		check_ajax_referer( 'wpc-ajax-nonce', 'nonce' );
+		check_ajax_referer( 'was-ajax-nonce', 'nonce' );
 
-		$wp_condition = new WAS_Condition( null, $_POST['group'] );
-		$wp_condition->output_condition_row();
-
+		new WAS_Condition( null, $_POST['group'] );
 		die();
 
 	}
@@ -57,21 +57,19 @@ class WAS_Ajax {
 	/**
 	 * Condition group.
 	 *
-	 * Output the HTML of a new condition group.
+	 * Render new condition group.
 	 *
 	 * @since 1.0.0
 	 */
-	public function add_condition_group() {
+	public function was_add_condition_group() {
 
-		check_ajax_referer( 'wpc-ajax-nonce', 'nonce' );
-		$group = absint( $_POST['group'] );
+		check_ajax_referer( 'was-ajax-nonce', 'nonce' );
 
-		?><div class='wpc-condition-group wpc-condition-group-<?php echo $group; ?>' data-group='<?php echo $group; ?>'>
+		?><div class='condition-group condition-group-<?php echo $_POST['group']; ?>' data-group='<?php echo $_POST['group']; ?>'>
 
-			<p class='or-match'><?php _e( 'Or match all of the following rules to allow this shipping method:', 'woocommerce-advanced-shipping' ); ?></p><?php
+			<p class='or-match'><?php _e( 'Or match all of the following rules to allow this shipping method:', 'woocommerce-advanced-shipping' );?></p><?php
 
-			$wp_condition = new WAS_Condition( null, $group );
-			$wp_condition->output_condition_row();
+			new was_Condition( null, $_POST['group'] );
 
 		?></div>
 
@@ -83,23 +81,17 @@ class WAS_Ajax {
 
 
 	/**
-	 * Update condition value field.
+	 * Update values.
 	 *
-	 * Output the HTML of the value field according to the condition key..
+	 * Retreive and render the new condition values according to the condition key.
 	 *
 	 * @since 1.0.0
 	 */
-	public function update_condition_value() {
+	public function was_update_condition_value() {
 
-		check_ajax_referer( 'wpc-ajax-nonce', 'nonce' );
+		check_ajax_referer( 'was-ajax-nonce', 'nonce' );
 
-		$wp_condition     = new WAS_Condition( $_POST['id'], $_POST['group'], $_POST['condition'] );
-		$value_field_args = $wp_condition->get_value_field_args();
-
-		?><span class='wpc-value-wrap wpc-value-wrap-<?php echo absint( $wp_condition->id ); ?>'><?php
-			wpc_html_field( $value_field_args );
-		?></span><?php
-
+		was_condition_values( $_POST['id'], $_POST['group'], $_POST['condition'] );
 		die();
 
 	}
@@ -112,22 +104,11 @@ class WAS_Ajax {
 	 *
 	 * @since 1.0.0
 	 */
-	public function update_condition_description() {
+	public function was_update_condition_description() {
 
-		check_ajax_referer( 'wpc-ajax-nonce', 'nonce' );
+		check_ajax_referer( 'was-ajax-nonce', 'nonce' );
 
-		$condition    = sanitize_text_field( $_POST['condition'] );
-		$wp_condition = new WAS_Condition( null, null, $condition );
-
-		if ( $desc = $wp_condition->get_description() ) {
-			?><span class='wpc-description wpc-no-description <?php echo $desc; ?>-description'><?php
-			die();
-		}
-
-		?><span class='wpc-description <?php echo $wp_condition->condition; ?>-description'>
-			<img class='help_tip' src='<?php echo WC()->plugin_url(); ?>/assets/images/help.png' height='24' width='24' data-tip="<?php echo esc_html( $wp_condition->get_description() ); ?>" />
-		</span><?php
-
+		was_condition_description( $_POST['condition'] );
 		die();
 
 	}
@@ -136,18 +117,19 @@ class WAS_Ajax {
 	/**
 	 * Save order.
 	 *
-	 * Save the order of the posts in the overview table.
+	 * Save the shipping method order.
 	 *
 	 * @since 1.0.4
 	 */
-	public function save_post_order() {
+	public function save_shipping_rates_table() {
 
 		global $wpdb;
 
-		check_ajax_referer( 'wpc-ajax-nonce', 'nonce' );
+		check_ajax_referer( 'was-ajax-nonce', 'nonce' );
 
 		$args = wp_parse_args( $_POST['form'] );
 
+		// Save order
 		$menu_order = 0;
 		foreach ( $args['sort'] as $sort ) :
 
@@ -161,6 +143,12 @@ class WAS_Ajax {
 
 			$menu_order++;
 
+		endforeach;
+
+
+		// Save priorities
+		foreach ( $args['method_priority'] as $rate_id => $priority ) :
+			update_post_meta( absint( $rate_id ), '_priority', absint( $priority ) );
 		endforeach;
 
 		die;

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\User;
 
-class ACP_Editing_Model_User_CommentCount extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class CommentCount extends Model {
 
 	public function get_view_settings() {
 		return array(

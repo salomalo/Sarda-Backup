@@ -141,7 +141,6 @@ Flatsome_Option::add_field( 'option',
 		'section'     => 'type',
 		'default'     => array(
 			'font-family' => 'Dancing Script',
-			'variant'     => '400',
 		),
 	)
 );

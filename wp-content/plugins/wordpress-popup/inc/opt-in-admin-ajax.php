@@ -10,7 +10,7 @@ class Opt_In_Admin_Ajax {
     private $_hustle;
     private $_admin;
 
-    public function __construct( Opt_In $hustle, Opt_In_Admin $admin ){
+    function __construct( Opt_In $hustle, Opt_In_Admin $admin ){
 
         $this->_hustle = $hustle;
         $this->_admin = $admin;
@@ -41,7 +41,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function render_provider_account_options(){
+    function render_provider_account_options(){
 
         Opt_In_Utils::validate_ajax_call( "change_provider_name" );
 
@@ -55,6 +55,10 @@ class Opt_In_Admin_Ajax {
          * @var $provider Opt_In_Provider_Interface
          */
         $provider = Opt_In::get_provider_by_id( $provider_id );
+        $is_allowed = $this->_is_provider_allowed_to_run( $provider );
+        if( is_wp_error( $is_allowed )  ){
+            wp_send_json_error( $is_allowed->get_error_messages() );
+        }
 
         $provider = Opt_In::provider_instance( $provider );
 
@@ -73,7 +77,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function refresh_provider_account_details(){
+    function refresh_provider_account_details(){
 
         Opt_In_Utils::validate_ajax_call( "refresh_provider_details" );
 
@@ -109,7 +113,7 @@ class Opt_In_Admin_Ajax {
         if( filter_input( INPUT_POST, "optin_url" ) )
             $provider->set_arg( "url", filter_input( INPUT_POST, "optin_url" ) );
 
-        $options = $provider->get_options();
+        $options = $provider->get_options( $optin_id );
 
         if( !empty( $options ) )
             $provider->update_option( Opt_In::get_const( $provider, 'LISTS' ), serialize( $options ) );
@@ -137,7 +141,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function prepare_custom_css(){
+    function prepare_custom_css(){
 
         Opt_In_Utils::validate_ajax_call( "inc_opt_prepare_custom_css" );
 
@@ -167,7 +171,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function save_optin(){
+    function save_optin(){
 
         Opt_In_Utils::validate_ajax_call( "hustle_save_optin" );
 
@@ -178,7 +182,7 @@ class Opt_In_Admin_Ajax {
             $res = $this->_admin->update_optin( $_POST );
 
         wp_send_json( array(
-            "success" =>  false === $res ? false: true,
+            "success" =>  $res === false ? false: true,
             "data" => $res
         ) );
     }
@@ -189,7 +193,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function toggle_optin_state(){
+    function toggle_optin_state(){
 
         Opt_In_Utils::validate_ajax_call( "inc_opt_toggle_state" );
 
@@ -201,15 +205,15 @@ class Opt_In_Admin_Ajax {
         $result = Opt_In_Model::instance()->get($id)->toggle_state();
 
         if( $result )
-            wp_send_json_success( __("Successful", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_success( __("Successful") );
         else
-            wp_send_json_error( __("Failed", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_error( __("Failed") );
     }
-
-    public function toggle_tracking_activity(){
+    
+    function toggle_tracking_activity(){
 
         Opt_In_Utils::validate_ajax_call( "optin-toggle-tracking-activity" );
-
+        
         $id = filter_input( INPUT_POST, 'id', FILTER_VALIDATE_INT );
         $type = trim( filter_input( INPUT_POST, 'type', FILTER_SANITIZE_STRING ) );
 
@@ -218,12 +222,12 @@ class Opt_In_Admin_Ajax {
 
 
         if( !is_object( Opt_In_Model::instance()->get($id)->settings->{$type} ) )
-            wp_send_json_error( sprintf( __( "Invalid environment: %s", Opt_In::TEXT_DOMAIN ), $type ) );
+            wp_send_json_error(__("Invalid environment: " . $type, Opt_In::TEXT_DOMAIN));
 
         $result = Opt_In_Model::instance()->get($id)->toggle_type_track_mode( $type );
 
         if( $result && !is_wp_error( $result ) )
-            wp_send_json_success( __("Successful", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_success( __("Successful") );
         else
             wp_send_json_error( $result->get_error_message() );
     }
@@ -233,7 +237,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function toggle_optin_type_state(){
+    function toggle_optin_type_state(){
 
         Opt_In_Utils::validate_ajax_call( "inc_opt_toggle_optin_type_state" );
 
@@ -246,12 +250,12 @@ class Opt_In_Admin_Ajax {
 
 
         if( !is_object( Opt_In_Model::instance()->get($id)->settings->{$type} ) )
-            wp_send_json_error( sprintf( __("Invalid environment: %s", Opt_In::TEXT_DOMAIN), $type ) );
+            wp_send_json_error(__("Invalid environment: " . $type, Opt_In::TEXT_DOMAIN));
 
         $result = Opt_In_Model::instance()->get($id)->toggle_state( $type );
 
         if( $result && !is_wp_error( $result ) )
-            wp_send_json_success( __("Successful", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_success( __("Successful") );
         else
             wp_send_json_error( $result->get_error_message() );
     }
@@ -261,7 +265,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.0
      */
-    public function toggle_type_test_mode(){
+    function toggle_type_test_mode(){
 
         Opt_In_Utils::validate_ajax_call( "inc_opt_toggle_type_test_mode" );
 
@@ -273,12 +277,12 @@ class Opt_In_Admin_Ajax {
 
 
         if( !is_object( Opt_In_Model::instance()->get($id)->settings->{$type} ) )
-            wp_send_json_error( sprintf( __("Invalid environment: %s", Opt_In::TEXT_DOMAIN), $type ) );
+            wp_send_json_error(__("Invalid environment: " . $type, Opt_In::TEXT_DOMAIN));
 
         $result = Opt_In_Model::instance()->get($id)->toggle_type_test_mode( $type );
 
         if( $result && !is_wp_error( $result ) )
-            wp_send_json_success( __("Successful", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_success( __("Successful") );
         else
             wp_send_json_error( $result->get_error_message() );
     }
@@ -286,7 +290,7 @@ class Opt_In_Admin_Ajax {
     /**
      * Delete optin
      */
-    public function delete_optin(){
+    function delete_optin(){
 
         Opt_In_Utils::validate_ajax_call( "inc_opt_delete_optin" );
 
@@ -298,9 +302,25 @@ class Opt_In_Admin_Ajax {
         $result = Opt_In_Model::instance()->get($id)->delete();
 
         if( $result )
-            wp_send_json_success( __("Successful", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_success( __("Successful") );
         else
-            wp_send_json_error( __("Failed", Opt_In::TEXT_DOMAIN) );
+            wp_send_json_error( __("Failed") );
+    }
+
+    /**
+     * Checks conditions required to run given provider
+     * 
+     * @param $provider
+     * @return bool|WP_Error 
+     */
+    private function _is_provider_allowed_to_run($provider ){
+        $err = new WP_Error();
+        if( 'Opt_In_ConstantContact' === $provider && version_compare( PHP_VERSION, '5.3', '<' ) ){
+            $err->add("Constant Contact Not Allowed", __("This provider requires PHP5.3+ and can't be used with current server. Please upgrade to use this provider.", Opt_In::TEXT_DOMAIN) );
+            return $err;
+        }
+
+        return true;
     }
 
     /**
@@ -309,7 +329,7 @@ class Opt_In_Admin_Ajax {
      *
      * @since 1.1.0
      */
-    public function get_subscriptions_list(){
+    function get_subscriptions_list(){
         Opt_In_Utils::validate_ajax_call("wpoi_get_emails_list");
 
         $id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
@@ -327,26 +347,26 @@ class Opt_In_Admin_Ajax {
 		else
             wp_send_json_error( __("Failed to fetch subscriptions", Opt_In::TEXT_DOMAIN) );
     }
-
+	
 	/**
      * Save persistent choice of closing new welcome notice on dashboard
      *
      * @since 2.0.2
      */
-	public function persist_new_welcome_close() {
+	function persist_new_welcome_close() {
 		Opt_In_Utils::validate_ajax_call( "hustle_new_welcome_notice" );
 		update_option("hustle_new_welcome_notice_dismissed", true);
 		wp_send_json_success();
 	}
 
 
-    public function export_subscriptions(){
+    function export_subscriptions(){
         Opt_In_Utils::validate_ajax_call( 'inc_optin_export_subscriptions' );
 
         $id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
 
         if( !$id )
-            die(esc_attr__("Invalid Request", Opt_In::TEXT_DOMAIN));
+            die(__("Invalid Request", Opt_In::TEXT_DOMAIN));
 
         $optin = Opt_In_Model::instance()->get($id);
 		$module_fields = Opt_In_Model::instance()->get($id)->get_design()->__get( 'module_fields' );
@@ -364,10 +384,8 @@ class Opt_In_Admin_Ajax {
 
 			foreach ( $fields as $key => $label ) {
 				// Check for legacy
-				if ( isset( $row->f_name ) && 'first_name' === $key )
-					$key = 'f_name';
-				if ( isset( $row->l_name ) && 'last_name' === $key )
-					$key = 'l_name';
+				if ( isset( $row->f_name ) && 'first_name' == $key ) $key = 'f_name';
+				if ( isset( $row->l_name ) && 'last_name' == $key ) $key = 'l_name';
 
 				$subscriber_data[ $key ] = isset( $row->$key ) ? $row->$key : '';
 			}
@@ -376,11 +394,11 @@ class Opt_In_Admin_Ajax {
 
         $file_name = strtolower( sanitize_file_name( $optin->optin_name ) ) . ".csv";
 
-        header("Content-type: application/x-msdownload", true, 200);
+        header("Content-type: application/x-msdownload",true,200);
         header("Content-Disposition: attachment; filename=$file_name");
         header("Pragma: no-cache");
         header("Expires: 0");
-        echo $csv; //phpcs:ignore
+        echo $csv;
         die();
 
     }
@@ -388,17 +406,14 @@ class Opt_In_Admin_Ajax {
 	/**
 	 * Validate new/updated custom module field.
 	 **/
-	public function add_module_field() {
+	function add_module_field() {
 		Opt_In_Utils::validate_ajax_call( 'optin_add_module_field' );
 		$input = stripslashes_deep( $_REQUEST );
 
 		if ( ! empty( $input ) ) {
 			$provider = $input['provider'];
 			$registered_providers = $this->_hustle->get_providers();
-			$can_add = array(
-				'success' => true,
-				'field' => $input['field'],
-			);
+			$can_add = array( 'success' => true, 'field' => $input['field'] );
 
 			if ( isset( $registered_providers[ $provider ] ) ) {
 				$provider_class = $registered_providers[ $provider ]['class'];
@@ -418,7 +433,7 @@ class Opt_In_Admin_Ajax {
 		}
 	}
 
-	public function get_error_list() {
+	function get_error_list() {
 		Opt_In_Utils::validate_ajax_call( 'optin_get_error_logs' );
 		$id = filter_input( INPUT_GET, 'optin_id', FILTER_VALIDATE_INT );
 
@@ -426,15 +441,12 @@ class Opt_In_Admin_Ajax {
 			$optin = Opt_In_Model::instance()->get( $id );
 			$error_log = $optin->get_error_log();
 			$module_fields = $optin->get_design()->__get( 'module_fields' );
-			wp_send_json_success( array(
-				'logs' => $error_log,
-				'module_fields' => $module_fields,
-			) );
+			wp_send_json_success( array( 'logs' => $error_log, 'module_fields' => $module_fields ) );
 		}
 		wp_send_json_error(true);
 	}
 
-	public function clear_logs() {
+	function clear_logs() {
 		Opt_In_Utils::validate_ajax_call( 'optin_clear_logs' );
 		$id = filter_input( INPUT_GET, 'optin_id', FILTER_VALIDATE_INT );
 
@@ -444,7 +456,7 @@ class Opt_In_Admin_Ajax {
 		wp_send_json_success(true);
 	}
 
-	public function export_error_logs() {
+	function export_error_logs() {
 		Opt_In_Utils::validate_ajax_call( 'optin_export_error_logs' );
 		$id = filter_input( INPUT_GET, 'optin_id', FILTER_VALIDATE_INT );
 
@@ -479,34 +491,34 @@ class Opt_In_Admin_Ajax {
 			}
 
 			$file_name = strtolower( sanitize_file_name( $optin->optin_name ) ) . "-errors.csv";
-			header("Content-type: application/x-msdownload", true, 200);
+			header("Content-type: application/x-msdownload",true,200);
 			header("Content-Disposition: attachment; filename=$file_name");
 			header("Pragma: no-cache");
 			header("Expires: 0");
-			echo implode( "\n", $csv );  //phpcs:ignore
+			echo implode( "\n", $csv );
 			die();
 		}
 		wp_send_json_error(true);
 	}
-
-    public function sshare_show_page_content() {
+    
+    function sshare_show_page_content() {
 		Opt_In_Utils::validate_ajax_call( "hustle_ss_stats_paged_data" );
-
+        
         $page_id = filter_input( INPUT_POST, 'page_id', FILTER_VALIDATE_INT );
         $offset = ($page_id - 1) * 5;
         $ss_share_stats = Hustle_Social_Sharing_Collection::instance()->get_share_stats( $offset, 5 );
-
+        
         foreach($ss_share_stats as $key => $ss_stats) {
-            $ss_share_stats[$key]->page_url = $ss_stats->ID ? esc_url(get_permalink($ss_stats->ID)) : esc_url(get_home_url());
-            $ss_share_stats[$key]->page_title = $ss_stats->ID ? $ss_stats->post_title : get_bloginfo();
+            $ss_share_stats[$key]->page_url = ( $ss_stats->ID != 0 ) ? esc_url(get_permalink($ss_stats->ID)) : esc_url(get_home_url());
+            $ss_share_stats[$key]->page_title = ( $ss_stats->ID != 0 ) ? $ss_stats->post_title : get_bloginfo();
         }
-
+        
 		wp_send_json_success( array(
             'ss_share_stats' => $ss_share_stats
         ) );
 	}
 
-	public function update_hubspot_referrer() {
+	function update_hubspot_referrer() {
 		Opt_In_Utils::validate_ajax_call( "hustle_hubspot_referrer" );
 
 		$optin_id = filter_input( INPUT_GET, 'optin_id', FILTER_VALIDATE_INT );
@@ -517,7 +529,7 @@ class Opt_In_Admin_Ajax {
 		}
 	}
 
-    public function update_constantcontact_referrer() {
+    function update_constantcontact_referrer() {
         Opt_In_Utils::validate_ajax_call( "hustle_constantcontact_referrer" );
 
 		$optin_id = filter_input( INPUT_GET, 'optin_id', FILTER_VALIDATE_INT );

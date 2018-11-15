@@ -1,16 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Export;
 
 /**
  * Depth of the current page (number of ancestors + 1)
  *
  * @since 2.3.4
  */
-class ACP_Column_Post_LinkCount extends AC_Column
-	implements ACP_Export_Column {
+class LinkCount extends AC\Column
+	implements Export\Exportable {
 
 	public function __construct() {
 		$this->set_type( 'column-linkcount' );
@@ -52,7 +53,7 @@ class ACP_Column_Post_LinkCount extends AC_Column
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_LinkCount( $this );
+		return new Export\Model\Post\LinkCount( $this );
 	}
 
 }

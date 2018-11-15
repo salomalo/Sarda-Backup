@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Comment_ID extends AC_Column_Comment_ID
-	implements ACP_Column_SortingInterface {
+class ID extends AC\Column\Comment\ID
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'comment_ID' );
 
 		return $model;

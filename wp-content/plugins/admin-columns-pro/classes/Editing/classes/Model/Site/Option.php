@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Site;
+
+use ACP\Column;
+use ACP\Editing\Model;
 
 /**
- * @property ACP_Column_NetworkSite_Option $column
+ * @property Column\NetworkSite\Option $column
  */
-class ACP_Editing_Model_Site_Option extends ACP_Editing_Model {
+class Option extends Model {
 
-	public function __construct( ACP_Column_NetworkSite_Option $column ) {
+	public function __construct( Column\NetworkSite\Option $column ) {
 		parent::__construct( $column );
 	}
 

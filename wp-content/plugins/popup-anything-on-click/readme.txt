@@ -2,7 +2,7 @@
 Contributors: wponlinesupport, anoopranawat, pratik-jain
 Tags:  modal popup, popup, modal, full screen popup, html popup, popup on click, modal popup on click, full screen popup on click
 Requires at least: 3.5
-Tested up to: 4.9.8
+Tested up to: 4.9.6
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -12,7 +12,7 @@ Display a modal popup by clicking on a link, image or button
 == Description ==
 Popup anything by **clicking on a** 
 
-* Link, 
+* Iink, 
 * Image or 
 * Button 
 

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_Slug extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class Slug extends Model {
 
 	public function get_sorting_vars() {
 		add_filter( 'posts_fields', array( $this, 'posts_fields_callback' ) );
@@ -30,7 +30,7 @@ class ACP_Sorting_Model_Post_Slug extends ACP_Sorting_Model {
 	/**
 	 * Only return fields required for sorting
 	 *
-	 * @global wpdb $wpdb
+	 * @global \wpdb $wpdb
 	 * @return string
 	 */
 	public function posts_fields_callback() {

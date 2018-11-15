@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\User;
 
-class ACP_Editing_Model_User_Username extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Username extends Model {
 
 	public function get_edit_value( $id ) {
 		return ac_helper()->user->get_user_field( 'user_login', $id );
@@ -21,10 +21,10 @@ class ACP_Editing_Model_User_Username extends ACP_Editing_Model {
 	}
 
 	/**
-	 * @param int $id
+	 * @param int    $id
 	 * @param string $value
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public function save( $id, $value ) {
 		global $wpdb;
@@ -32,7 +32,7 @@ class ACP_Editing_Model_User_Username extends ACP_Editing_Model {
 		$value = sanitize_user( $value, true );
 
 		if ( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(1) FROM {$wpdb->users} WHERE user_login = %s AND ID != %d", $value, $id ) ) ) {
-			return new WP_Error( 'cacie_error_username_exists', __( 'The username already exists.', 'codepress-admin-columns' ) );
+			return new \WP_Error( 'cacie_error_username_exists', __( 'The username already exists.', 'codepress-admin-columns' ) );
 		}
 
 		$wpdb->update(

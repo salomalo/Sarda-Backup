@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\User;
 
-class ACP_Editing_Model_User_RichEditing extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class RichEditing extends Model {
 
 	public function get_view_settings() {
 		return array(

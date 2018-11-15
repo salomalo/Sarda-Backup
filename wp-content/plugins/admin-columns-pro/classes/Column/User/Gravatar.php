@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP;
 
 /**
  * @since 2.0
  */
-class ACP_Column_User_Gravatar extends AC_Column {
+class Gravatar extends AC\Column {
 
 	public function __construct() {
 		$this->set_type( 'column-gravatar' );
@@ -19,7 +20,7 @@ class ACP_Column_User_Gravatar extends AC_Column {
 	}
 
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_Gravatar( $this ) );
+		$this->add_setting( new ACP\Settings\Column\Gravatar( $this ) );
 	}
 
 }

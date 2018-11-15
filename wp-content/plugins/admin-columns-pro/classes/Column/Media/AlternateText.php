@@ -1,18 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_AlternateText extends AC_Column_Media_AlternateText
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface {
+use AC;
+use ACP\Editing;
+use ACP\Sorting;
+
+class AlternateText extends AC\Column\Media\AlternateText
+	implements Editing\Editable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Media_AlternateText( $this );
+		return new Editing\Model\Media\AlternateText( $this );
 	}
 
 }

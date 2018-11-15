@@ -12,12 +12,12 @@
  *
  * @see https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.4.4
+ * @version 3.4.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! wc_coupons_enabled() ) { // @codingStandardsIgnoreLine.
+if ( ! wc_coupons_enabled() || ! empty( WC()->cart->applied_coupons ) ) { // @codingStandardsIgnoreLine.
 	return;
 }
 

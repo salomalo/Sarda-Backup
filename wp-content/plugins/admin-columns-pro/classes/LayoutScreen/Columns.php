@@ -1,13 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\LayoutScreen;
 
-class ACP_LayoutScreen_Columns {
+use AC;
+use AC\ListScreen;
+use ACP\Layout;
+use ACP\Layouts;
+
+class Columns {
 
 	public function __construct() {
-
 		// Init
 		add_action( 'ac/settings/list_screen', array( $this, 'set_layout_on_settings_screen' ) );
 
@@ -31,8 +33,8 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param string        $message
-	 * @param AC_ListScreen $list_screen
+	 * @param string         $message
+	 * @param ListScreen $list_screen
 	 *
 	 * @return string
 	 */
@@ -45,7 +47,7 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 */
 	public function set_layout_on_settings_screen( $list_screen ) {
 		// Preference
@@ -69,7 +71,7 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param AC_Admin_Page_Columns $screen
+	 * @param AC\Admin\Page\Columns $screen
 	 */
 	public function handle_request( $screen ) {
 
@@ -80,13 +82,11 @@ class ACP_LayoutScreen_Columns {
 					return;
 				}
 
-				$list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) );
+				$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ), filter_input( INPUT_POST, 'layout' ) );
 
 				if ( ! $list_screen ) {
 					return;
 				}
-
-				$list_screen->set_layout_id( filter_input( INPUT_POST, 'layout' ) );
 
 				$layouts = ACP()->layouts( $list_screen );
 
@@ -127,7 +127,7 @@ class ACP_LayoutScreen_Columns {
 					return;
 				}
 
-				$list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) );
+				$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ) );
 
 				if ( ! $list_screen ) {
 					return;
@@ -137,8 +137,7 @@ class ACP_LayoutScreen_Columns {
 				$this->preferences()->delete( $list_screen->get_key() );
 
 				// Delete layout
-				$layouts = ACP()->layouts( $list_screen );
-				$layout = $layouts->delete( filter_input( INPUT_POST, 'layout_id' ) );
+				$layout = ACP()->layouts( $list_screen )->delete( filter_input( INPUT_POST, 'layout_id' ) );
 
 				if ( ! $layout ) {
 					AC()->admin()->get_page( 'columns' )->notice( __( "Screen does not exist.", 'codepress-admin-columns' ), 'error' );
@@ -156,7 +155,7 @@ class ACP_LayoutScreen_Columns {
 	 *
 	 */
 	public function preferences() {
-		return new AC_Preferences_Site( 'layout_columns' );
+		return new AC\Preferences\Site( 'layout_columns' );
 	}
 
 	/**
@@ -178,7 +177,7 @@ class ACP_LayoutScreen_Columns {
 	public function restore_all() {
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like( ACP_Layouts::LAYOUT_KEY ) . '%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like( Layouts::LAYOUT_KEY ) . '%' ) );
 	}
 
 	/**
@@ -208,9 +207,9 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 */
-	public function settings( AC_ListScreen $list_screen ) { ?>
+	public function settings( ListScreen $list_screen ) { ?>
 		<div class="sidebox layouts" data-type="<?php echo $list_screen->get_key(); ?>">
 
 			<div class="header">
@@ -322,7 +321,7 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	private function get_assets_url() {
-		return ACP()->get_plugin_url() . 'assets/';
+		return ACP()->get_url() . 'assets/';
 	}
 
 	public function layout_help() {
@@ -356,7 +355,7 @@ class ACP_LayoutScreen_Columns {
 	private function ajax_validate_request() {
 		check_ajax_referer( 'acp-layout' );
 
-		if ( ! AC()->user_can_manage_admin_columns() ) {
+		if ( ! current_user_can( AC\Capabilities::MANAGE ) ) {
 			wp_die();
 		}
 	}
@@ -373,7 +372,7 @@ class ACP_LayoutScreen_Columns {
 
 		$options = array();
 
-		$users_query = new WP_User_Query( $query_args );
+		$users_query = new \WP_User_Query( $query_args );
 		if ( $users = $users_query->get_results() ) {
 			$names = array();
 
@@ -401,11 +400,15 @@ class ACP_LayoutScreen_Columns {
 	public function ajax_update_layout() {
 		$this->ajax_validate_request();
 
-		if ( ! ( $list_screen = AC()->get_list_screen( filter_input( INPUT_POST, 'list_screen' ) ) ) ) {
+		$list_screen = AC\ListScreenFactory::create( filter_input( INPUT_POST, 'list_screen' ) );
+
+		if ( ! $list_screen ) {
 			wp_die();
 		}
 
-		if ( ! ( $formdata = filter_input( INPUT_POST, 'data' ) ) ) {
+		$formdata = filter_input( INPUT_POST, 'data' );
+
+		if ( ! $formdata ) {
 			wp_die();
 		}
 
@@ -436,8 +439,8 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param string        $label
-	 * @param AC_ListScreen $list_screen
+	 * @param string         $label
+	 * @param ListScreen $list_screen
 	 *
 	 * @return string
 	 */
@@ -450,8 +453,8 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
-	 * @param               $layout
+	 * @param ListScreen $list_screen
+	 * @param                $layout
 	 *
 	 * @return string
 	 */
@@ -460,9 +463,11 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param ACP_Layout[] $layouts
+	 * @param ListScreen $list_screen
+	 *
+	 * @return string
 	 */
-	private function get_display_layout_list( AC_ListScreen $list_screen ) {
+	private function get_display_layout_list( ListScreen $list_screen ) {
 		ob_start();
 		$count = 0;
 		foreach ( ACP()->layouts( $list_screen )->get_layouts() as $layout ) : ?>
@@ -476,9 +481,9 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 */
-	public function menu( AC_ListScreen $list_screen ) {
+	public function menu( ListScreen $list_screen ) {
 		$list = $this->get_display_layout_list( $list_screen );
 
 		if ( ! $list ) {
@@ -495,9 +500,9 @@ class ACP_LayoutScreen_Columns {
 	}
 
 	/**
-	 * @param                  $attr_id
-	 * @param ACP_Layout|false $layout
-	 * @param bool             $is_disabled
+	 * @param                   $attr_id
+	 * @param Layout|false $layout
+	 * @param bool              $is_disabled
 	 */
 	public function input_rows( $attr_id, $layout = false, $is_disabled = false ) {
 		?>

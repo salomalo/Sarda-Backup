@@ -1,12 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
+
+use ACP;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Media_AuthorName extends ACP_Column_Post_AuthorName {
+class AuthorName extends ACP\Column\Post\AuthorName {
 
 }

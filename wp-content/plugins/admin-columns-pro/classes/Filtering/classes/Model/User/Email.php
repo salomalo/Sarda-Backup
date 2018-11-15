@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\User;
 
-class ACP_Filtering_Model_User_Email extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Email extends Model {
 
 	/**
 	 * @param $query
 	 *
-	 * @return WP_Query
+	 * @return \WP_Query
 	 */
 	public function filter_by_email( $query ) {
 		global $wpdb;
@@ -21,7 +21,8 @@ class ACP_Filtering_Model_User_Email extends ACP_Filtering_Model {
 
 	/**
 	 * @param array $vars
-	 * @param string $value
+	 *
+	 * @return array
 	 */
 	public function get_filtering_vars( $vars ) {
 		add_filter( 'pre_user_query', array( $this, 'filter_by_email' ) );

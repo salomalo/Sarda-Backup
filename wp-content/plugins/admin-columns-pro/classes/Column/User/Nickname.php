@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
 
 /**
  * @since 2.0
  */
-class ACP_Column_User_Nickname extends AC_Column_User_Nickname
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface {
+class Nickname extends AC\Column\User\Nickname
+	implements Editing\Editable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Meta( $this );
+		return new Sorting\Model\Meta( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Meta( $this );
+		return new Editing\Model\Meta( $this );
 	}
 
 }

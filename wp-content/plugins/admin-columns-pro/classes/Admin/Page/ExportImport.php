@@ -1,16 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Admin\Page;
+
+use AC\Admin\Page;
+use AC\Message;
+use AC\ListScreen;
+use AC\ListScreenFactory;
+use AC\ListScreenGroups;
+use ACP;
 
 /**
- * AC_Export_Import Class
- *
  * @since 1.4.6.5
- *
  */
-class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
+class ExportImport extends Page {
 
 	/**
 	 * @var string
@@ -21,10 +23,18 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 	 * @since 1.4.6.5
 	 */
 	public function __construct() {
+
 		$this
 			->set_slug( 'import-export' )
 			->set_label( __( 'Export/Import', 'codepress-admin-columns' ) );
 
+		$this->register();
+	}
+
+	/**
+	 * Register Hooks
+	 */
+	public function register() {
 		add_action( 'admin_init', array( $this, 'handle_export' ) );
 		add_action( 'admin_init', array( $this, 'handle_import' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
@@ -34,25 +44,24 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 	 * @return string
 	 */
 	private function get_assets_url() {
-		return ACP()->get_plugin_url() . 'assets/';
+		return ACP()->get_url() . 'assets/';
 	}
 
 	/**
 	 * @since 1.4.6.5
 	 */
 	public function handle_export() {
-		if ( ! $this->is_current_screen() ) {
-			return;
-		}
-
-		if ( ! $this->verify_nonce( 'export' ) ) {
+		if ( ! $this->is_current_screen() || ! $this->verify_nonce( 'export' ) ) {
 			return;
 		}
 
 		$export_types = $this->get_exported_types();
 
 		if ( empty( $export_types ) ) {
-			AC()->notice( __( 'Export field is empty. Please select your types from the left column.', 'codepress-admin-columns' ), 'error' );
+			$notice = new Message\Notice();
+			$notice->set_message( __( 'Export field is empty. Please select your types from the left column.', 'codepress-admin-columns' ) )
+			       ->set_type( $notice::ERROR )
+			       ->register();
 
 			return;
 		}
@@ -65,9 +74,8 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 		// JSON
 		if ( filter_input( INPUT_POST, 'ac-export-json' ) ) {
 			$json = $this->get_json_export_string( $export_types );
-
-			// Filename
 			$filename = 'admin-columns-export_' . date( 'Y-m-d' );
+
 			if ( 1 === count( $export_types ) ) {
 				$filename .= '_' . $export_types[0];
 			}
@@ -90,8 +98,20 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 	private function create_json_file( $filename, $json ) {
 		header( 'Content-disposition: attachment; filename=' . $filename . '.json' );
 		header( 'Content-type: application/json' );
+
 		echo $json;
 		exit;
+	}
+
+	/**
+	 * @param string $message
+	 */
+	private function notice_error( $message ) {
+		$notice = new Message\Notice();
+
+		$notice->set_message( $message )
+		       ->set_type( $notice::ERROR )
+		       ->register();
 	}
 
 	/**
@@ -109,14 +129,16 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 
 		$file = wp_import_handle_upload();
 
-		if ( isset( $file['error'] ) ) {
-			AC()->notice( __( 'Sorry, there has been an error.', 'codepress-admin-columns' ) . '<br />' . esc_html( $file['error'] ), 'error' );
+		$error = false;
 
-			return;
+		if ( isset( $file['error'] ) ) {
+			$error = __( 'Sorry, there has been an error.', 'codepress-admin-columns' ) . '<br>' . esc_html( $file['error'] );
+		} elseif ( ! file_exists( $file['file'] ) ) {
+			$error = __( 'Sorry, there has been an error.', 'codepress-admin-columns' ) . '<br>' . sprintf( __( 'The export file could not be found at %s. It is likely that this was caused by a permissions problem.', 'codepress-admin-columns' ), '<code>' . esc_html( $file['file'] ) . '</code>' );
 		}
 
-		if ( ! file_exists( $file['file'] ) ) {
-			AC()->notice( __( 'Sorry, there has been an error.', 'codepress-admin-columns' ) . '<br />' . sprintf( __( 'The export file could not be found at %s. It is likely that this was caused by a permissions problem.', 'codepress-admin-columns' ), '<code>' . esc_html( $file['file'] ) . '</code>' ), 'error' );
+		if ( false !== $error ) {
+			$this->notice_error( $error );
 
 			return;
 		}
@@ -129,16 +151,17 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 		$columndata = $this->get_decoded_settings( $content );
 
 		if ( empty( $columndata ) ) {
-			AC()->notice( __( 'Import failed. File does not contain Admin Column settings.', 'codepress-admin-columns' ), 'error' );
+			$this->notice_error( __( 'Import failed. File does not contain Admin Column settings.', 'codepress-admin-columns' ) );
 
 			return;
 		}
 
 		foreach ( $columndata as $type => $_data ) {
-			$list_screen = AC()->get_list_screen( $type );
+			$list_screen = ListScreenFactory::create( $type );
 
 			if ( ! $list_screen ) {
-				AC()->notice( sprintf( __( 'Screen %s does not exist.', 'codepress-admin-columns' ), "<strong>{$type}</strong>" ), 'error' );
+				$this->notice_error( sprintf( __( 'Screen %s does not exist.', 'codepress-admin-columns' ), "<strong>{$type}</strong>" ) );
+
 				continue;
 			}
 
@@ -185,12 +208,13 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 			}
 
 			if ( ! $created_layouts ) {
-				AC()->notice( __( 'Import failed.', 'codepress-admin-columns' ), 'error' );
+				$this->notice_error( __( 'Import failed.', 'codepress-admin-columns' ) );
 
 				return;
 			}
 
 			$links = array();
+
 			foreach ( $created_layouts as $id => $name ) {
 				$links[] = ac_helper()->html->link( add_query_arg( 'layout_id', $id, $list_screen->get_edit_link() ), '<strong>' . esc_html( $name ) . '</strong>' );
 			}
@@ -201,7 +225,9 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 				"<strong>" . $list_screen->get_label() . "</strong>"
 			);
 
-			AC()->notice( $message, 'updated' );
+			$notice = new Message\Notice();
+			$notice->set_message( $message )
+			       ->register();
 		}
 	}
 
@@ -219,7 +245,7 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 *
 	 * @return array
 	 */
@@ -295,8 +321,8 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 			if ( $this->export_single_layouts() ) {
 				$group = $list_screen->get_singular_label();
 
-				if ( $list_screen instanceof ACP_ListScreen_Taxonomy ) {
-					$group = AC()->list_screen_groups()->get_group_label( $list_screen->get_group() ) . ' - ' . $group;
+				if ( $list_screen instanceof ACP\ListScreen\Taxonomy ) {
+					$group = ListScreenGroups::get_groups()->get_group_label( $list_screen->get_group() ) . ' - ' . $group;
 				}
 
 				if ( $layouts ) {
@@ -320,7 +346,7 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 			else {
 				$has_stored_columns = false;
 
-				$group = AC()->list_screen_groups()->get_group_label( $list_screen->get_group() );
+				$group = ListScreenGroups::get_groups()->get_group_label( $list_screen->get_group() );
 
 				// Layouts
 				if ( $layouts ) {
@@ -568,8 +594,6 @@ class ACP_Admin_Page_ExportImport extends AC_Admin_Page {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 *
 	 * @param string $contents
 	 *
 	 * @return bool|mixed

@@ -1,20 +1,21 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Strategy;
+
+use AC;
+use ACP\Export\Strategy;
 
 /**
  * Exportability class for users list screen
  *
  * @since 1.0
  */
-class ACP_Export_Strategy_User extends ACP_Export_Strategy {
+class User extends Strategy {
 
 	/**
-	 * @param AC_ListScreen_User $list_screen
+	 * @param AC\ListScreen\User $list_screen
 	 */
-	public function __construct( AC_ListScreen_User $list_screen ) {
+	public function __construct( AC\ListScreen\User $list_screen ) {
 		parent::__construct( $list_screen );
 	}
 
@@ -43,7 +44,7 @@ class ACP_Export_Strategy_User extends ACP_Export_Strategy {
 		$args['fields'] = 'ids';
 
 		// Construct users query
-		$query = new WP_User_Query( $args );
+		$query = new \WP_User_Query( $args );
 
 		// Export
 		$this->export( $query->get_results() );

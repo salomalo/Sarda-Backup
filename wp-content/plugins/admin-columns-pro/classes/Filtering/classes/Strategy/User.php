@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Strategy;
 
-class ACP_Filtering_Strategy_User extends ACP_Filtering_Strategy {
+use ACP\Filtering\Strategy;
+
+class User extends Strategy {
 
 	public function handle_request() {
 		add_action( 'pre_get_users', array( $this, 'handle_filter_requests' ), 1 );
@@ -15,7 +15,7 @@ class ACP_Filtering_Strategy_User extends ACP_Filtering_Strategy {
 	 *
 	 * @since 3.5
 	 *
-	 * @param WP_User_Query $user_query
+	 * @param \WP_User_Query $user_query
 	 */
 	public function handle_filter_requests( $user_query ) {
 		if ( ! isset( $_GET['acp_filter_action'] ) ) {

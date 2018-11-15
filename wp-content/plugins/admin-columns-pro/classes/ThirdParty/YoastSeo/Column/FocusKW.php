@@ -1,11 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_FocusKW extends ACP_ThirdParty_YoastSeo_Column
-	implements ACP_Column_EditingInterface, ACP_Export_Column {
+use ACP\ThirdParty\YoastSeo;
+use ACP\Editing;
+use ACP\Export;
+
+class FocusKW extends YoastSeo\Column
+	implements Editing\Editable, Export\Exportable {
 
 	public function __construct() {
 		parent::__construct();
@@ -14,11 +16,11 @@ class ACP_ThirdParty_YoastSeo_Column_FocusKW extends ACP_ThirdParty_YoastSeo_Col
 	}
 
 	public function editing() {
-		return new ACP_ThirdParty_YoastSeo_Editing_FocusKW( $this );
+		return new YoastSeo\Editing\FocusKW( $this );
 	}
 
 	public function export() {
-		return new ACP_ThirdParty_YoastSeo_Export_FocusKW( $this );
+		return new YoastSeo\Export\FocusKW( $this );
 	}
 
 }

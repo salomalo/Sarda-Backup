@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Sticky extends AC_Column_Post_Sticky
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Sticky extends AC\Column\Post\Sticky
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_Sticky( $this );
+		return new Sorting\Model\Post\Sticky( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Sticky( $this );
+		return new Editing\Model\Post\Sticky( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Sticky( $this );
+		return new Filtering\Model\Post\Sticky( $this );
 	}
 
 }

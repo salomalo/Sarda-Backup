@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_AuthorIP extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class AuthorIP extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		add_filter( 'comments_clauses', array( $this, 'filter_by_author_ip' ) );

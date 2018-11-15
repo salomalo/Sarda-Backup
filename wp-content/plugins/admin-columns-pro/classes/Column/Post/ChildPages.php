@@ -1,11 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_ChildPages extends AC_Column
-	implements ACP_Column_FilteringInterface, ACP_Export_Column {
+use AC;
+use ACP\Export;
+use ACP\Filtering;
+
+class ChildPages extends AC\Column
+	implements Filtering\Filterable, Export\Exportable {
 
 	public function __construct() {
 		$this->set_type( 'column-child-pages' );
@@ -45,11 +47,11 @@ class ACP_Column_Post_ChildPages extends AC_Column
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_ChildPages( $this );
+		return new Filtering\Model\Post\ChildPages( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_ChildPages( $this );
+		return new Export\Model\Post\ChildPages( $this );
 	}
 
 }

@@ -5,7 +5,8 @@
  *
  * Class Hustle_Condition_Factory
  */
-class Hustle_Condition_Factory {
+class Hustle_Condition_Factory
+{
 
 	/**
 	 * Callback to use with preg_replace_callback in self::build
@@ -29,8 +30,8 @@ class Hustle_Condition_Factory {
 				array(__CLASS__, "_preg_replace_callback"),
 				ucfirst( $condition_key )
 			);
-
-		return ( class_exists($class) )
+		
+		return ( class_exists($class) ) 
 			? new $class( $args )
 			: false
 		;

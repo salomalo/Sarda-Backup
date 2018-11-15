@@ -80,10 +80,7 @@ class WF_ProdImpExpCsv_ImportCron {
 
         $multi_csv_import_enabled = apply_filters('hf_multi_csv_import_enabled', FALSE);
 
-        WF_ProdImpExpCsv_ImportCron::product_importer($arg);  
-
-        $GLOBALS['WF_CSV_Product_Import']->hf_log_data_change('csv-import', "---------------".__('Start: Cron Import started at ', 'wf_csv_import_export').date('Y-m-d H:i:s')."---------------");
-        
+        WF_ProdImpExpCsv_ImportCron::product_importer($arg);
         if ($this->handle_ftp_for_autoimport($multi_csv_import_enabled)) {
             $mapping = '';
             $eval_field = '';
@@ -142,13 +139,10 @@ class WF_ProdImpExpCsv_ImportCron {
             //do_action('wf_new_scheduled_import');
             //wp_clear_scheduled_hook('wf_woocommerce_csv_im_ex_auto_import_products');
             //do_action('wf_new_scheduled_import');
-            
-            $GLOBALS['WF_CSV_Product_Import']->hf_log_data_change('csv-import', '---------------'.__('End: Cron Import ended at ', 'wf_csv_import_export').date('Y-m-d H:i:s')."--------------- \n");
+
             die();
         } else {
             $GLOBALS['WF_CSV_Product_Import']->hf_log_data_change('csv-import', __('Fetching file failed. Reason:' . $this->error_message, 'wf_csv_import_export'));
-            $GLOBALS['WF_CSV_Product_Import']->hf_log_data_change('csv-import', '---------------'.__('End: Cron Import ended with errors at ', 'wf_csv_import_export').date('Y-m-d H:i:s')."--------------- \n");
-
         }
     }
 
@@ -158,12 +152,9 @@ class WF_ProdImpExpCsv_ImportCron {
 
     private function handle_ftp_for_autoimport($multi_csv_import_enabled = false) {
         $enable_ftp_ie = $this->settings['pro_enable_ftp_ie'];
-        $this->error_message = "";
-        $success = false;
-        if (!$enable_ftp_ie){
-            $this->error_message = __("Please enable auto import.");;
+        if (!$enable_ftp_ie)
             return false;
-        }
+
         $ftp_server = $this->settings['pro_ftp_server'];
         $ftp_user = $this->settings['pro_ftp_user'];
         $ftp_password = $this->settings['pro_ftp_password'];
@@ -174,18 +165,20 @@ class WF_ProdImpExpCsv_ImportCron {
 
         $local_file = 'wp-content/plugins/product-csv-import-export-for-woocommerce/temp-import.csv';
         $server_file = $ftp_server_path;
-        
+
+        $this->error_message = "";
+        $success = false;
+
         // if have SFTP Add-on for Import Export for WooCommerce 
         if (class_exists('class_wf_sftp_import_export')) {
             $sftp_import = new class_wf_sftp_import_export();
             if (!$sftp_import->connect($ftp_server, $ftp_user, $ftp_password, $ftp_port)) {
-                $this->error_message = __("Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>.");
-                return false;
+                $this->error_message = __("Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>. \n");
             }
 
+
             if (empty($server_file)) {
-                $this->error_message = __("Please Complete fill the FTP Details.");
-                return false;
+                $this->error_message = __("Please Complete fill the FTP Details. \n");
             } else {
                 $file_contents = $sftp_import->get_contents($server_file);
                 if (!empty($file_contents)) {
@@ -193,8 +186,7 @@ class WF_ProdImpExpCsv_ImportCron {
                     $this->error_message = "";
                     $success = true;
                 } else {
-                    $this->error_message = __("Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b>.");
-                    return false;
+                    $this->error_message = __("Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n");
                 }
             }
         } else {
@@ -202,14 +194,12 @@ class WF_ProdImpExpCsv_ImportCron {
             $ftp_conn = $use_ftps ? @ftp_ssl_connect($ftp_server, $ftp_port) : ftp_connect($ftp_server, $ftp_port);
 
             if ($ftp_conn == false) {
-                $this->error_message = __("Could not connect to the host. Server Host Name / IP or Port may be wrong.");
-                return false;
+                $this->error_message = __("Could not connect to the host. Server Host Name / IP or Port may be wrong.\n");
             }
 
             if (empty($this->error_message)) {
                 if (@ftp_login($ftp_conn, $ftp_user, $ftp_password) == false) {
-                    $this->error_message = __("Connected to host but could not login. Server UserID or Password may be wrong or Try with / without FTPS.");
-                    return false;
+                    $this->error_message = __("Connected to host but could not login. Server UserID or Password may be wrong or Try with / without FTPS .\n");
                 }
             }
             if (empty($this->error_message)) {
@@ -228,13 +218,12 @@ class WF_ProdImpExpCsv_ImportCron {
                                 $success = true;
                             } else {
                                 $this->error_message = __("Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n");
-                                return false;
                             }
                         }
                     }
 
                     if (!$success) {
-                        return FALSE;
+
                         die($this->error_message);
                     }
                 } else {
@@ -242,8 +231,7 @@ class WF_ProdImpExpCsv_ImportCron {
                         $this->error_message = "";
                         $success = true;
                     } else {
-                        $this->error_message = __("Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b>.");
-                        return false;
+                        $this->error_message = __("Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n");
                     }
                 }
             }
@@ -267,7 +255,6 @@ class WF_ProdImpExpCsv_ImportCron {
                 $this->file_url = ABSPATH . $local_file;
             }
         } else {
-            return FALSE;
             die($this->error_message);
         }
 

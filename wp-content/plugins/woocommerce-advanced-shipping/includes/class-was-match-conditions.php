@@ -225,12 +225,8 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_contains_product( $match, $operator, $value, $package ) {
 
-		$product_ids = array();
 		foreach ( $package['contents'] as $product ) :
 			$product_ids[] = $product['product_id'];
-			if ( isset( $product['variation_id'] ) ) {
-				$product_ids[] = $product['variation_id'];
-			}
 		endforeach;
 
 		if ( '==' == $operator ) :
@@ -250,7 +246,6 @@ class WAS_Match_Conditions {
 	 * Match the condition value against the applied coupons.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.10 - Add capability to set condition based on coupon amount/percentage
 	 *
 	 * @param  bool   $match    Current match value.
 	 * @param  string $operator Operator selected by the user in the condition row.
@@ -264,58 +259,11 @@ class WAS_Match_Conditions {
 			return $match;
 		endif;
 
-		$coupons = array( 'percent' => array(), 'fixed' => array() );
-		foreach ( WC()->cart->get_coupons() as $coupon ) {
-			/** @var $coupon WC_Coupon */
-			if ( version_compare( WC()->version, '2.7', '>=' ) ) {
-				$type               = str_replace( '_product', '', $coupon->get_discount_type() );
-				$type               = str_replace( '_cart', '', $type );
-				$coupons[ $type ][] = $coupon->get_amount();
-			} else {
-				$type               = str_replace( '_product', '', $coupon->discount_type );
-				$type               = str_replace( '_cart', '', $type );
-				$coupons[ $type ][] = $coupon->coupon_amount;
-			}
-		}
-
-		// Match against coupon percentage
-		if ( strpos( $value, '%' ) !== false ) {
-
-			$percentage_value = str_replace( '%', '', $value );
-			if ( '==' == $operator ) :
-				$match = in_array( $percentage_value, $coupons['percent'] );
-			elseif ( '!=' == $operator ) :
-				$match = ! in_array( $percentage_value, $coupons['percent'] );
-			elseif ( '>=' == $operator ) :
-				$match = empty( $coupons['percent'] ) ? $match : ( min( $coupons['percent'] ) >= $percentage_value );
-			elseif ( '<=' == $operator ) :
-				$match = ! is_array( $coupons['percent'] ) ? false : ( max( $coupons['percent'] ) <= $percentage_value );
-			endif;
-
-		// Match against coupon amount
-		} elseif ( strpos( $value, '$' ) !== false ) {
-
-			$amount_value = str_replace( '$', '', $value );
-			if ( '==' == $operator ) :
-				$match = in_array( $amount_value, $coupons['fixed'] );
-			elseif ( '!=' == $operator ) :
-				$match = ! in_array( $amount_value, $coupons['fixed'] );
-			elseif ( '>=' == $operator ) :
-				$match = empty( $coupons['fixed'] ) ? $match : ( min( $coupons['fixed'] ) >= $amount_value );
-			elseif ( '<=' == $operator ) :
-				$match = ! is_array( $coupons['fixed'] ) ? $match : ( max( $coupons['fixed'] ) <= $amount_value );
-			endif;
-
-		// Match coupon codes
-		} else {
-
-			if ( '==' == $operator ) :
-				$match = ( in_array( $value, WC()->cart->get_applied_coupons() ) );
-			elseif ( '!=' == $operator ) :
-				$match = ( ! in_array( $value, WC()->cart->get_applied_coupons() ) );
-			endif;
-
-		}
+		if ( '==' == $operator ) :
+			$match = ( in_array( $value, WC()->cart->applied_coupons ) );
+		elseif ( '!=' == $operator ) :
+			$match = ( ! in_array( $value, WC()->cart->applied_coupons ) );
+		endif;
 
 		return $match;
 
@@ -339,9 +287,7 @@ class WAS_Match_Conditions {
 
 		$weight = 0;
 		foreach ( $package['contents'] as $key => $item ) :
-			/** @var $product WC_Product */
-			$product = $item['data'];
-			$weight += ( (float) $product->get_weight() * (int) $item['quantity'] );
+			$weight += $item['data']->weight * $item['quantity'];
 		endforeach;
 
 		$value = (string) $value;
@@ -434,7 +380,7 @@ class WAS_Match_Conditions {
 
 		// Remove all non- letters and numbers
 		foreach ( $zipcodes as $key => $zipcode ) :
-			$zipcodes[ $key ] = preg_replace( '/[^0-9a-zA-Z\-\*]/', '', $zipcode );
+			$zipcodes[ $key ] = preg_replace( '/[^0-9a-zA-Z\*]/', '', $zipcode );
 		endforeach;
 
 		if ( '==' == $operator ) :
@@ -453,7 +399,7 @@ class WAS_Match_Conditions {
 					if ( count( $parts ) > 1 ) :
 						$match = ( $user_zipcode >= min( $parts ) && $user_zipcode <= max( $parts ) );
 					else :
-						$match = preg_match( '/^' . preg_quote( $zipcode, '/' ) . '/i', $user_zipcode );
+						$match = preg_match( '/^' . preg_quote( $zipcode ) . '/i', $user_zipcode );
 					endif;
 
 				else :
@@ -488,7 +434,7 @@ class WAS_Match_Conditions {
 					if ( count( $parts ) > 1 ) :
 						$zipcode_match = ( $user_zipcode >= min( $parts ) && $user_zipcode <= max( $parts ) );
 					else :
-						$zipcode_match = preg_match( '/^' . preg_quote( $zipcode, '/' ) . '/i', $user_zipcode );
+						$zipcode_match = preg_match( '/^' . preg_quote( $zipcode ) . '/i', $user_zipcode );
 					endif;
 
 					if ( $zipcode_match == true ) :
@@ -534,25 +480,24 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_city( $match, $operator, $value, $package ) {
 
-		if ( ! isset( WC()->customer ) ) return $match;
-
-		$customer_city = strtolower( WC()->customer->get_shipping_city() );
-		$value         = strtolower( $value );
+		if ( ! isset( WC()->customer ) ) :
+			return $match;
+		endif;
 
 		if ( '==' == $operator ) :
 
 			if ( preg_match( '/\, ?/', $value ) ) :
-				$match = ( in_array( $customer_city, preg_split( '/\, ?/', $value ) ) );
+				$match = ( in_array( WC()->customer->get_shipping_city(), explode( ',', $value ) ) );
 			else :
-				$match = ( $value == $customer_city );
+				$match = ( preg_match( '/^' . preg_quote( $value, '/' ) . "$/i", WC()->customer->get_shipping_city() ) );
 			endif;
 
 		elseif ( '!=' == $operator ) :
 
 			if ( preg_match( '/\, ?/', $value ) ) :
-				$match = ( ! in_array( $customer_city, preg_split( '/\, ?/', $value ) ) );
+				$match = ( ! in_array( WC()->customer->get_shipping_city(), explode( ',', $value ) ) );
 			else :
-				$match = ! ( $value == $customer_city );
+				$match = ( ! preg_match( '/^' . preg_quote( $value, '/' ) . "$/i", WC()->customer->get_shipping_city() ) );
 			endif;
 
 		endif;
@@ -613,26 +558,10 @@ class WAS_Match_Conditions {
 			return $match;
 		endif;
 
-		$user_country = WC()->customer->get_shipping_country();
-
-		if ( method_exists( WC()->countries, 'get_continent_code_for_country' ) ) :
-			$user_continent = WC()->countries->get_continent_code_for_country( $user_country );
-		endif;
-
 		if ( '==' == $operator ) :
-			$match = stripos( $user_country, $value ) === 0;
-
-			// Check for continents if available
-			if ( ! $match && isset( $user_continent ) && strpos( $value, 'CO_' ) === 0 ) :
-				$match = stripos( $user_continent, str_replace( 'CO_', '', $value ) ) === 0;
-			endif;
+			$match = ( preg_match( '/^' . preg_quote( $value, '/' ) . "$/i", WC()->customer->get_shipping_country() ) );
 		elseif ( '!=' == $operator ) :
-			$match = stripos( $user_country, $value ) === false;
-
-			// Check for continents if available
-			if ( $match && isset( $user_continent ) && strpos( $value, 'CO_' ) === 0 ) :
-				$match = stripos( $user_continent, str_replace( 'CO_', '', $value ) ) === false;
-			endif;
+			$match = ( ! preg_match( '/^' . preg_quote( $value, '/' ) . "$/i", WC()->customer->get_shipping_country() ) );
 		endif;
 
 		return $match;
@@ -688,18 +617,21 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_width( $match, $operator, $value, $package ) {
 
-		if ( ! isset( WC()->cart ) ) :
+		if ( ! isset( WC()->cart ) || empty( WC()->cart->cart_contents ) ) :
 			return $match;
 		endif;
 
-		$product_widths = array();
-		foreach ( WC()->cart->get_cart() as $item ) :
-			/** @var $product WC_Product */
-			$product = $item['data'];
-			$product_widths[] = $product->get_width();
+		foreach ( WC()->cart->cart_contents as $product ) :
+
+			if ( true == $product['data']->variation_has_width ) :
+				$width[] = ( get_post_meta( $product['data']->variation_id, '_width', true ) );
+			else :
+				$width[] = ( get_post_meta( $product['product_id'], '_width', true ) );
+			endif;
+
 		endforeach;
 
-		$max_width = max( $product_widths );
+		$max_width = max( (array) $width );
 
 		if ( '==' == $operator ) :
 			$match = ( $max_width == $value );
@@ -731,18 +663,21 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_height( $match, $operator, $value, $package ) {
 
-		if ( ! isset( WC()->cart ) ) :
+		if ( ! isset( WC()->cart ) || empty( WC()->cart->cart_contents ) ) :
 			return $match;
 		endif;
 
-		$product_heights = array();
-		foreach ( WC()->cart->get_cart() as $item ) :
-			/** @var $product WC_Product */
-			$product = $item['data'];
-			$product_heights[] = $product->get_height();
+		foreach ( WC()->cart->cart_contents as $product ) :
+
+			if ( true == $product['data']->variation_has_height ) :
+				$height[] = ( get_post_meta( $product['data']->variation_id, '_height', true ) );
+			else :
+				$height[] = ( get_post_meta( $product['product_id'], '_height', true ) );
+			endif;
+
 		endforeach;
 
-		$max_height = max( $product_heights );
+		$max_height = max( $height );
 
 		if ( '==' == $operator ) :
 			$match = ( $max_height == $value );
@@ -774,18 +709,21 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_length( $match, $operator, $value, $package ) {
 
-		if ( ! isset( WC()->cart ) ) :
+		if ( ! isset( WC()->cart ) || empty( WC()->cart->cart_contents ) ) :
 			return $match;
 		endif;
 
-		$product_lengths = array();
-		foreach ( WC()->cart->get_cart() as $item ) :
-			/** @var $product WC_Product */
-			$product = $item['data'];
-			$product_lengths[] = $product->get_length();
+		foreach ( WC()->cart->cart_contents as $product ) :
+
+			if ( true == $product['data']->variation_has_length ) :
+				$length[] = ( get_post_meta( $product['data']->variation_id, '_length', true ) );
+			else :
+				$length[] = ( get_post_meta( $product['product_id'], '_length', true ) );
+			endif;
+
 		endforeach;
 
-		$max_length = max( $product_lengths );
+		$max_length = max( $length );
 
 		if ( '==' == $operator ) :
 			$match = ( $max_length == $value );
@@ -817,15 +755,19 @@ class WAS_Match_Conditions {
 	 */
 	public function was_match_condition_stock( $match, $operator, $value, $package ) {
 
-		$product_stocks = array();
-		foreach ( WC()->cart->get_cart() as $item ) :
-			/** @var $product WC_Product */
-			$product = $item['data'];
-			$product_stocks[] = $product->get_stock_quantity();
+		// Get all product stocks
+		foreach ( $package['contents'] as $product ) :
+
+			if ( true == $product['data']->variation_has_stock ) :
+				$stock[] = ( get_post_meta( $product['data']->variation_id, '_stock', true ) );
+			else :
+				$stock[] = ( get_post_meta( $product['product_id'], '_stock', true ) );
+			endif;
+
 		endforeach;
 
 		// Get lowest value
-		$min_stock = min( $product_stocks );
+		$min_stock = min( $stock );
 
 		if ( '==' == $operator ) :
 			$match = ( $min_stock == $value );
@@ -860,17 +802,13 @@ class WAS_Match_Conditions {
 		if ( '==' == $operator ) :
 
 			$match = true;
-			foreach ( $package['contents'] as $item ) :
+			foreach ( $package['contents'] as $product ) :
 
-				/** @var $product WC_Product */
-				$product = $item['data'];
-
-				if ( method_exists( $product, 'get_stock_status' ) ) { // WC 2.7 compatibility
-					$stock_status = $product->get_stock_status();
-				} else {
-					$id = $product->variation_has_stock ? $product->variation_id : $item['product_id'];
-					$stock_status = ( get_post_meta( $id, '_stock_status', true ) );
-				}
+				if ( true == $product['data']->variation_has_stock ) :
+					$stock_status = ( get_post_meta( $product['data']->variation_id, '_stock_status', true ) );
+				else :
+					$stock_status = ( get_post_meta( $product['product_id'], '_stock_status', true ) );
+				endif;
 
 				if ( $stock_status != $value ) :
 					$match = false;
@@ -881,19 +819,15 @@ class WAS_Match_Conditions {
 		elseif ( '!=' == $operator ) :
 
 			$match = true;
-			foreach ( $package['contents'] as $item ) :
+			foreach ( $package['contents'] as $product ) :
 
-				/** @var $product WC_Product */
-				$product = $item['data'];
+				if ( true == $product['data']->variation_has_stock ) :
+					$stock_status = ( get_post_meta( $product['data']->variation_id, '_stock_status', true ) );
+				else :
+					$stock_status = ( get_post_meta( $product['product_id'], '_stock_status', true ) );
+				endif;
 
-				if ( method_exists( $product, 'get_stock_status' ) ) { // WC 2.7 compatibility
-					$stock_status = $product->get_stock_status();
-				} else {
-					$id = $product->variation_has_stock ? $product->variation_id : $item['product_id'];
-					$stock_status = ( get_post_meta( $id, '_stock_status', true ) );
-				}
-
-				if ( $stock_status != $value ) :
+				if ( $stock_status == $value ) :
 					$match = false;
 				endif;
 
@@ -930,7 +864,7 @@ class WAS_Match_Conditions {
 
 		if ( '==' == $operator ) :
 
-			foreach ( WC()->cart->get_cart() as $product ) :
+			foreach ( WC()->cart->cart_contents as $product ) :
 
 				if ( ! has_term( $value, 'product_cat', $product['product_id'] ) ) :
 					$match = false;
@@ -940,7 +874,7 @@ class WAS_Match_Conditions {
 
 		elseif ( '!=' == $operator ) :
 
-			foreach ( WC()->cart->get_cart() as $product ) :
+			foreach ( WC()->cart->cart_contents as $product ) :
 
 				if ( has_term( $value, 'product_cat', $product['product_id'] ) ) :
 					$match = false;

@@ -7,46 +7,22 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 	const ID = "hubspot";
 	const NAME = "Hubspot";
 
-	protected $id = self::ID;
-
-
-	/**
-	 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-	 */
-	public static function instance(){
-		return new self();
+	static function instance() {
+		return new self;
 	}
 
-	/**
-	 * Get Provider Details
-	 * General function to get provider details from database based on key
-	 *
-	 * @param Hustle_Module_Model $module
-	 * @param String $field - the field name
-	 *
-	 * @return String
-	 */
-	protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-		$details = '';
-		$name = self::ID;
-		if ( isset( $module->content->email_services[$name][$field] ) ) {
- 			$details = $module->content->email_services[$name][$field];
-		}
-		return $details;
-	}
-	
-	public function is_authorized() {
+	function is_authorized() {
 		return true;
 	}
 
 	/**
 	 * @return bool|Opt_In_HubSpot_Api
 	 */
-	public function api() {
+	function api() {
 		return self::static_api();
 	}
 
-	public static function static_api() {
+	static function static_api() {
 		if ( ! class_exists( 'Opt_In_HubSpot_Api' ) )
 			require_once 'opt-in-hubspot-api.php';
 
@@ -55,7 +31,29 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 		return $api;
 	}
 
-	public function subscribe( Hustle_Module_Model $module, array $data ) {
+	/**
+	 * Updates api option
+	 *
+	 * @param $option_key
+	 * @param $option_value
+	 * @return bool
+	 */
+	function update_option($option_key, $option_value) {
+		return update_site_option( self::ID . "_" . $option_key, $option_value);
+	}
+
+	/**
+	 * Retrieves api option from db
+	 *
+	 * @param $option_key
+	 * @param $default
+	 * @return mixed
+	 */
+	function get_option($option_key, $default ) {
+		return get_site_option( self::ID . "_" . $option_key, $default );
+	}
+
+	function subscribe( Hustle_Module_Model $module, array $data ) {
 		$email_list = self::_get_email_list( $module );
 		$err = new WP_Error();
 		$err->add( 'something_wrong', __( 'Something went wrong. Please try again', Opt_In::TEXT_DOMAIN ) );
@@ -98,7 +96,7 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 				} elseif( is_wp_error( $res ) ) {
 					$data['error'] = $res->get_error_message();
 					$module->log_error( $data );
-				} elseif ( isset( $res->status ) && 'error' === $res->status ) {
+				} elseif ( isset( $res->status ) && 'error' == $res->status ) {
 					$data['error'] = $res->message;
 					$module->log_error($data);
 				}
@@ -108,11 +106,11 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 		return $err;
 	}
 
-	public function get_options() {
+	function get_options( $module_id ) {
 		return array();
 	}
 
-	public function get_account_options( $module_id ) {
+	function get_account_options( $module_id ) {
 		$options = array();
 		$email_list = '';
 		$api = $this->api();
@@ -166,11 +164,32 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 		return $options;
 	}
 
+	/**
+	 * Get Provider Details
+	 * General function to get provider details from database based on key
+	 *
+	 * @param Hustle_Module_Model $module
+	 * @param String $field - the field name
+	 *
+	 * @return String
+	 */
+	private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+		$details = '';
+		$name = self::ID;
+		if ( !is_null( $module->content->email_services ) 
+			&& isset( $module->content->email_services[$name] ) 
+			&& isset( $module->content->email_services[$name][$field] ) ) {
+				
+			$details = $module->content->email_services[$name][$field];
+		}
+		return $details;
+	}
+
 	private static function _get_email_list( Hustle_Module_Model $module ) {
 		return self::_get_provider_details( $module, 'list_id' );
 	}
 
-	public static function add_custom_field( $fields, $module_id ) {
+	static function add_custom_field( $fields, $module_id ) {
 		$api 	= self::static_api();
 		$exist 	= false;
 
@@ -186,7 +205,7 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 					foreach ( $fields as $field ) {
 						$name 	= $field['name'];
 						$label 	= $field['label'];
-						if ( $name !== $property_name || $label !== $property_label ) {
+						if ( $name != $property_name || $label != $property_label ) {
 							$new_field = array(
 								'name' => $property_name,
 								'label' => $property_label
@@ -195,7 +214,7 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 						}
 					}
 				}
-
+					
 			}
 
 			if ( ! empty( $new_fields ) ) {
@@ -212,20 +231,14 @@ class Opt_In_HubSpot extends Opt_In_Provider_Abstract  implements  Opt_In_Provid
 					if ( $api->add_property( $property ) )
 						$exist = true;
 				}
-
+				
 			}
 		}
 
 		if ( $exist )
-			return array(
-				'success' => true,
-				'field' => $fields,
-			);
+			return array( 'success' => true, 'field' => $fields );
 		else
-			return array(
-				'error' => true,
-				'code' => 'cannot_create_custom_field',
-			);
+			return array( 'error' => true, 'code' => 'cannot_create_custom_field' );
 	}
 }
 

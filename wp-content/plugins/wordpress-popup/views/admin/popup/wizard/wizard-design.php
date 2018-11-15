@@ -9,7 +9,7 @@
 	<?php $this->render( "admin/popup/wizard/boxes/box-image_position", array() ); ?>
 
 	<?php $this->render( "admin/popup/wizard/boxes/box-image_fit", array() ); ?>
-
+	
 	<?php $this->render( "admin/popup/wizard/boxes/box-palette", array() ); ?>
 
 	<?php $this->render( "admin/popup/wizard/boxes/box-shapes", array() ); ?>

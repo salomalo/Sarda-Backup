@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_CommentCount extends ACP_Sorting_Model {
+use AC;
+use ACP\Sorting\Model;
+
+class CommentCount extends Model {
 
 	public function get_sorting_vars() {
 		$ids = array();
 
-		/* @var AC_Settings_Column_CommentCount $setting */
+		/* @var AC\Settings\Column\CommentCount $setting */
 		$setting = $this->column->get_setting( 'comment_count' );
 
 		foreach ( $this->strategy->get_results() as $id ) {

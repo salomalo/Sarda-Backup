@@ -15,18 +15,18 @@ class Hustle_Module_Model extends Hustle_Model {
 	const EMBEDDED_MODULE = 'embedded';
 	const SOCIAL_SHARING_MODULE = 'social_sharing';
 	const SUBSCRIPTION              = "subscription";
-	const ERROR_LOG = "error_logs"; //phpcs:ignore
+	const ERROR_LOG = "error_logs";
 
 	/**
 	 * @var $_provider_details object
 	 */
 	private $_provider_details;
 
-	public static function instance(){
-		return new self();
+	static function instance(){
+		return new self;
 	}
 
-	public static function get_embedded_types() {
+	static function get_embedded_types() {
 		return array( 'after_content', 'widget', 'shortcode' );
 	}
 
@@ -35,7 +35,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return Hustle_Module_Decorator
 	 */
-	public function get_decorated(){
+	function get_decorated(){
 
 		if( !$this->_decorator )
 			$this->_decorator = new Hustle_Module_Decorator( $this );
@@ -48,7 +48,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return Class
 	 */
-	public function get_content( $type = 'popup' ) {
+	function get_content( $type = 'popup' ) {
 		$data = $this->get_settings_meta( self::KEY_CONTENT, '{}', true );
       // If redirect url is set then esc it.
 		if ( isset( $data['redirect_url'] ) ) {
@@ -58,28 +58,31 @@ class Hustle_Module_Model extends Hustle_Model {
 		switch ( $type ) {
 			case 'popup':
 				return new Hustle_Popup_Content( $data, $this );
+			break;
 			case 'slidein':
 				return new Hustle_Slidein_Content( $data, $this );
+			break;
 			case 'embedded':
 				return new Hustle_Embedded_Content( $data, $this );
+			break;
 		}
 	}
 
-	public function get_design() {
+	function get_design() {
 		return new Hustle_Popup_Design( $this->get_settings_meta( self::KEY_DESIGN, '{}', true ), $this );
 	}
 
-	public function get_display_settings() {
+	function get_display_settings() {
 		return new Hustle_Popup_Settings( $this->get_settings_meta( self::KEY_SETTINGS, '{}', true ), $this );
 	}
 
-	public function get_shortcode_id() {
+	function get_shortcode_id() {
 		return $this->get_meta( self::KEY_SHORTCODE_ID );
 	}
 
-	public function is_embedded_type_active($type) {
+	function is_embedded_type_active($type) {
 		$settings = $this->get_display_settings()->to_array();
-		if ( isset( $settings[ $type . '_enabled' ] ) && in_array( $settings[ $type . '_enabled' ], array( 'true', true ), true ) ) {
+		if ( isset( $settings[ $type . '_enabled' ] ) && $settings[ $type . '_enabled' ] == 'true' ) {
 			return true;
 		} else {
 			return false;
@@ -91,9 +94,9 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @param (array) $data			Submitted field data.
 	 **/
-	public function log_error( $data ) {
+	function log_error( $data ) {
 		$data = wp_parse_args( array( 'date' => date( 'Y-m-d' ) ), $data );
-		$this->add_meta( self::ERROR_LOG, wp_json_encode( $data ) );
+		$this->add_meta( self::ERROR_LOG, json_encode( $data ) );
 	}
 
 	/**
@@ -101,14 +104,14 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return int
 	 */
-	public function get_total_log_errors(){
+	function get_total_log_errors(){
 		return (int) $this->_wpdb->get_var( $this->_wpdb->prepare( "SELECT COUNT(meta_id) FROM " . $this->get_meta_table() . " WHERE `module_id`=%d AND `meta_key`=%s AND `meta_value` != '' ", $this->id, self::ERROR_LOG )  );
 	}
 
 	/**
 	 * Retrieve logs
 	 **/
-	public function get_error_log() {
+	function get_error_log() {
 		return array_map( "json_decode", $this->_wpdb->get_col( $this->_wpdb->prepare( "SELECT `meta_value` FROM " . $this->get_meta_table()  . " WHERE `meta_key`=%s AND `module_id`=%d AND `meta_value` != '' ",
 			self::ERROR_LOG,
 			$this->id
@@ -118,7 +121,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	/**
 	 * Clear error logs.
 	 **/
-	public function clear_error_log() {
+	function clear_error_log() {
 		$this->_wpdb->query( $this->_wpdb->prepare( "DELETE FROM " . $this->get_meta_table() . " WHERE `meta_key`=%s AND `module_id`=%d", self::ERROR_LOG, $this->id ) );
 	}
 
@@ -129,14 +132,14 @@ class Hustle_Module_Model extends Hustle_Model {
 	 * @param array $data
 	 * @return bool
 	 */
-	public function add_local_subscription( array $data ){
+	function add_local_subscription(array $data ){
 		if( !$this->has_subscribed( $data['email'] ) )
-			return $this->add_meta( self::SUBSCRIPTION, wp_json_encode( $data ) );
+			return $this->add_meta( self::SUBSCRIPTION, json_encode( $data ) );
 
 		return new WP_Error("email_already_added", __("This email address has already subscribed.", Opt_In::TEXT_DOMAIN));
 	}
 
-	public function has_subscribed( $email ){
+	function has_subscribed( $email ){
 		$email_like = '%"' . $email .'"%';
 		$sql = $this->_wpdb->prepare( "SELECT `meta_id` FROM " . $this->get_meta_table() . " WHERE `module_id`=%d AND `meta_key`=%s AND `meta_value`  LIKE %s ", $this->id, self::SUBSCRIPTION, $email_like  );
 		return $this->_wpdb->get_var( $sql);
@@ -147,7 +150,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return array
 	 */
-	public function get_local_subscriptions(){
+	function get_local_subscriptions(){
 
 		return array_map( "json_decode", $this->_wpdb->get_col( $this->_wpdb->prepare( "SELECT `meta_value` FROM " . $this->get_meta_table()  . " WHERE `meta_key`=%s AND `module_id`=%d AND `meta_value` != '' ",
 			self::SUBSCRIPTION,
@@ -160,7 +163,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return int
 	 */
-	public function get_total_subscriptions(){
+	function get_total_subscriptions(){
 		return (int) $this->_wpdb->get_var( $this->_wpdb->prepare( "SELECT COUNT(meta_id) FROM " . $this->get_meta_table() . " WHERE `module_id`=%d AND `meta_key`=%s AND `meta_value` != '' ", $this->id, self::SUBSCRIPTION )  );
 	}
 
@@ -169,7 +172,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 *
 	 * @return bool
 	 */
-	public function is_allowed_to_display( $settings, $type ) {
+	function is_allowed_to_display( $settings, $type ) {
 
 		// if Disabled for current user type or test mode, do not display
 		if (
@@ -210,10 +213,10 @@ class Hustle_Module_Model extends Hustle_Model {
 		// If this is a single page or home page is posts.
 		if ( is_singular() || (is_home() && is_front_page())) {
 			// unset not needed post_type
-			if ( isset($post->post_type) && 'post' === $post->post_type ) {
+			if ( isset($post->post_type) && $post->post_type == 'post' ) {
 				unset($conditions['pages']);
 				$skip_all_cpt = true;
-			} elseif ( isset($post->post_type) && 'page' === $post->post_type ) {
+			} elseif ( isset($post->post_type) && $post->post_type == 'page' ) {
 				unset($conditions['posts']);
 				unset($conditions['categories']);
 				unset($conditions['tags']);
@@ -222,9 +225,6 @@ class Hustle_Module_Model extends Hustle_Model {
 				// unset posts and pages since this is CPT
 				unset($conditions['posts']);
 				unset($conditions['pages']);
-				if ( empty( $conditions ) ) {
-					$display = false;
-				}
 			}
 		} else {
 			if( class_exists('woocommerce') ) {
@@ -256,13 +256,14 @@ class Hustle_Module_Model extends Hustle_Model {
 			if ( is_array($args) && isset($args['post_type']) && isset($args['post_type_label']) ) {
 
 				// skip ms_invoice
-				if ( 'ms_invoice' === $args['post_type'] ) {
+				if ( $args['post_type'] === 'ms_invoice' ) {
 					continue;
 				}
 
 				// handle ms_membership
-				if ( !in_array( $args['post_type'], array( 'ms_membership', 'ms_membership-n' ), true )
-						&& ( $skip_all_cpt || (isset($post->post_type) && $post->post_type !== $args['post_type'] )) ) {
+				if ( $args['post_type'] === 'ms_membership' ) {
+					// do nothing so this will went through
+				} else if ( $skip_all_cpt || (isset($post->post_type) && $post->post_type != $args['post_type'] )) {
 					continue;
 				}
 
@@ -286,7 +287,7 @@ class Hustle_Module_Model extends Hustle_Model {
 	 * @param $type
 	 * @return array
 	 */
-	public function get_obj_conditions( $settings ){
+	function get_obj_conditions( $settings ){
 		$conditions = array();
 		// defaults
 		$_conditions = array(

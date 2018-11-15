@@ -2,7 +2,7 @@
 
 	<div class="wpmudev-box-left">
 
-		<h4><strong><?php esc_attr_e( "Custom embed size", Opt_In::TEXT_DOMAIN ); ?></strong></h4>
+		<h4><strong><?php _e( "Custom embed size", Opt_In::TEXT_DOMAIN ); ?></strong></h4>
 
 	</div>
 
@@ -11,14 +11,14 @@
 		<div class="wpmudev-switch-labeled">
 
 			<div class="wpmudev-switch">
-
+				
 				<input id="wph-aftercontent-custom_size" class="toggle-checkbox" type="checkbox" data-attribute="customize_size" {{_.checked(_.isTrue(customize_size), true)}}>
-
+				
 				<label class="wpmudev-switch-design" for="wph-aftercontent-custom_size" aria-hidden="true"></label>
-
+				
 			</div>
-
-			<label class="wpmudev-switch-label" for="wph-aftercontent-custom_size"><?php esc_attr_e( "Use custom size", Opt_In::TEXT_DOMAIN ); ?></label>
+			
+			<label class="wpmudev-switch-label" for="wph-aftercontent-custom_size"><?php _e( "Use custom size", Opt_In::TEXT_DOMAIN ); ?></label>
 
 		</div>
 
@@ -28,15 +28,15 @@
 
 				<div class="wpmudev-col">
 
-					<label><?php esc_attr_e( "Width", Opt_In::TEXT_DOMAIN ); ?></label>
-
+					<label><?php _e( "Width", Opt_In::TEXT_DOMAIN ); ?></label>
+					
 					<input type="number" value="{{custom_width}}" data-attribute="custom_width" class="wpmudev-input_number">
 
 				</div>
 
 				<div class="wpmudev-col">
 
-					<label><?php esc_attr_e( "Height", Opt_In::TEXT_DOMAIN ); ?></label>
+					<label><?php _e( "Height", Opt_In::TEXT_DOMAIN ); ?></label>
 
 					<input type="number" value="{{custom_height}}" data-attribute="custom_height" class="wpmudev-input_number">
 

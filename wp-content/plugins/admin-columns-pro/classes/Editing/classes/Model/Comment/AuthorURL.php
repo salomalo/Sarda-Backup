@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Comment;
 
-class ACP_Editing_Model_Comment_AuthorURL extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class AuthorURL extends Model {
 
 	public function get_view_settings() {
 		return array(

@@ -5,8 +5,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Google Search Console, Content analysis, Readability
 Requires at least: 4.8
-Tested up to: 4.9.8
-Stable tag: 8.2.1
+Tested up to: 4.9.7
+Stable tag: 7.8
 Requires PHP: 5.2.4
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -106,73 +106,92 @@ You'll find answers to many of your questions on [kb.yoast.com](https://yoa.st/1
 
 == Changelog ==
 
-= 8.2.1 =
-Release Date: September 20th, 2018
-
-Bugfixes:
-
-* Fixes a bug where the Chrome or Opera browser tab would crash on Windows when a Polish text contains sentences in passive voice.
-
-= 8.2.0 =
-Release Date: September 11th, 2018
+= 7.8.0 =
+Release Date: July 10th, 2018
 
 Enhancements:
-
-* Introduces a How-To block in Gutenberg to create a How-to guide in an SEO-friendly way. Read more about the Gutenblocks in [https://yoa.st/gutenblocks](our release post).
-* Introduces a FAQ block in Gutenberg to list your Frequently Asked Questions in an SEO-friendly way. Read more about the Gutenblocks in [https://yoa.st/gutenblocks](our release post).
-* Adds readability analysis for Polish.
-* On Multisite environments, in addition to the site domain, path and ID, also site titles are now present in the site selection dropdowns.
-
-Bugfixes:
-
-* Fixes a bug where changing the WordPress slug would not correctly update the snippet editor.
-* Fixes a bug where the user input would trigger an analysis every time.
-* Fixes a bug with incorrect zooming on older iPhones within the installation wizard.
-* Fixes a bug where the OpenGraph image wouldn't show correctly for the frontpage in a few situations. Props to [@mt8](https://github.com/mt8) for the solution direction.
-* Fixes a bug where the Yoast SEO network admin menu and admin bar menu would appear when the plugin was only active for the main site, and not for the entire network.
-* Fixes a bug where snippet variables in the Twitter card title and description wouldn't be properly replaced.
-* Fixes a bug where a non-existing dependency was requested on the Search Appearance settings page.
-* Fixes a bug where the value of the primary category snippet variable in the classic editor wouldn't change when the primary category was changed.
-* Fixes a bug where the Gutenberg editor in the Classic Editor plugin would crash when the primary category picker was loaded. If something goes wrong in the primary category picker, it now shows a notification, instead of making the entire editor crash.
-* Fixes a bug where the readability analysis would not show the correct scores for cornerstone content.
-* Fixes a bug where switching off the SEO analysis would stop the readability analysis from loading.
-* Fixes a fatal error on the Term and Post edit pages when the server is running on PHP 5.2.
-
-= 8.1.2 =
-Release Date: September 5th, 2018
+* Improves the way that the OpenGraph is determined for front pages, especially in the case of static front pages.
+* Adds links to relevant articles to all SEO assessments.
+* Adds Flesch Reading Ease assessment for French.
+* Adds Flesch Reading Ease assessment for Spanish.
+* Adds passive voice assessment for Italian.
 
 Bugfixes:
+* Fixes a bug where images from password protected posts could potentially end up in OpenGraph image tags.
+* Fixes a bug where very old notifications could not be be dismissed or restored.
+* Fixes a bug where the `Insert snippet variable` button alignment was incorrect.
+* Fixes a bug where the snippet variables had a different label in the Search Appearance settings compared to the snippet variables when writing a post, pages and taxonomies.
+* Fixes a bug where instances of the same keyword with different kinds of apostrophes (e.g., brain’s and brain's) were not recognized as the same. This affects the following assessments: keyword in meta description, keyword in subheading, keyword in first paragraph, keyword in title and keyword in URL.
+* Fixes a bug where the custom set breadcrumb title for the WooCommerce Shop page wasn't used.
 
-* Fixes a bug where our JavaScript memory usage would increase indefinitely. This could result in a browser crash after a long enough period.
+Other:
+* Adds a reminder message to create a redirect if a user deletes a category or tag.
+* Removes a banner spot in the admin.
 
-= 8.1.1 =
-Release Date: September 3rd, 2018
+= 7.7.3 =
+Release Date: July 2nd, 2018
 
 Bugfixes:
+* Disables WordPress' automatic conversion of emoji to images on every page where the snippet editor is present. This conversion is not compatible with React or content editable fields and broke the snippet editor.
+* Fixes text directionality for the title and description fields in the snippet editor for right-to-left languages.
+* Fixes a bug where the snippet title and description values were saved to the database if they did match the post-type template.
 
-* Fixes compatibility with Gutenberg 3.7, which removed a feature we were relying on.
-* Fixes a bug where the Twitter meta-tags would not have the snippet variables replaced with their dynamic values.
-* Fixes a bug where the `og:url` would not be set to the canonical URL if the canonical URL is explicitly set on Post types, Terms or Tags.
-* Fixes a bug on the Term page when editting the `slug`, it would not be updated in the Snippet Preview directly.
+= 7.7.2 =
+Release Date: June 29th, 2018
 
-= 8.1.0 =
-Release Date: August 28th, 2018
+Bugfixes:
+* Fixes a bug where the snippet variables selection is hidden behind the WordPress menu when using a right-to-left language.
+* Fixes styling in the snippet preview when using a right-to-left language.
+* Fixes a bug where the 'insert snippet variable' button placement was inconsistent.
+* Migrates WooCommerce Product archive settings to the Shop page, if present and not already set on the Shop page.
+
+= 7.7.1 =
+Release Date: June 27th, 2018
+
+Bugfixes:
+* Fixes a bug where disabling the `post_format` archive would result in it actually being enabled and vice versa.
+* Fixes an issue where all replacement variables were being displayed instead of the recommended ones.
+
+Other:
+* Restores `currentyear` as a snippet variable.
+
+= 7.7.0 =
+Release Date: June 26th, 2018
 
 Enhancements:
-
-* Adds the Snippet Preview Editor to the sidebar.
-* Introduces the Primary Category picker to Gutenberg.
-* Introduces a loading indicator in the analysis that is shown until we're ready to analyze the content.
-* Optimizes the content analysis calculations. This fixes the issue where the UI could freeze when you have a long post.
-* Changes the "Check Inlinks (OSE)" menu item in the Yoast Admin bar "Analyze this page" dropdown from the Moz OpenSite Explorer (OSE) to Google Search Console, as the former service is being disabled on August 30th 2018.
+* Implements the snippet preview in React. This brings an improved user experience regarding the snippet variables, making it easier to use and discover them.
+* Implements the improved snippet variables on the search appearance settings pages.
+* Adds an inserter to the title and metadescription fields to make it easier to insert a snippet variable.
+* Improves the mobile snippet preview to match the Google mobile search results more closely.
+* Changes the behavior of the meta description preview when there is no handwritten meta description. We no longer mimic Google by showing a part of your content, but explain what Google does instead.
+* Sends the user to the proper control in the customizer when clicking the link in the "You still have the default WordPress tagline [...]" warning message.
+* Adds a `wpseo_attachment_redirect_url` filter to allow changing of the target redirection URL for attachments. This may be necessary to restore the redirect to the parent post. Props to [cawa-93](https://github.com/cawa-93).
+* Adds recommended snippet variables for templates depending on the context.
+* Adds a `wpseo_recommended_replace_vars` filter to allow adding or altering the recommended snippet variables.
+* Adds support for JSON-LD breadcrumbs. Props to [teolaz](https://github.com/teolaz)
+* Improves the lists of French transition words, stopwords, and function words, props to [Laurent-1971](https://github.com/Laurent-1971).
+* Improves the assessment that checks the use of subheadings so that it always returns relevant feedback to the user.
+* Adds a notification when a post is removed.
+* Overhauls the Content Types section under SEO -> Search Appearance by sectioning the post types and allowing users to collapse them. This is especially handy when you have a lot of custom post types.
+* Updates the 'snippet variables tab' of the Help Center to have the new names.
 
 Bugfixes:
+* Fixes a bug where a PHP notice would be triggered when the `opcache.restrict_api` directive was enabled.
+* Fixes a bug where restricting SEO setting access to network admins only on a multisite, would still allow regular admins to have access to SEO settings.
+* Fixes a bug where dismissing notifications on a single site in a multisite environment, would result in the notification being dismissed on all sites.
+* Fixes a bug where the attachment URL would redirect to `wp-admin` if the attachment was located on a different Site URL domain.
+* Fixes a bug where MySQL would throw a "Duplicate entry 'X'" error into the error log when attempting to upsert a record in the database.
+* Fixes a performance problem where the selecting a fallback Open Graph image would collect the filename for all the images in the content. This has been changed to detecting if an image is usable per image and stopping when a usable image is found.
+* Fixes a bug where the term title snippet variable would be replaced by 'undefined' instead of an empty string on posts and pages.
+* Fixes a bug where PHP notices got triggered on archive pages when `%%pt_single%%` and/or `%%pt_plural%%` are used in a template.
+* Fixes a bug where the configured separator wasn't used in the title template fallback that's being used when no title template has been set.
 
-* Fixes a bug where the analysis scores would change multiple times due to a delay in the loading of the actual scores. We now show loading indicators until the actual scores have been calculated.
-* Fixes a bug where the parent title snippet variable wasn't properly being replaced with the actual parent title in Gutenberg.
-* Fixes a plugin compatibility bug where the SEO score in the admin bar could not be retrieved.
-* Fixes a bug where the editor would not be usable when deferred or async loading of JavaScript is being forced.
-* Fixes a bug where the analysis for previously used keywords would only be triggered if the keyword was changed, resulting in an incorrect SEO score.
+Deprecated:
+* Deprecates the following snippet variables: %%userid%%, %%currenttime%%, %%currentdate%%, %%currentday%%, %%currentmonth%%, %%currentyear%%.
+
+Other:
+* Changes the timing on which the capability filter is run to better time when notifications should be initialized.
+* Adds X-Redirect-By header to all redirects, making the origin of redirects much easier to debug.
 
 = Earlier versions =
 

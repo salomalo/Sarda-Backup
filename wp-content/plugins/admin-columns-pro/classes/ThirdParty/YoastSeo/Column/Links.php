@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_Links extends ACP_ThirdParty_YoastSeo_Column
-	implements ACP_Export_Column {
+use ACP\ThirdParty\YoastSeo;
+use ACP\Export;
+
+class Links extends YoastSeo\Column
+	implements Export\Exportable {
 
 	public function __construct() {
 		parent::__construct();
@@ -14,7 +15,7 @@ class ACP_ThirdParty_YoastSeo_Column_Links extends ACP_ThirdParty_YoastSeo_Colum
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Disabled( $this );
+		return new Export\Model\Disabled( $this );
 	}
 
 }

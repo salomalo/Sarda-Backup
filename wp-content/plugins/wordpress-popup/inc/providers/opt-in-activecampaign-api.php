@@ -4,12 +4,13 @@
  *
  * Class Opt_In_Activecampaign_Api
  */
-class Opt_In_Activecampaign_Api {
+class Opt_In_Activecampaign_Api
+{
 
 	private $_url;
 	private $_key;
 
-	public function __construct( $url, $api_key ){
+	function __construct( $url, $api_key ){
 		$this->_url = trailingslashit( $url ) . 'admin/api.php';
 		$this->_key = $api_key;
 	}
@@ -37,7 +38,7 @@ class Opt_In_Activecampaign_Api {
 		curl_setopt($request, CURLOPT_HEADER, false); // set to 0 to eliminate header info from response
 		curl_setopt($request, CURLOPT_RETURNTRANSFER, true); // Returns response data instead of TRUE(1)
 		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
 
 
 		if( array() !== $args ){
@@ -100,7 +101,7 @@ class Opt_In_Activecampaign_Api {
 		$res2 = array();
 		foreach ($res as $key => $value) {
 			if( is_numeric( $key ) ) {
-				array_push($res2, $value);
+				array_push($res2,$value);
 			}
 		}
 
@@ -123,14 +124,14 @@ class Opt_In_Activecampaign_Api {
 				$res = $this->_post( 'contact_add', $data );
 			}
 
-			if ( is_array( $res ) && isset( $res['result_code'] ) && 'SUCCESS' === $res['result_code'] ){
+			if ( is_array( $res ) && isset( $res['result_code'] ) && $res['result_code'] == 'SUCCESS' ){
 				return __( 'Successful subscription', Opt_In::TEXT_DOMAIN );
 			} else if ( empty( $res ) ) {
 				return __( 'Successful subscription', Opt_In::TEXT_DOMAIN );
 			}
 
 			if ( is_array( $res ) && isset( $res['result_code'] ) ){
-				if( 'FAILED' === $res['result_code'] ){
+				if( $res['result_code'] == 'FAILED' ){
 					$origData['error'] = ! empty( $res['result_message'] ) ? $res['result_message'] : __( 'Unexpected error occurred.', Opt_In::TEXT_DOMAIN );
 					$module->log_error( $origData );
 				}
@@ -144,7 +145,7 @@ class Opt_In_Activecampaign_Api {
 		}
 	}
 
-	public function email_exist( $email, $list_id ) {
+	function email_exist( $email, $list_id ) {
 		$res = $this->_post( 'contact_view_email', array( 'email' => $email ) );
 
 		// See if duplicate exists.
@@ -166,7 +167,7 @@ class Opt_In_Activecampaign_Api {
 		return false;
 	}
 
-	public function add_custom_fields( $custom_fields, $list, Hustle_Module_Model $module ) {
+	function add_custom_fields( $custom_fields, $list, Hustle_Module_Model $module ) {
 		if ( ! empty( $custom_fields ) ) {
 			foreach ( $custom_fields as $key => $label ) {
 				$field_data = array(

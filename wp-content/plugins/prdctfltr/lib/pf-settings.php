@@ -1554,6 +1554,10 @@
 				'analytics' =>array(
 					'title' => esc_html__( 'Filter Analytics', 'prdctfltr' ),
 					'icon' => '<i class="prdctfltr-analytics"></i>'
+				),
+				'register' =>array(
+					'title' => esc_html__( 'Register and Automatic Updates', 'prdctfltr' ),
+					'icon' => '<i class="prdctfltr-update"></i>'
 				)
 			);
 
@@ -1575,7 +1579,31 @@
 		</ul>
 		<?php
 			}
-			if ( isset( $_GET['section'] ) && $_GET['section'] == 'analytics' ) {
+			if ( isset( $_GET['section'] ) && $_GET['section'] == 'register' ) {
+
+				$settings = array();
+
+				$settings = array(
+					'section_register_title' => array(
+						'name' => esc_html__( 'Product Filter Registration', 'prdctfltr' ),
+						'type' => 'title',
+						'desc' => esc_html__( 'By entering your purchase code you will enable the Automatic Updates option! Use one license per domain please! Need help? Check this link', 'prdctfltr' ) . ' <a href="http://mihajlovicnenad.com/product-filter/documentation-and-full-guide-video/" target="_blank">' . esc_html__( 'Product Filter - Documentation and Guide', 'prdctfltr' ) . '</a>',
+					),
+					'prdctfltr_purchase_code' => array(
+						'name' => esc_html__( 'Register Product Filter', 'prdctfltr' ),
+						'type' => 'text',
+						'desc' => esc_html__( 'Enter your purchase code to get instant updated! Updates will come even before the Codecanyon.net official releases!', 'prdctfltr' ),
+						'id'   => 'wc_settings_prdctfltr_purchase_code',
+						'default' => '',
+						'css' => 'width:300px;margin-right:12px;'
+					),
+					'section_register_end' => array(
+						'type' => 'sectionend'
+					)
+				);
+
+			}
+			else if ( isset( $_GET['section'] ) && $_GET['section'] == 'analytics' ) {
 
 				$settings = array();
 

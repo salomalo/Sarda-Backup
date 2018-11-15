@@ -1,11 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\CustomField;
 
-class ACP_Export_Model_CustomField_Count extends ACP_Export_Model_Value {
+use ACP\Export\Model;
 
-	// @see ACP_Export_Model_Value
+class Count extends Model\Value {
+
+	// @see Export\Model\Value
 
 }

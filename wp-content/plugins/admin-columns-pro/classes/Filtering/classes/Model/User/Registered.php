@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\User;
 
-class ACP_Filtering_Model_User_Registered extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+use ACP\Filtering\Settings;
+
+class Registered extends Model {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );
@@ -13,7 +14,7 @@ class ACP_Filtering_Model_User_Registered extends ACP_Filtering_Model {
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings_DatePast( $this->column ) );
+		$this->column->add_setting( new Settings\DatePast( $this->column ) );
 	}
 
 	public function filter_by_user_registered( $query ) {
@@ -36,7 +37,7 @@ class ACP_Filtering_Model_User_Registered extends ACP_Filtering_Model {
 				}
 
 				if ( $value['max'] ) {
-					$max = new DateTime( $value['max'] );
+					$max = new \DateTime( $value['max'] );
 					$max->modify( '+1day' );
 
 					$query->query_where .= ' ' . $wpdb->prepare( "AND DATE({$wpdb->users}.user_registered) < %s", $max->format( 'Y-m-d' ) );
@@ -78,7 +79,7 @@ class ACP_Filtering_Model_User_Registered extends ACP_Filtering_Model {
 	private function get_filter_format() {
 		$setting = $this->column->get_setting( 'filter' );
 
-		if ( ! $setting instanceof ACP_Filtering_Settings_Ranged ) {
+		if ( ! $setting instanceof Settings\Ranged ) {
 			return false;
 		}
 

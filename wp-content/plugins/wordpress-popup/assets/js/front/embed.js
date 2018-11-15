@@ -15,7 +15,7 @@
 				if( !id ) return;
 				
 				var module = _.find(Modules, function ( mod, key ) {
-					return id === parseInt( mod[ 'module_id' ] );
+					return id == key;
 				});
 				
 				if (!module) return;

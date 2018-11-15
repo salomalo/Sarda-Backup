@@ -1,17 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\RelatedPosts;
 
-class ACP_ThirdParty_RelatedPosts_Editing extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Editing extends Model {
 
 	public function get_ajax_options( $request ) {
 		if ( ! class_exists( 'RP4WP_Post_Type_Manager', false ) ) {
 			return array();
 		}
 
-		$pt_manager = new RP4WP_Post_Type_Manager();
+		$pt_manager = new \RP4WP_Post_Type_Manager();
 		$post_types = $pt_manager->get_installed_post_type( $this->column->get_post_type() );
 
 		return acp_editing_helper()->get_posts_list( array( 's' => $request['search'], 'post_type' => $post_types, 'paged' => $request['paged'] ) );
@@ -30,13 +30,13 @@ class ACP_ThirdParty_RelatedPosts_Editing extends ACP_Editing_Model {
 
 	public function save( $id, $values ) {
 		if ( ! class_exists( 'RP4WP_Post_Link_Manager' ) ) {
-			return new WP_Error( 'related-posts-error', 'Class RP4WP_Post_Link_Manager not found.' );
+			return new \WP_Error( 'related-posts-error', 'Class RP4WP_Post_Link_Manager not found.' );
 		}
 
 		// remove any false booleans
 		$values = array_filter( array_map( 'intval', (array) $values ) );
 
-		$post_link_manager = new RP4WP_Post_Link_Manager();
+		$post_link_manager = new \RP4WP_Post_Link_Manager();
 		$current_related_ids = (array) $this->column->get_raw_value( $id );
 
 		if ( $removed_ids = array_diff( $current_related_ids, $values ) ) {

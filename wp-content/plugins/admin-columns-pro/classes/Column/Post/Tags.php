@@ -1,29 +1,33 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Tags extends AC_Column_Post_Tags
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Export_Column {
+class Tags extends AC\Column\Post\Tags
+	implements Filtering\Filterable, Sorting\Sortable, Editing\Editable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_Taxonomy( $this );
+		return new Sorting\Model\Post\Taxonomy( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Taxonomy( $this );
+		return new Editing\Model\Post\Taxonomy( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Taxonomy( $this );
+		return new Filtering\Model\Post\Taxonomy( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Taxonomy( $this );
+		return new Export\Model\Post\Taxonomy( $this );
 	}
 
 }

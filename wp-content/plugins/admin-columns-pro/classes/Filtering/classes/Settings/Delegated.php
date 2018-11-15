@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Settings;
 
-class ACP_Filtering_Settings_Delegated extends ACP_Filtering_Settings {
+use ACP\Filtering\Settings;
+
+class Delegated extends Settings {
 
 	public function define_options() {
 		$options = parent::define_options();

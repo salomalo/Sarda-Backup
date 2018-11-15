@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_User_PostCount extends AC_Column_User_PostCount
-	implements ACP_Column_SortingInterface {
+class PostCount extends AC\Column\User\PostCount
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_User_PostCount( $this );
+		return new Sorting\Model\User\PostCount( $this );
 	}
 
 }

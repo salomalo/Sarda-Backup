@@ -49,11 +49,11 @@ interface wfWAFStorageInterface {
 	
 	public function purgeIPBlocks($types = wfWAFStorageInterface::IP_BLOCKS_ALL);
 
-	public function getConfig($key, $default = null, $category = '');
+	public function getConfig($key, $default = null);
 
-	public function setConfig($key, $value, $category = '');
+	public function setConfig($key, $value);
 
-	public function unsetConfig($key, $category = '');
+	public function unsetConfig($key);
 
 	public function uninstall();
 

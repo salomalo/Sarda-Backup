@@ -2,46 +2,16 @@
 
 Contributors: yithemes
 Tags: ajax, search, woocommerce, products, themes, yit, e-commerce, shop, results
-Requires at least: 4.0.0
-Tested up to: 4.7.4
-Stable tag: 1.5.5
+Requires at least: 3.5.1
+Tested up to: 4.2.0
+Stable tag: 1.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Changelog ==
-= 1.5.5 - Released: Apr 28, 2017 =
-New: Support to WooCommerce 3.0.4
-Update: Plugin Core
-
-= 1.5.4 - Released: Apr 14, 2017 =
-Fix: Search by sku for products created with WooCoommerce 3.0.x
-Fix: Query in pre_get_posts
-Update: Plugin Core
-
-= 1.5.3 - Released: Apr 05, 2017 =
-New: Support to WooCommerce 3.0
-Dev: Added class 'ywcas_img' in the thumbnails of autocomplete
-Fix: Search query
-Update: Plugin Core
-
-= 1.5.2 - Released: Mar 31, 2017 =
-Fix: Query for visible product
-
-= 1.5.1 - Released: Mar 31, 2017 =
-New: Support to WooCommerce 3.0 RC 2
-Fix: Query for visible product
-Update: Plugin Core
-
-= 1.5.0 - Released: Mar 06, 2017 =
-New: Support to WooCommerce 2.7 RC 1
-New: 'yith_wcas_search_show_view_all_text' in the wpml-config.xml
-Fix: 'yith_wcas_search_price_label' in the wpml-config.xml
-Update: Plugin Core
-Update: Languages files
-
 = 1.4.9 - Released: Nov 21, 2016 =
-* Fix: error 404 on pages
+* Fix: 404 on pages
 
 = 1.4.8 - Released: Nov 17, 2016 =
 * Added: Filter 'yith_wcas_search_for_taxonomy' to extend the search to other taxonomies

@@ -53,7 +53,7 @@ if( !class_exists( 'YITH_WCAS_Admin' ) ) {
          * @access public
          * @since 1.0.0
          */
-       public $doc_url    = 'http://docs.yithemes.com/yith-woocommerce-ajax-search/';
+       public $doc_url    = 'http://yithemes.com/docs-plugins/yith-woocommerce-ajax-search/';
     
     	/**
 		 * Constructor

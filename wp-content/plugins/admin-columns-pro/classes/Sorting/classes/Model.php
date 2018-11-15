@@ -1,15 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting;
 
-/**
- * Sorting model
- *
- * @since 1.0
- */
-class ACP_Sorting_Model extends ACP_Model {
+use ACP;
+use ACP\Sorting;
+
+class Model extends ACP\Model {
 
 	/**
 	 * When set, the native query will try to use this orderby
@@ -18,10 +14,15 @@ class ACP_Sorting_Model extends ACP_Model {
 	 */
 	protected $orderby;
 
+	/**
+	 * @var Strategy\Comment|Strategy\Post|Strategy\User
+	 */
+	protected $strategy;
+
 	public function is_active() {
 		$setting = $this->column->get_setting( 'sort' );
 
-		if ( ! $setting instanceof ACP_Sorting_Settings ) {
+		if ( ! $setting instanceof Sorting\Settings ) {
 			return false;
 		}
 
@@ -29,9 +30,23 @@ class ACP_Sorting_Model extends ACP_Model {
 	}
 
 	/**
+	 * @param Strategy $strategy
+	 */
+	public function set_strategy( Strategy $strategy ) {
+		$this->strategy = $strategy;
+	}
+
+	/**
+	 * @return Strategy
+	 */
+	public function get_strategy() {
+		return $this->strategy;
+	}
+
+	/**
 	 * @param string $orderby
 	 *
-	 * return $this
+	 * @return $this
 	 */
 	public function set_orderby( $orderby ) {
 		$this->orderby = $orderby;
@@ -81,8 +96,7 @@ class ACP_Sorting_Model extends ACP_Model {
 	/**
 	 * Sorts an array ascending, maintains index association and returns keys
 	 *
-	 * @param array  $array
-	 * @param string $data_type
+	 * @param array $array
 	 *
 	 * @return array Returns the array keys of the sorted array
 	 */
@@ -109,8 +123,7 @@ class ACP_Sorting_Model extends ACP_Model {
 	}
 
 	/**
-	 * @param array  $ids
-	 * @param string $data_type
+	 * @param array $ids
 	 *
 	 * @return array
 	 */
@@ -197,7 +210,7 @@ class ACP_Sorting_Model extends ACP_Model {
 	 * Register column settings
 	 */
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Sorting_Settings( $this->column ) );
+		$this->column->add_setting( new Settings( $this->column ) );
 	}
 
 }

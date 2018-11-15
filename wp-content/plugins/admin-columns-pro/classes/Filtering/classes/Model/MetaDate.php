@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model;
 
-class ACP_Filtering_Model_MetaDate extends ACP_Filtering_Model_Meta {
+use ACP\Filtering\Settings;
+
+class MetaDate extends Meta {
 
 	/**
 	 * @var string
@@ -43,74 +43,80 @@ class ACP_Filtering_Model_MetaDate extends ACP_Filtering_Model_Meta {
 	public function get_filtering_vars( $vars ) {
 		$value = $this->get_filter_value();
 
-		// Empty or nonempty
+		// empty or not empty
 		if ( in_array( $value, array( 'cpac_empty', 'cpac_nonempty' ) ) ) {
 			return $this->get_filtering_vars_empty_nonempty( $vars );
 		}
 
-		$args = array();
+		// set filter format
+		$filter_format = $this->get_filter_format();
 
-		// Ranged
 		if ( $this->is_ranged() ) {
-
-			if ( $value['min'] ) {
-				$args['min'] = date( $this->get_date_format(), strtotime( $value['min'] ) );
-			}
-
-			if ( $value['max'] ) {
-				$args['max'] = date( $this->get_date_format(), strtotime( $value['max'] ) );
-			}
-
-			if ( 'U' === $this->get_date_format() ) {
-				$args['type'] = 'numeric';
-			}
-
-			return $this->get_filtering_vars_ranged( $vars, $args );
+			$filter_format = 'default_ranged';
 		}
 
-		// Date formats
-		switch ( $this->get_filter_format() ) {
+		$args = array();
 
-			case 'future_past' :
-				if ( $date = $this->get_date_time_object() ) {
-					$key = 'future' === $value ? 'min' : 'max';
-					$args[ $key ] = $date->format( $this->get_date_format() );
+		if ( 'U' === $this->get_date_format() ) {
+			$args['type'] = 'numeric';
+		}
 
-					return $this->get_filtering_vars_ranged( $vars, $args );
+		$suffix = '0101 00:00:00';
+		$format = $this->get_date_format();
+
+		switch ( $filter_format ) {
+			case 'default_ranged':
+				foreach ( array( 'min', 'max' ) as $key ) {
+					if ( $value[ $key ] ) {
+						$args[ $key ] = date( $format, strtotime( $value[ $key ] ) );
+					}
+				}
+
+				break;
+			case 'future_past':
+				$date = $this->get_date_time_object();
+				$key = 'future' !== $value ? 'max' : 'min';
+
+				if ( $date ) {
+					$args[ $key ] = $date->format( $format );
 				}
 
 				break;
 			case 'yearly' :
-				if ( $date = $this->get_date_time_object( $value . '0101' ) ) {
+				$value .= $suffix;
+				$date = $this->get_date_time_object( $value );
 
-					$args['min'] = $date->format( $this->get_date_format() );
-					$args['max'] = $date->modify( '+1 year' )->modify( '-1 day' )->format( $this->get_date_format() );
-
-					return $this->get_filtering_vars_ranged( $vars, $args );
+				if ( $date ) {
+					$args['min'] = $date->format( $format );
+					$args['max'] = $date->modify( '+1 year' )->modify( '-1 day' )->format( $format );
 				}
 
 				break;
 			case 'monthly' :
-				if ( $date = $this->get_date_time_object( $value . '01' ) ) {
+				$value .= substr( $suffix, 2 );
+				$date = $this->get_date_time_object( $value );
 
-					$args['min'] = $date->format( $this->get_date_format() );
-					$args['max'] = $date->modify( '+1 month' )->modify( '-1 day' )->format( $this->get_date_format() );
-
-					return $this->get_filtering_vars_ranged( $vars, $args );
+				if ( $date ) {
+					$args['min'] = $date->format( $format );
+					$args['max'] = $date->modify( '+1 month' )->modify( '-1 day' )->format( $format );
 				}
 
 				break;
 			case 'daily' :
-				if ( $date = $this->get_date_time_object( $value ) ) {
+				$value .= substr( $suffix, 4 );
+				$date = $this->get_date_time_object( $value );
 
-					$args['min'] = $date->format( $this->get_date_format() );
-					$args['max'] = $date->format( $this->get_date_format() );
-
-					return $this->get_filtering_vars_ranged( $vars, $args );
+				if ( $date ) {
+					$args['min'] = $date->format( $format );
+					$args['max'] = $date->modify( '+1 day' )->modify( '-1 second' )->format( $format );
 				}
+
+				break;
+			default:
+				$this->get_filtering_vars_empty_nonempty( $vars );
 		}
 
-		return $this->get_filtering_vars_empty_nonempty( $vars );
+		return $this->get_filtering_vars_ranged( $vars, $args );
 	}
 
 	public function get_filtering_data() {
@@ -142,18 +148,18 @@ class ACP_Filtering_Model_MetaDate extends ACP_Filtering_Model_Meta {
 	/**
 	 * @param string $date
 	 *
-	 * @return DateTime|false
+	 * @return \DateTime|false
 	 */
 	private function get_date_time_object( $date = null ) {
 		try {
-			return new DateTime( $date );
-		} catch ( Exception $e ) {
+			return new \DateTime( $date );
+		} catch ( \Exception $e ) {
 			return false;
 		}
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings_Date( $this->column ) );
+		$this->column->add_setting( new Settings\Date( $this->column ) );
 	}
 
 }

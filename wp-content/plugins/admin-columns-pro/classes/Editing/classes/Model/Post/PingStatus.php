@@ -1,10 +1,6 @@
-<?php
+<?php  namespace ACP\Editing\Model\Post;  use ACP\Editing\Model;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-class ACP_Editing_Model_Post_PingStatus extends ACP_Editing_Model {
+class PingStatus extends Model {
 
 	public function get_view_settings() {
 		return array(

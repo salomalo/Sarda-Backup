@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_Date extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Date extends Model {
 
 	public function filter_by_date( $comments_clauses ) {
 		global $wpdb;

@@ -1,10 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model;
 
-class ACP_Filtering_Model_Delegated extends ACP_Filtering_Model {
+use AC;
+use ACP\Filtering\Model;
+use ACP\Filtering\Settings;
+
+class Delegated extends Model {
 
 	/**
 	 * @var string Dropdown HTML attribute id
@@ -12,10 +14,10 @@ class ACP_Filtering_Model_Delegated extends ACP_Filtering_Model {
 	private $dropdown_attr_id;
 
 	/**
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 * @param string    $dropdown_attr_id
 	 */
-	public function __construct( AC_Column $column, $dropdown_attr_id = null ) {
+	public function __construct( AC\Column $column, $dropdown_attr_id = null ) {
 		parent::__construct( $column );
 
 		$this->dropdown_attr_id = $dropdown_attr_id;
@@ -30,7 +32,7 @@ class ACP_Filtering_Model_Delegated extends ACP_Filtering_Model {
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings_Delegated( $this->column ) );
+		$this->column->add_setting( new Settings\Delegated( $this->column ) );
 	}
 
 	public function get_dropdown_attr_id() {

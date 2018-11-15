@@ -1,16 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_Excerpt extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Excerpt extends Model {
 
 	public function get_filtering_data() {
 		return array(
 			'options' => array(
-				'without_exerpt' => __( "Without Excerpt", 'codepress-admin-columns' ),
-				'has_excerpt'    => __( "Has Excerpt", 'codepress-admin-columns' ),
+				'without_excerpt' => __( 'Without Excerpt', 'codepress-admin-columns' ),
+				'has_excerpt'     => __( 'Has Excerpt', 'codepress-admin-columns' ),
 			),
 		);
 	}

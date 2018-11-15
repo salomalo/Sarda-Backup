@@ -1,21 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Export;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_User_Posts extends AC_Column_User_Posts
-	implements ACP_Column_SortingInterface, ACP_Export_Column {
+class Posts extends AC\Column\User\Posts
+	implements Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_User_PostCount( $this );
+		return new Sorting\Model\User\PostCount( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_User_Posts( $this );
+		return new Export\Model\User\Posts( $this );
 	}
 
 }

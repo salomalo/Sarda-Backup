@@ -747,12 +747,12 @@ class WC_Discounts {
 	 * @return bool
 	 */
 	protected function validate_coupon_sale_items( $coupon ) {
-		if ( $coupon->get_exclude_sale_items() && 'fixed_product' !== $coupon->get_discount_type() ) {
-			$valid = true;
+		if ( $coupon->get_exclude_sale_items() ) {
+			$valid = false;
 
 			foreach ( $this->get_items_to_validate() as $item ) {
-				if ( $item->product && $item->product->is_on_sale() ) {
-					$valid = false;
+				if ( $item->product && ! $item->product->is_on_sale() ) {
+					$valid = true;
 					break;
 				}
 			}

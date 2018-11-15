@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
 
-class ACP_Column_User_Registered extends AC_Column_User_Registered
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Column_EditingInterface {
+use AC;
+use ACP\Sorting;
+use ACP\Editing;
+use ACP\Filtering;
+
+class Registered extends AC\Column\User\Registered
+	implements Filtering\Filterable, Sorting\Sortable, Editing\Editable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'registered' );
 
 		return $model;
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_User_Registered( $this );
+		return new Filtering\Model\User\Registered( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_User_Registered( $this );
+		return new Editing\Model\User\Registered( $this );
 	}
 
 }

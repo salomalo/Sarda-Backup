@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Attachment extends AC_Column_Post_Attachment
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class Attachment extends AC\Column\Post\Attachment
+	implements Editing\Editable, Sorting\Sortable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Attachment( $this );
+		return new Editing\Model\Post\Attachment( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Attachment( $this );
+		return new Export\Model\Post\Attachment( $this );
 	}
 
 }

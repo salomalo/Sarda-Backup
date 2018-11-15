@@ -11,7 +11,8 @@
  * @property int $test_mode
  *
  */
-abstract class Hustle_Model extends Hustle_Data {
+abstract class Hustle_Model extends Hustle_Data
+{
 
 	/**
 	 * Optin id
@@ -20,7 +21,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @var $id int
 	 */
-	public $id;
+	var $id;
 
 	/**
 	 * @var array
@@ -32,7 +33,8 @@ abstract class Hustle_Model extends Hustle_Data {
 
 	protected $_decorator = false;
 
-	public function __get($field) {
+	function __get($field)
+	{
 		$from_parent = parent::__get($field);
 		if( !empty( $from_parent ) )
 			return $from_parent;
@@ -54,7 +56,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $id
 	 * @return $this
 	 */
-	public function get( $id ){
+	function get( $id ){
 		$key = "hustle_model_data_" . $id;
 		$this->_data  = wp_cache_get( $key );
 		$this->id = (int) $id;
@@ -89,7 +91,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param bool $enforce_type Whether to get only embeds or sshares.
 	 * @return $this
 	 */
-	public function get_by_shortcode( $shortcode_id, $enforce_type = true ){
+	function get_by_shortcode( $shortcode_id, $enforce_type = true ){
 
 		$key = "hustle_shortcode_data_" . $shortcode_id;
 		$this->_data  = wp_cache_get( $key );
@@ -117,7 +119,7 @@ abstract class Hustle_Model extends Hustle_Data {
 			}
 
 			// Get results and meta where the ID matches.
-			$this->_data = $this->_wpdb->get_row( $sql, OBJECT );
+			$this->_data = $this->_data = $this->_wpdb->get_row( $sql, OBJECT );
 		}
 
 		$this->_populate();
@@ -132,7 +134,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return false|int
 	 */
-	public function save(){
+	function save(){
 		$data = get_object_vars($this);
 
 		if( !isset( $data['blog_id'] ) )
@@ -204,11 +206,11 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $meta_value
 	 * @return false|int
 	 */
-	public function add_meta( $meta_key, $meta_value ){
+	function add_meta( $meta_key, $meta_value ){
 		return $this->_wpdb->insert( $this->get_meta_table(), array(
 			"module_id" => $this->id,
 			"meta_key" => $meta_key,
-			"meta_value" => is_array( $meta_value ) || is_object( $meta_value ) ?  wp_json_encode( $meta_value ) : $meta_value
+			"meta_value" => is_array( $meta_value ) || is_object( $meta_value ) ?  json_encode( $meta_value ) : $meta_value
 		), array(
 			"%d",
 			"%s",
@@ -225,11 +227,11 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $meta_value
 	 * @return false|int
 	 */
-	public function update_meta( $meta_key, $meta_value ){
+	function update_meta( $meta_key, $meta_value ){
 
 		if( $this->has_meta( $meta_key ) ) {
 			return $this->_wpdb->update($this->get_meta_table(), array(
-				"meta_value" => is_array($meta_value) || is_object($meta_value) ? wp_json_encode($meta_value) : $meta_value
+				"meta_value" => is_array($meta_value) || is_object($meta_value) ? json_encode($meta_value) : $meta_value
 			), array(
 				'module_id' => $this->id,
 				'meta_key' => $meta_key
@@ -281,7 +283,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return array
 	 */
-	public function get_data(){
+	function get_data(){
 		return (array) $this->_data;
 	}
 
@@ -291,7 +293,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param null $environment
 	 * @return false|int|WP_Error
 	 */
-	public function toggle_state( $environment = null ){
+	function toggle_state( $environment = null ){
 		// Clear cache.
 		$this->clear_object_cache();
 
@@ -312,7 +314,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param null $environment
 	 * @return false|int|WP_Error
 	 */
-	public function toggle_display_type_state( $environment = null, $settings = false ){
+	function toggle_display_type_state( $environment = null, $settings = false ){
 		if( is_null( $environment ) ) {
 			return $this->toggle_state( $environment );
 		}
@@ -322,12 +324,12 @@ abstract class Hustle_Model extends Hustle_Data {
 			$prev_value = $obj_settings->$environment;
 			$prev_value->enabled = !isset( $prev_value->enabled ) || "false" === $prev_value->enabled ? "true": "false";
 			$new_value = array_merge( (array) $obj_settings, array( $environment => $prev_value ));
-			return $this->update_meta( self::KEY_SETTINGS,  wp_json_encode( $new_value ) );
+			return $this->update_meta( self::KEY_SETTINGS,  json_encode( $new_value ) );
 		} else {
-			if( in_array( $environment, $this->types, true ) ) { // we are toggling state of a specific environment
+			if( in_array( $environment, $this->types ) ) { // we are toggling state of a specific environment
 				$prev_value = $this->{$environment}->to_object();
 				$prev_value->enabled = !isset( $prev_value->enabled ) || "false" === $prev_value->enabled ? "true": "false";
-				return $this->update_meta( $environment,  wp_json_encode( $prev_value ) );
+				return $this->update_meta( $environment,  json_encode( $prev_value ) );
 			} else{
 				return new WP_Error("Invalid_env", "Invalid environment . " . $environment);
 			}
@@ -361,7 +363,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param string $type
 	 * @return false|int
 	 */
-	public function log_view( $data, $type ){
+	function log_view( $data, $type ){
 		return $this->_log( $data,  $type  . '_' . self::KEY_VIEW  );
 	}
 
@@ -373,7 +375,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $optin_type
 	 * @return false|int
 	 */
-	public function log_conversion( $data, $optin_type ){
+	function log_conversion( $data, $optin_type ){
 		return $this->_log( $data, $optin_type  . '_' . self::KEY_CONVERSION );
 	}
 
@@ -383,13 +385,13 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @since 1.0.0
 	 * @return string json
 	 */
-	public function to_json(){
+	function to_json(){
 		$model_data = array_merge(
 			$this->_sanitize_model_data( get_object_vars( $this ) ),
 			array("id" => $this->id),
 			array( "save_to_local" => $this->save_to_collection )
 		);
-		return wp_json_encode( $model_data );
+		return json_encode( $model_data );
 	}
 
 	/**
@@ -397,7 +399,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return bool
 	 */
-	public function delete(){
+	function delete(){
 
 		// delete optin
 		$result = $this->_wpdb->delete( $this->get_table(), array(
@@ -424,7 +426,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return bool
 	 */
-	public function is_allowed_for_current_user(){
+	function is_allowed_for_current_user(){
 		return  1 === (int)$this->test_mode || current_user_can( 'manage_options' );
 	}
 
@@ -433,7 +435,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return null|array
 	 */
-	public function get_test_types(){
+	function get_test_types(){
 		$this->_test_types = json_decode( $this->get_meta( self::TEST_TYPES ), true );
 		return $this->_test_types;
 	}
@@ -443,7 +445,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return null|array
 	 */
-	public function get_tracking_types(){
+	function get_tracking_types(){
 		$this->_track_types = json_decode( $this->get_meta( self::TRACK_TYPES ), true );
 		return $this->_track_types;
 	}
@@ -454,7 +456,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function is_test_type_active( $type ){
+	function is_test_type_active( $type ){
 		return isset( $this->_test_types[ $type ] );
 	}
 	
@@ -464,7 +466,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function is_test_active(){
+	function is_test_active(){
 		// return isset( $this->_test_types[ $type ] );
 		// TODO: get the actual test value
 		return true;
@@ -476,7 +478,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function is_tracking_enabled() {
+	function is_tracking_enabled() {
 		// return isset( $this->_test_types[ $type ] );
 		// TODO: get the actual tracking types
 		return true;
@@ -488,7 +490,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function is_track_type_active( $type ){
+	function is_track_type_active( $type ){
 		return isset( $this->_track_types[ $type ] );
 	}
 
@@ -498,7 +500,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function toggle_type_test_mode( $type ){
+	function toggle_type_test_mode( $type ){
 
 		if( $this->is_test_type_active( $type ) )
 			unset( $this->_test_types[ $type ] );
@@ -517,7 +519,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return bool
 	 */
-	public function toggle_type_track_mode( $type ){
+	function toggle_type_track_mode( $type ){
 
 		if( $this->is_track_type_active( $type ) )
 			unset( $this->_track_types[ $type ] );
@@ -545,7 +547,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return int
 	 */
-	public function get_is_active_for_admin(){
+	function get_is_active_for_admin(){
 		return (int) $this->get_meta( self::ACTIVE_FOR_ADMIN, 1 );
 	}
 
@@ -554,18 +556,16 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return int
 	 */
-	public function get_is_active_for_logged_in_user(){
+	function get_is_active_for_logged_in_user(){
 		return (int) $this->get_meta( self::ACTIVE_FOR_LOGGED_IN, 1 );
 	}
 
-	public function toggle_activity_for_user( $user_type ){
+	function toggle_activity_for_user( $user_type ){
 
-		if( !in_array( $user_type, array( "admin", "logged_in" ), true ) ) {
-			return new WP_Error("invalid arg", __("Invalid user type provided", Opt_In::TEXT_DOMAIN), $user_type);
-		}
+		if( !in_array( $user_type, array( "admin", "logged_in" ) ) ) return new WP_Error("invalid arg", __("Invalid user type provided", Opt_In::TEXT_DOMAIN), $user_type);
 
-		$key = "admin" === $user_type ? self::ACTIVE_FOR_ADMIN : self::ACTIVE_FOR_LOGGED_IN;
-		$val = "admin" === $user_type ? $this->is_active_for_admin : $this->is_active_for_logged_in_user;
+		$key = $user_type === "admin" ? self::ACTIVE_FOR_ADMIN : self::ACTIVE_FOR_LOGGED_IN;
+		$val = $user_type === "admin" ? $this->is_active_for_admin : $this->is_active_for_logged_in_user;
 
 		return $this->update_meta( $key, 1 - $val );
 
@@ -578,8 +578,8 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type_name
 	 * @return bool
 	 */
-	public function has_type( $type_name ){
-		return in_array( $type_name, $this->types, true );
+	function has_type( $type_name ){
+		return in_array( $type_name, $this->types );
 	}
 
 	/**
@@ -587,7 +587,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 *
 	 * @return bool
 	 */
-	public function get_display(){
+	function get_display(){
 
 		/**
 		 * Return true if any test type if active
@@ -613,7 +613,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $type
 	 * @return null|Hustle_Model_Stats
 	 */
-	public function get_statistics( $type ){
+	function get_statistics( $type ){
 
 		if( !isset( $this->_stats[ $type ] ) ) {
 			$this->_stats[ $type ] = new Hustle_Model_Stats($this, $type);
@@ -629,7 +629,7 @@ abstract class Hustle_Model extends Hustle_Data {
 	 * @param $ending_date
 	 * @return (array|object|null) Database query results
 	 */
-	public function get_module_conversion( $starting_date, $ending_date, $is_array ){
+	function get_module_conversion( $starting_date, $ending_date, $is_array ){
 		$date_format = '%Y%m%d';
 		$conversion_query = '%_conversion';
 		$date_condition = ( !is_null($starting_date) && !is_null($ending_date) && !empty($starting_date) && !empty($ending_date) ) 

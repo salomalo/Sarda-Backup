@@ -12,14 +12,14 @@ class WF_ProdImpExpCsv_Settings {
     public static function save_settings() {
         global $wpdb;
         $pro_ftp_server = !empty($_POST['pro_ftp_server']) ? $_POST['pro_ftp_server'] : '';
-        $pro_ftp_user = !empty($_POST['pro_ftp_user']) ? stripslashes(htmlentities($_POST['pro_ftp_user'])) : '';
+        $pro_ftp_user = !empty($_POST['pro_ftp_user']) ? $_POST['pro_ftp_user'] : '';
         $pro_ftp_password = !empty($_POST['pro_ftp_password']) ? $_POST['pro_ftp_password'] : '';
         $pro_ftp_port = !empty($_POST['pro_ftp_port']) ? $_POST['pro_ftp_port'] : 21;
         $pro_use_ftps = !empty($_POST['pro_use_ftps']) ? true : false;
         $pro_enable_ftp_ie = !empty($_POST['pro_enable_ftp_ie']) ? true : false;
 
         $rev_ftp_server = !empty($_POST['rev_ftp_server']) ? $_POST['rev_ftp_server'] : '';
-        $rev_ftp_user = !empty($_POST['rev_ftp_user']) ? stripslashes(htmlentities($_POST['rev_ftp_user'])) : '';
+        $rev_ftp_user = !empty($_POST['rev_ftp_user']) ? $_POST['rev_ftp_user'] : '';
         $rev_ftp_password = !empty($_POST['rev_ftp_password']) ? $_POST['rev_ftp_password'] : '';
         $rev_ftp_port = !empty($_POST['rev_ftp_port']) ? $_POST['rev_ftp_port'] : 21;
         $rev_use_ftps = !empty($_POST['rev_use_ftps']) ? true : false;

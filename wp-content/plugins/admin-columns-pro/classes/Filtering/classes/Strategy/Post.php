@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Strategy;
 
-final class ACP_Filtering_Strategy_Post extends ACP_Filtering_Strategy {
+use ACP\Filtering\Strategy;
+
+class Post extends Strategy {
 
 	public function handle_request() {
 		add_action( 'pre_get_posts', array( $this, 'handle_filter_requests' ), 1 );
@@ -15,7 +15,7 @@ final class ACP_Filtering_Strategy_Post extends ACP_Filtering_Strategy {
 	 *
 	 * @since 3.5
 	 *
-	 * @param WP_Query $wp_query
+	 * @param \WP_Query $wp_query
 	 */
 	public function handle_filter_requests( $wp_query ) {
 		if ( ! $wp_query->is_main_query() || ! is_admin() ) {

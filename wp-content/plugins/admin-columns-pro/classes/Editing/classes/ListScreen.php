@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
-interface ACP_Editing_ListScreen {
+interface ListScreen {
 
 	/**
-	 * @param ACP_Editing_Model $model
+	 * @param Model $model
 	 *
-	 * @return ACP_Editing_Strategy
+	 * @return Strategy
 	 */
 	public function editing( $model );
 

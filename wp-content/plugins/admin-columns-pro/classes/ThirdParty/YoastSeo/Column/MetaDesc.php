@@ -1,11 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_MetaDesc extends ACP_ThirdParty_YoastSeo_Column
-	implements ACP_Column_EditingInterface, ACP_Export_Column {
+use ACP\ThirdParty\YoastSeo;
+use ACP\Editing;
+use ACP\Export;
+
+class MetaDesc extends YoastSeo\Column
+	implements Editing\Editable, Export\Exportable {
 
 	public function __construct() {
 		parent::__construct();
@@ -14,10 +16,10 @@ class ACP_ThirdParty_YoastSeo_Column_MetaDesc extends ACP_ThirdParty_YoastSeo_Co
 	}
 
 	public function editing() {
-		return new ACP_ThirdParty_YoastSeo_Editing_MetaDesc( $this );
+		return new YoastSeo\Editing\MetaDesc( $this );
 	}
 
 	public function export() {
-		return new ACP_ThirdParty_YoastSeo_Export_MetaDesc( $this );
+		return new YoastSeo\Export\MetaDesc( $this );
 	}
 }

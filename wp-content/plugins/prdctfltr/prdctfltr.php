@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: WooCommerce Product Filter
-Plugin URI: https://www.mihajlovicnenad.com/product-filter
+Plugin URI: http://www.mihajlovicnenad.com/product-filter
 Description: Advanced product filter for any Wordpress template! - Mihajlovicnenad.com
 Author: Mihajlovic Nenad
-Version: 6.6.0
+Version: 6.5.8
 Requires at least: 4.5
-Tested up to: 4.9.8
+Tested up to: 4.9.6
 WC requires at least: 3.0.0
-WC tested up to: 3.4.4
+WC tested up to: 3.4.0
 Author URI: https://www.mihajlovicnenad.com
 Text Domain: prdctfltr
 */
@@ -21,7 +21,7 @@ if ( !class_exists( 'PrdctfltrInit' ) ) :
 
 	final class PrdctfltrInit {
 
-		public static $version = '6.6.0';
+		public static $version = '6.5.8';
 
 		protected static $_instance = null;
 
@@ -71,8 +71,16 @@ if ( !class_exists( 'PrdctfltrInit' ) ) :
 			if ( $this->is_request( 'admin' ) ) {
 
 				add_action( 'vc_before_init', array( $this, 'composer' ) );
-				add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg' ) );
 				include_once ( 'lib/pf-settings.php' );
+
+				$purchase_code = get_option( 'wc_settings_prdctfltr_purchase_code', '' );
+				if ( $purchase_code ) {
+					require 'lib/update/plugin-update-checker.php';
+					$pf_check = PucFactory::buildUpdateChecker(
+						'http://mihajlovicnenad.com/envato/verify_json.php?k=' . $purchase_code,
+						__FILE__
+					);
+				}
 
 			}
 
@@ -142,38 +150,6 @@ if ( !class_exists( 'PrdctfltrInit' ) ) :
 
 		public function version() {
 			return self::$version;
-		}
-
-		public function gutenberg() {
-
-			$prdctfltr = array();
-			$presets = array(
-				array(
-					'label' => __( 'Default', 'prdctfltr' ),
-					'value' => ''
-				)
-			);
-
-			$saved_presets = get_option( 'prdctfltr_templates', array() );
-
-			if ( is_array( $saved_presets ) ) {
-				foreach ( $saved_presets as $k => $v ) {
-					$presets[] = array(
-						'label' => $k,
-						'value' => $k
-					);
-				}
-			}
-			$prdctfltr['presets'] = $presets;
-
-			wp_enqueue_script(
-				'gutenberg-for-product-filter',
-				plugins_url( '/lib/js/gutenberg.js', __FILE__ ),
-				array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
-				'1.0.0'
-			);
-			wp_localize_script( 'gutenberg-for-product-filter', 'prdctfltr', $prdctfltr );
-
 		}
 
 		public function composer() {

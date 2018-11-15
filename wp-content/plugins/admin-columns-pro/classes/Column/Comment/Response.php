@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Comment_Response extends AC_Column_Comment_Response
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+class Response extends AC\Column\Comment\Response
+	implements Filtering\Filterable, Sorting\Sortable, Export\Exportable {
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_Response( $this );
+		return new Filtering\Model\Comment\Response( $this );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Comment_Response( $this );
+		return new Sorting\Model\Comment\Response( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Comment_Response( $this );
+		return new Export\Model\Comment\Response( $this );
 	}
 
 }

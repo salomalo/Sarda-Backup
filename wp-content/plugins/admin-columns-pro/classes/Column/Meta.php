@@ -1,34 +1,37 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 4.0
  */
-abstract class ACP_Column_Meta extends AC_Column_Meta
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Column_FilteringInterface {
+abstract class Meta extends AC\Column\Meta
+	implements Sorting\Sortable, Editing\Editable, Filtering\Filterable {
 
 	/**
-	 * @return ACP_Sorting_Model_Meta
+	 * @return Sorting\Model\Meta
 	 */
 	public function sorting() {
-		return new ACP_Sorting_Model_Meta( $this );
+		return new Sorting\Model\Meta( $this );
 	}
 
 	/**
-	 * @return ACP_Editing_Model_Meta
+	 * @return Editing\Model\Meta
 	 */
 	public function editing() {
-		return new ACP_Editing_Model_Meta( $this );
+		return new Editing\Model\Meta( $this );
 	}
 
 	/**
-	 * @return ACP_Filtering_Model_Meta
+	 * @return Filtering\Model\Meta
 	 */
 	public function filtering() {
-		return new ACP_Filtering_Model_Meta( $this );
+		return new Filtering\Model\Meta( $this );
 	}
 
 }

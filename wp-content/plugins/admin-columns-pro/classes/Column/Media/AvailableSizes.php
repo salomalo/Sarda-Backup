@@ -1,18 +1,20 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_AvailableSizes extends AC_Column_Media_AvailableSizes
-	implements ACP_Column_SortingInterface {
+use AC;
+use ACP\Export;
+use ACP\Sorting;
+
+class AvailableSizes extends AC\Column\Media\AvailableSizes
+	implements Sorting\Sortable {
 
 	public function sorting(){
-		return new ACP_Sorting_Model_Media_AvailableSizes( $this );
+		return new Sorting\Model\Media\AvailableSizes( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Value( $this );
+		return new Export\Model\Value( $this );
 	}
 
 }

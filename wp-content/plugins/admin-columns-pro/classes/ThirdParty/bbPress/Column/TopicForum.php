@@ -1,11 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\bbPress\Column;
 
-class ACP_ThirdParty_bbPress_Column_TopicForum extends AC_Column
-	implements ACP_Column_EditingInterface {
+use AC;
+use ACP\Editing;
+use ACP\ThirdParty\bbPress;
+
+class TopicForum extends AC\Column
+	implements Editing\Editable {
 
 	public function __construct() {
 		$this->set_original( true );
@@ -13,7 +15,7 @@ class ACP_ThirdParty_bbPress_Column_TopicForum extends AC_Column
 	}
 
 	public function editing() {
-		return new ACP_ThirdParty_bbPress_Editing_TopicForum( $this );
+		return new bbPress\Editing\TopicForum( $this );
 	}
 
 	public function is_valid() {

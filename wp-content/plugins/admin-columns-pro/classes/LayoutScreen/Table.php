@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\LayoutScreen;
 
-class ACP_LayoutScreen_Table {
+use AC\ListScreen;
+
+class Table {
 
 	public function __construct() {
 		add_action( 'ac/table/list_screen', array( $this, 'set_current_layout' ), 9 ); // Early priority
@@ -13,7 +13,7 @@ class ACP_LayoutScreen_Table {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param ListScreen $list_screen
 	 */
 	public function set_current_layout( $list_screen ) {
 		$layouts = ACP()->layouts( $list_screen );
@@ -93,8 +93,8 @@ class ACP_LayoutScreen_Table {
 	 * Loads scripts on the list screen
 	 */
 	public function table_scripts() {
-		wp_enqueue_script( 'acp-layouts', ACP()->get_plugin_url() . 'assets/js/layouts-listings-screen.js', array( 'jquery' ), ACP()->get_version() );
-		wp_enqueue_style( 'acp-layouts', ACP()->get_plugin_url() . 'assets/css/layouts-listings-screen.css', array(), ACP()->get_version() );
+		wp_enqueue_script( 'acp-layouts', ACP()->get_url() . 'assets/js/layouts-listings-screen.js', array( 'jquery' ), ACP()->get_version() );
+		wp_enqueue_style( 'acp-layouts', ACP()->get_url() . 'assets/css/layouts-listings-screen.css', array(), ACP()->get_version() );
 	}
 
 }

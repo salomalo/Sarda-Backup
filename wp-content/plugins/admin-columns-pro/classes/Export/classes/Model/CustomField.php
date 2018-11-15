@@ -1,16 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model;
+
+use AC\Column;
 
 /**
- * @property AC_Column_CustomField $column
+ * @property Column\CustomField $column
  * @since 4.1
  */
-class ACP_Export_Model_CustomField extends ACP_Export_Model_RawValue {
+class CustomField extends RawValue {
 
-	public function __construct( AC_Column_CustomField $column ) {
+	public function __construct( Column\CustomField $column ) {
 		parent::__construct( $column );
 	}
 

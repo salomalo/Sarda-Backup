@@ -1,10 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
 
-class ACP_Layout {
+class Layout {
 
 	/**
 	 * @var string
@@ -153,7 +151,7 @@ class ACP_Layout {
 	}
 
 	/**
-	 * @param WP_User $user
+	 * @param \WP_User $user
 	 *
 	 * @return string
 	 */

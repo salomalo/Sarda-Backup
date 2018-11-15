@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Filtering;
 
-class ACP_ThirdParty_YoastSeo_Filtering_PrimaryTaxonomy extends ACP_Filtering_Model_Meta {
+use ACP\Filtering;
+
+class PrimaryTaxonomy extends Filtering\Model\Meta {
 
 	/**
 	 * @return array

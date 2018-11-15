@@ -5,7 +5,7 @@
  */jQuery(document).ready(function($){/**
 	 * Add reset sorting button to listing screen.
 	 * Resets sorting preference with ajax callback.
-	 */if(ACP_Sorting.reset_button.orderby){var button=$('<a title="'+ACP_Sorting.reset_button.label+'" class="reset-sorting add-new-h2">'+ACP_Sorting.reset_button.label+'</a>');$('.tablenav.top .actions:last').append(button);$(button).click(function(e){e.preventDefault();if($(this).hasClass('disabled')){return}$(this).addClass('disabled');$.post(ajaxurl,{action:'acp_reset_sorting',list_screen:AC.list_screen,layout:AC.layout,_ajax_nonce:AC.ajax_nonce},function(response){if(response&&true===response.data){window.location.href=removeParam('orderby',window.location.href)}else{$(this).removeClass('disabled')}},'json')})}});/**
+	 */if(ACP_Sorting.reset_button.orderby){var $button=$('<a title="'+ACP_Sorting.reset_button.label+'" class="reset-sorting add-new-h2">'+ACP_Sorting.reset_button.label+'</a>');$button.insertAfter('#doaction');$('.tablenav.top .actions:last').append($button);$button.click(function(e){e.preventDefault();if($(this).hasClass('disabled')){return}$(this).addClass('disabled');$.post(ajaxurl,{action:'acp_reset_sorting',list_screen:AC.list_screen,layout:AC.layout,_ajax_nonce:AC.ajax_nonce},function(response){if(response&&true===response.data){window.location.href=removeParam('orderby',window.location.href)}else{$(this).removeClass('disabled')}},'json')})}});/**
  * Remove query param from URL
  *
  * @param key string

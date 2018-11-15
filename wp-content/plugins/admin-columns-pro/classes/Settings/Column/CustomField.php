@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column;
 
-class ACP_Settings_Column_CustomField extends AC_Settings_Column_CustomField {
+use AC;
+
+class CustomField extends AC\Settings\Column\CustomField {
 
 	public function get_dependent_settings() {
-		return array( new ACP_Settings_Column_CustomFieldType( $this->column ) );
+		return array( new CustomFieldType( $this->column ) );
 	}
 
 }

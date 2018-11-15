@@ -1,15 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Exporter;
+
+use ACP\Export;
+use ACP\Export\Exporter;
 
 /**
  * Exporter for the CSV format
  *
  * @since 1.0
  */
-class ACP_Export_Exporter_CSV extends ACP_Export_Exporter {
+class CSV extends Exporter {
 
 	/**
 	 * @see   BulkPress_Exporter::export()
@@ -27,14 +28,14 @@ class ACP_Export_Exporter_CSV extends ACP_Export_Exporter {
 
 			// Encrypt the file contents
 			try {
-				$cryptor = new ACP_Export_Cryptor();
-				$key = ACP_Export_Utility_Users::get_user_encryption_key();
+				$cryptor = new Export\Cryptor();
+				$key = Export\Utility\Users::get_user_encryption_key();
 				$result = $cryptor->encrypt( $csv, $key );
 				$csv_encrypted = $result['result'];
 
 				// Write the encrypted contents to the file
 				fwrite( $fh, $csv_encrypted );
-			} catch ( Exception $e ) {
+			} catch ( \Exception $e ) {
 				wp_send_json_error( __( 'The requested file could not be downloaded.', 'codepress-admin-columns' ) );
 			}
 
@@ -46,8 +47,8 @@ class ACP_Export_Exporter_CSV extends ACP_Export_Exporter {
 		 *
 		 * @since 1.0
 		 *
-		 * @param string                  $delimiter Delimiter to use
-		 * @param ACP_Export_Exporter_CSV $exporter  Exporter class instance
+		 * @param string $delimiter Delimiter to use
+		 * @param CSV    $exporter  Exporter class instance
 		 */
 		$delimiter = apply_filters( 'ac/export/exporter_csv/delimiter', ',', $this );
 

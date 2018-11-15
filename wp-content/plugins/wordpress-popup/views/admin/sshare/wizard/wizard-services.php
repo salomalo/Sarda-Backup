@@ -3,9 +3,9 @@
     <?php $this->render( "admin/sshare/wizard/boxes/box-name", array() ); ?>
 
     <?php $this->render( "admin/sshare/wizard/boxes/box-behaviour", array() ); ?>
-
+    
     <?php $this->render( "admin/sshare/wizard/boxes/box-icons_native", array() ); ?>
-
+    
     <?php $this->render( "admin/sshare/wizard/boxes/box-icons_custom", array() ); ?>
 
 </script>

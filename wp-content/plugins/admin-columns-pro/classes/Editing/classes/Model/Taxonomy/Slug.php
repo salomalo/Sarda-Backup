@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Taxonomy;
 
-class ACP_Editing_Model_Taxonomy_Slug extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Slug extends Model {
 
 	public function get_edit_value( $id ) {
-		return ac_helper()->taxonomy->get_term_field( 'slug', $id, $this->column->get_taxonomy() );
+		return ac_helper()->taxonomy->get_term_field( 'slug', $id, $this->get_column()->get_taxonomy() );
 	}
 
 	public function save( $id, $value ) {

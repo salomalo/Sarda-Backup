@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_CommentStatus extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class CommentStatus extends Model {
 
 	public function filter_by_comment_status( $where ) {
 		global $wpdb;

@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column;
+
+use AC;
+use ACP\Export;
 
 /**
  * @since 4.1
  */
-class ACP_Column_Actions extends AC_Column_Actions
-	implements ACP_Export_Column {
+class Actions extends AC\Column\Actions
+	implements Export\Exportable {
 
 	public function export() {
-		return new ACP_Export_Model_Disabled( $this );
+		return new Export\Model\Disabled( $this );
 	}
 
 }

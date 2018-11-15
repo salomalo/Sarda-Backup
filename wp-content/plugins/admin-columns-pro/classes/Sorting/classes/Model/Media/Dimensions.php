@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Media;
 
-class ACP_Sorting_Model_Media_Dimensions extends ACP_Sorting_Model_Media_Meta {
+use ACP\Sorting\Model;
+
+class Dimensions extends Model\Media\Meta {
 
 	protected function get_width( $values ) {
 		return $this->get_meta_value( $values, 'width' );

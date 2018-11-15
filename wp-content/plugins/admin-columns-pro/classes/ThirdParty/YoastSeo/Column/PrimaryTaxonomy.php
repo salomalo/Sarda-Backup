@@ -1,11 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Column;
 
-class ACP_ThirdParty_YoastSeo_Column_PrimaryTaxonomy extends AC_Column_Meta
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+use AC;
+use ACP\ThirdParty\YoastSeo;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+
+class PrimaryTaxonomy extends AC\Column\Meta
+	implements Editing\Editable, Filtering\Filterable, Export\Exportable {
 
 	public function __construct() {
 		$this->set_label( __( 'Primary Taxonomy', 'codepress-admin-columns' ) );
@@ -34,19 +38,19 @@ class ACP_ThirdParty_YoastSeo_Column_PrimaryTaxonomy extends AC_Column_Meta
 	}
 
 	protected function register_settings() {
-		$this->add_setting( new ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy( $this ) );
+		$this->add_setting( new YoastSeo\Settings\PrimaryTaxonomy( $this ) );
 	}
 
 	public function editing() {
-		return new ACP_ThirdParty_YoastSeo_Editing_PrimaryTaxonomy( $this );
+		return new YoastSeo\Editing\PrimaryTaxonomy( $this );
 	}
 
 	public function filtering() {
-		return new ACP_ThirdParty_YoastSeo_Filtering_PrimaryTaxonomy( $this );
+		return new YoastSeo\Filtering\PrimaryTaxonomy( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 	/**
@@ -55,7 +59,7 @@ class ACP_ThirdParty_YoastSeo_Column_PrimaryTaxonomy extends AC_Column_Meta
 	public function get_taxonomy() {
 		$setting = $this->get_setting( 'primary_taxonomy' );
 
-		if ( ! $setting instanceof ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy ) {
+		if ( ! $setting instanceof YoastSeo\Settings\PrimaryTaxonomy ) {
 			return '';
 		}
 

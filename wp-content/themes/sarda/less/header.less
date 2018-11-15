@@ -2,7 +2,7 @@
 
 /*************** ADD CUSTOM CSS HERE.   ***************/
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 48em) {
   /*************** ADD MOBILE ONLY CSS HERE  ***************/
 
   .mfp-close {
@@ -10,8 +10,10 @@
   }
   .mfp-content {
     vertical-align: top;
+    //width: 100% !important;
     .sidebar-menu {
       padding-top: 0px;
+      //width: 100% !important;
       .mega-menu-wrap {
         width: 100% !important;
         a.mega-menu-link {
@@ -31,25 +33,18 @@
     }
   }
   div.mobile-sidebar {
-    text-align: center;
-    .mobile-logo img {
-      position: relative;
-      top: -30px;
-      width: 250px;
-      height: auto;
-    }
     div.mobile-logo-center {
       -webkit-box-align:center;
       -webkit-box-pack:center;
       display:-webkit-box;
     }
-  }
-  img.cart-img-icon {
-    height: 25px;
+    .mobile-logo img {
+      position: relative;
+      top: -30px;
+    }
   }
 }
 
-/*************** ADD DESKTOP CSS HERE  ***************/
 ul.nav-sidebar {
   border-top: solid 1px @primary !important;
 }
@@ -60,13 +55,9 @@ ul.nav-sidebar {
   }
 }
 
-img.cart-img-icon {
-  height: 25px;
-  position: relative;
-}
-
+/*************** ADD DESKTOP CSS HERE  ***************/
 .header-top-text-left, .header-bottom-text-left, .header-top-text-right, .header-bottom-text-right {
-  font-family: futura pt, sans-serif;
+  font-family: futura-pt, sans-serif;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.14em;
@@ -84,7 +75,6 @@ div.header-top-text-right, div.header-bottom-text-right {
   a {
     padding-left: 12px;
   }
-  a:hover { color: @rollover; }
   img {
     margin-right: -8px;
   }
@@ -94,16 +84,12 @@ div.header-top-text-left, div.header-bottom-text-left {
   a {
     padding-right: 12px;
   }
-  a:hover { color: @rollover; }
   img {
     margin-left: -8px;
   }
 }
 div.header-bottom-text-left {
-  margin-top: 123px;
-  i.fa {
-    font-size: 20px;
-  }
+  margin-top: 120px;
 }
 div.header-bottom-text-right {
   margin-top: 112px;
@@ -113,7 +99,7 @@ div.header-bottom-text-right, div.header-bottom-text-left {
   font-size:15px;
 }
 span.header-cart-title {
-  font-family: futura pt, sans-serif;
+  font-family: futura-pt, sans-serif;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.14em;

@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Post_Formats extends AC_Column_Post_Formats
-	implements ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Formats extends AC\Column\Post\Formats
+	implements Editing\Editable, Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 	public function editing(){
-		return new ACP_Editing_Model_Post_Formats( $this );
+		return new Editing\Model\Post\Formats( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Formats( $this );
+		return new Filtering\Model\Post\Formats( $this );
 	}
 
 }

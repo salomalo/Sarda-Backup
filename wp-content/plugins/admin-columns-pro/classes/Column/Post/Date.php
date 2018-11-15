@@ -1,25 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Date extends AC_Column_Post_Date
-	implements ACP_Column_FilteringInterface, ACP_Column_EditingInterface, ACP_Export_Column {
+class Date extends AC\Column\Post\Date
+	implements Filtering\Filterable, Editing\Editable, Export\Exportable {
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Date( $this );
+		return new Editing\Model\Post\Date( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Date( $this );
+		return new Filtering\Model\Post\Date( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Date( $this );
+		return new Export\Model\Post\Date( $this );
 	}
 
 }

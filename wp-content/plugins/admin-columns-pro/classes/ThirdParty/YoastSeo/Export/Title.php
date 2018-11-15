@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Export;
 
-class ACP_ThirdParty_YoastSeo_Export_Title extends ACP_Export_Model {
+use ACP\Export;
+
+class Title extends Export\Model {
 
 	public function get_value( $id ) {
 		$title = get_post_meta( $id, '_yoast_wpseo_title', true );

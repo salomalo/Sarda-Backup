@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Post;
 
-class ACP_Editing_Model_Post_Date extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Date extends Model {
 
 	public function get_edit_value( $id ) {
 		$post = get_post( $id );

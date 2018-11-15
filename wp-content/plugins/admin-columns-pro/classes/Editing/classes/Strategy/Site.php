@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Strategy;
 
-class ACP_Editing_Strategy_Site extends ACP_Editing_Strategy {
+use ACP\Editing\Strategy;
+
+class Site extends Strategy {
 
 	public function get_rows() {
 		global $wp_list_table;
@@ -13,7 +13,7 @@ class ACP_Editing_Strategy_Site extends ACP_Editing_Strategy {
 	}
 
 	/**
-	 * @param int|WP_Post $post
+	 * @param int|\WP_Site $site
 	 *
 	 * @return bool|int
 	 */

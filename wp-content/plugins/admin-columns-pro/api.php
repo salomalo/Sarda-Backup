@@ -1,21 +1,24 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+/**
+ * @return ACP\AdminColumnsPro
+ */
+function ACP() {
+	return ACP\AdminColumnsPro::instance();
 }
 
 /**
  * Editing instance
  *
  * @since 4.0
- * @return ACP_Editing_Addon
+ * @return ACP\Editing\Addon
  */
 function acp_editing() {
 	return ACP()->editing();
 }
 
 /**
- * @return ACP_Editing_Helper
+ * @return ACP\Editing\Helper
  */
 function acp_editing_helper() {
 	return ACP()->editing()->helper();
@@ -25,7 +28,7 @@ function acp_editing_helper() {
  * Filtering instance
  *
  * @since 4.0
- * @return ACP_Filtering_Addon
+ * @return ACP\Filtering\Addon
  */
 function acp_filtering() {
 	return ACP()->filtering();
@@ -33,7 +36,7 @@ function acp_filtering() {
 
 /**
  * @since 4.2
- * @return ACP_Filtering_Helper
+ * @return ACP\Filtering\Helper
  */
 function acp_filtering_helper() {
 	return ACP()->filtering()->helper();
@@ -43,26 +46,15 @@ function acp_filtering_helper() {
  * Sorting instance
  *
  * @since 4.0
- * @return ACP_Sorting_Addon
+ * @return ACP\Sorting\Addon
  */
 function acp_sorting() {
 	return ACP()->sorting();
 }
 
 /**
- * @since 4.0
- * @return bool True when a minimum version of Admin Columns Pro plugin is activated.
+ * @return ACP\Export\Addon
  */
-function acp_is_version_gte( $version ) {
-	return version_compare( ACP()->get_version(), $version, '>=' );
-}
-
-/**
- * @see        ac_register_columns
- * @deprecated 4.0
- */
-function cpac_set_storage_model_columns( $list_screen_key, $column_data ) {
-	_deprecated_function( __METHOD__, '4.0', 'ac_register_columns()' );
-
-	ac_register_columns( $list_screen_key, $column_data );
+function ac_addon_export() {
+	return ACP\Export\Addon::instance();
 }

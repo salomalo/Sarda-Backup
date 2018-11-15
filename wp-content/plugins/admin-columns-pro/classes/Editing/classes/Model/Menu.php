@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model;
+
+use AC;
+use ACP\Editing\Model;
 
 /**
- * @property AC_Column_Menu $column
+ * @property AC\Column\Menu $column
  */
-abstract class ACP_Editing_Model_Menu extends ACP_Editing_Model {
+abstract class Menu extends Model {
 
 	/**
 	 * @param int $id
@@ -94,4 +95,4 @@ abstract class ACP_Editing_Model_Menu extends ACP_Editing_Model {
 		}
 	}
 
-}
+}//1135293899

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\Taxonomy;
 
-class ACP_Editing_Model_Taxonomy_Description extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Description extends Model {
 
 	public function get_edit_value( $id ) {
 		return ac_helper()->taxonomy->get_term_field( 'description', $id, $this->column->get_taxonomy() );

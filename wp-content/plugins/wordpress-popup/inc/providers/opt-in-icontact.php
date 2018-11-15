@@ -5,33 +5,9 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
 
 		const ID = "icontact";
 		const NAME = "IContact";
-
-		protected $id = self::ID;
-
-
-		/**
-		 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-		 */
-		public static function instance(){
-			return new self();
-		}
-
-		/**
-		 * Get Provider Details
-		 * General function to get provider details from database based on key
-		 *
-		 * @param Hustle_Module_Model $module
-		 * @param String $field - the field name
-		 *
-		 * @return String
-		 */
-		protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-			$details = '';
-			$name = self::ID;
-			if ( isset( $module->content->email_services[$name][$field] ) ) {
-				 $details = $module->content->email_services[$name][$field];
-			}
-			return $details;
+		
+		static function instance() {
+			return new self;
 		}
 
 		/**
@@ -43,10 +19,10 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
          *
          * @return WP_Error|Object
          */
-        public static function api( $app_id, $api_password, $api_username ) {
+        static function api( $app_id, $api_password, $api_username ) {
             if ( ! class_exists( 'Opt_In_IContact_Api' ) )
                 require_once 'opt-in-icontact-api.php';
-
+            
             try {
                 $api = new Opt_In_IContact_Api( $app_id, $api_password, $api_username );
                 return $api;
@@ -54,12 +30,20 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
                 return new WP_Error( 'something_wrong', $e->getMessage() );
             }
 		}
-
-		public function is_authorized() {
+		
+		function is_authorized() {
 			return true;
 		}
 
-		public function subscribe( Hustle_Module_Model $module, array $data ) {
+		function update_option($option_key, $option_value){
+			return update_site_option( self::ID . "_" . $option_key, $option_value);
+		}
+
+		function get_option($option_key, $default){
+			return get_site_option( self::ID . "_" . $option_key, $default );
+		}
+
+		function subscribe( Hustle_Module_Model $module, array $data ) {
 			$app_id     = self::_get_app_id( $module );
 			$username   = self::_get_username( $module );
 			$password   = self::_get_password( $module );
@@ -132,7 +116,7 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
             if ( !is_wp_error( $contacts ) ) {
                 if ( is_array( $contacts ) && isset( $contacts['contacts'] ) && is_array( $contacts['contacts'] ) ) {
                     foreach ( $contacts['contacts'] as $contact ) {
-                        if ( $contact['email'] === $email ){
+                        if ( $contact['email'] == $email ){
                             return true;
                         }
                     }
@@ -141,7 +125,7 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
             return false;
         }
 
-		public function get_options(){
+		function get_options( $module_id ){
 			$api 	= self::api( $this->app_id, $this->password, $this->username );
 			$lists 	= array();
 			$value 	= '';
@@ -156,15 +140,13 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
                             $lists[ $list['listId'] ]['value'] = $list['listId'];
                             $lists[ $list['listId'] ]['label'] = $list['name'];
 						}
-
+						
 						$total_lists = count( $lists );
 						if ( !empty( $first ) ) {
 							$value = $first['value'];
 						}
                     }
                 }
-			} else {
-				return $api;
 			}
 
 			return  array(
@@ -190,7 +172,7 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
 			);
 		}
 
-		public function get_account_options( $module_id ) {
+		function get_account_options( $module_id ) {
 			$app_id = '';
 			$username = '';
 			$password = '';
@@ -269,6 +251,27 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
 			return $options;
 		}
 
+		/**
+		* Get Provider Details
+		* General function to get provider details from database based on key
+		*
+		* @param Hustle_Module_Model $module
+		* @param String $field - the field name
+		*
+		* @return String
+		*/
+		private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+			$details = '';
+			$name = self::ID;
+			if ( !is_null( $module->content->email_services ) 
+				&& isset( $module->content->email_services[$name] ) 
+				&& isset( $module->content->email_services[$name][$field] ) ) {
+					
+				$details = $module->content->email_services[$name][$field];
+			}
+			return $details;
+		}
+
 		private static function _get_app_id( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'app_id' );
 		}
@@ -280,12 +283,12 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
 		private static function _get_password( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'password' );
 		}
-
+		
 		private static function _get_list_id( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'list_id' );
 		}
 
-		public static function add_custom_field( $fields, $module_id ) {
+		static function add_custom_field( $fields, $module_id ) {
 			$module 	= Hustle_Module_Model::instance()->get( $module_id );
 			$app_id     = self::_get_app_id( $module );
 			$username   = self::_get_username( $module );
@@ -297,22 +300,17 @@ if ( ! class_exists( 'Opt_In_IContact' ) ) :
 				$api->add_custom_field( array(
 					'displayToUser'  => 1,
 					'privateName'    => $field['name'],
-					'fieldType'      => ( 'email' === $field['type'] ) ? 'text' : $field['type']
+					'fieldType'      => ( $field['type'] == 'email' ) ? 'text' : $field['type']
 				) );
 			}
 
 			if ( $exist ) {
-				return array(
-					'success' => true,
-					'field' => $fields,
-				);
+				return array( 'success' => true, 'field' => $fields );
 			}
 
-			return array(
-				'error' => true,
-				'code' => '',
-			);
+			return array( 'error' => true, 'code' => '' );
 		}
 	}
 
 endif;
+?>

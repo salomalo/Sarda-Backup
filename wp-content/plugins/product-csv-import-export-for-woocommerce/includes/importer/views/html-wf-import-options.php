@@ -29,16 +29,10 @@ if (!defined('ABSPATH')) {
             <input type="hidden" name="import_url" value="<?php echo $this->file_url; ?>" />
         <?php endif; ?>
         <h3><?php _e('Map Fields', 'wf_csv_import_export'); ?></h3>
-        <?php
-        if ($this->profile == '') { ?>
-            <?php _e('Mapping file name:', 'wf_csv_import_export'); ?> 
-            <input type="text" name="profile" value="" placeholder="Enter filename to save" />
-            <input type="button" name="save_import_mapping" id="v_save_import_mapping"  class="button button-primary" value="<?php _e('Save Import Mapping', 'wf_csv_import_export'); ?>" >
-                    <span style="float: none" class ="spinner " ></span>
-                    <span id="prod_save_mapping_notice"></span>
+        <?php if ($this->profile == '') { ?>
+            <?php _e('Mapping file name:', 'wf_csv_import_export'); ?> <input type="text" name="profile" value="" placeholder="Enter filename to save" />
         <?php } else { ?>
             <input type="hidden" name="profile" value="<?php echo $this->profile; ?>" />
-            
         <?php } ?>
         <p><?php _e('Here you can map your imported columns to product data fields.', 'wf_csv_import_export'); ?></p>
         <table class="widefat widefat_importer">

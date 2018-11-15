@@ -1,20 +1,23 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
+
+use AC;
+use ACP;
 
 /**
  * @since 4.0
  */
-class ACP_Filtering_Addon extends AC_Addon {
+class Addon extends AC\Addon {
 
 	public function __construct() {
-		AC()->autoloader()->register_prefix( 'ACP_Filtering', $this->get_plugin_dir() . 'classes' );
+		AC\Autoloader::instance()->register_prefix( __NAMESPACE__, $this->get_dir() . 'classes' );
+		AC\Autoloader\Underscore::instance()->add_alias( __NAMESPACE__ . '\Filterable', 'ACP_Column_FilteringInterface' );
 
 		add_action( 'ac/column/settings', array( $this, 'settings' ) );
 		add_action( 'ac/settings/scripts', array( $this, 'settings_scripts' ) );
 		add_action( 'ac/table/list_screen', array( $this, 'table_screen' ) );
+		add_action( 'ac/table/list_screen', array( $this, 'handle_filtering' ) );
 		add_action( 'wp_ajax_acp_update_filtering_cache', array( $this, 'ajax_update_dropdown_cache' ) );
 	}
 
@@ -26,13 +29,11 @@ class ACP_Filtering_Addon extends AC_Addon {
 			'layout'      => FILTER_SANITIZE_STRING,
 		) );
 
-		$list_screen = AC()->get_list_screen( $input->list_screen );
+		$list_screen = AC\ListScreenFactory::create( $input->list_screen, $input->layout );
 
 		if ( ! $list_screen ) {
 			wp_die();
 		}
-
-		$list_screen->set_layout_id( $input->layout );
 
 		$table_screen = $this->table_screen( $list_screen );
 
@@ -58,47 +59,41 @@ class ACP_Filtering_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @return ACP_Filtering_Helper
+	 * @return Helper
 	 */
 	public function helper() {
-		return new ACP_Filtering_Helper();
+		return new Helper();
 	}
 
 	/**
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 *
-	 * @return ACP_Filtering_Model|false
+	 * @return Model|false
 	 */
 	public function get_filtering_model( $column ) {
-		if ( ! $column instanceof ACP_Column_FilteringInterface ) {
+		if ( ! $column instanceof Filterable ) {
 			return false;
 		}
 
 		$list_screen = $column->get_list_screen();
 
-		if ( ! $list_screen instanceof ACP_Filtering_ListScreen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return false;
 		}
 
 		$model = $column->filtering();
-		$strategy = $list_screen->filtering( $model );
-
-		if ( $model->is_active() && false !== $model->get_filter_value() ) {
-			$strategy->handle_request();
-		}
-
-		$model->set_strategy( $strategy );
+		$model->set_strategy( $list_screen->filtering( $model ) );
 
 		return $model;
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
 	 * @return array|false
 	 */
-	private function get_models( AC_ListScreen $list_screen ) {
-		if ( ! $list_screen instanceof ACP_Filtering_ListScreen ) {
+	private function get_models( AC\ListScreen $list_screen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return false;
 		}
 
@@ -116,11 +111,11 @@ class ACP_Filtering_Addon extends AC_Addon {
 	}
 
 	/**
-	 * @param AC_ListScreen $list_screen
+	 * @param AC\ListScreen $list_screen
 	 *
-	 * @return ACP_Filtering_TableScreen|false
+	 * @return TableScreen|false
 	 */
-	public function table_screen( AC_ListScreen $list_screen ) {
+	public function table_screen( AC\ListScreen $list_screen ) {
 		$models = $this->get_models( $list_screen );
 
 		if ( ! $models ) {
@@ -128,35 +123,55 @@ class ACP_Filtering_Addon extends AC_Addon {
 		}
 
 		switch ( true ) {
-			case $list_screen instanceof ACP_ListScreen_MSUser :
-				return new ACP_Filtering_TableScreen_MSUser( $models );
+			case $list_screen instanceof ACP\ListScreen\MSUser :
+				return new TableScreen\MSUser( $models );
 
-			case $list_screen instanceof ACP_ListScreen_Post :
-			case $list_screen instanceof ACP_ListScreen_Media :
-				return new ACP_Filtering_TableScreen_Post( $models );
+			case $list_screen instanceof ACP\ListScreen\User :
+				return new TableScreen\User( $models );
 
-			case $list_screen instanceof ACP_ListScreen_User :
-				return new ACP_Filtering_TableScreen_User( $models );
+			case $list_screen instanceof ACP\ListScreen\Post :
+			case $list_screen instanceof ACP\ListScreen\Media :
+				return new TableScreen\Post( $models );
 
-			case $list_screen instanceof ACP_ListScreen_Comment :
-				return new ACP_Filtering_TableScreen_Comment( $models );
+			case $list_screen instanceof ACP\ListScreen\Comment :
+				return new TableScreen\Comment( $models );
+
+			case $list_screen instanceof ACP\ListScreen\Taxonomy :
+				return new TableScreen\Taxonomy( $models );
 		}
 
 		return false;
 	}
 
 	public function settings_scripts() {
-		wp_enqueue_script( 'acp-filtering-settings', $this->get_plugin_url() . 'assets/js/settings.js', array( 'jquery' ), $this->get_version() );
+		wp_enqueue_script( 'acp-filtering-settings', $this->get_url() . 'assets/js/settings.js', array( 'jquery' ), $this->get_version() );
 	}
 
 	/**
 	 * Register field settings for filtering
 	 *
-	 * @param AC_Column $column
+	 * @param AC\Column $column
 	 */
 	public function settings( $column ) {
-		if ( $model = $this->get_filtering_model( $column ) ) {
+		$model = $this->get_filtering_model( $column );
+
+		if ( $model ) {
 			$model->register_settings();
+		}
+	}
+
+	/**
+	 * Handle filtering request
+	 *
+	 * @param AC\ListScreen $list_screen
+	 */
+	public function handle_filtering( AC\ListScreen $list_screen ) {
+		foreach ( $list_screen->get_columns() as $column ) {
+			$model = $this->get_filtering_model( $column );
+
+			if ( $model && $model->is_active() && false !== $model->get_filter_value() ) {
+				$model->get_strategy()->handle_request();
+			}
 		}
 	}
 

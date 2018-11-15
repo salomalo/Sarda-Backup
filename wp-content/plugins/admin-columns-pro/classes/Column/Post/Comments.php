@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Export;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Post_Comments extends AC_Column_Post_Comments
-	implements ACP_Export_Column {
+class Comments extends AC\Column\Post\Comments
+	implements Export\Exportable {
 
 	public function export() {
-		return new ACP_Export_Model_Post_Comments( $this );
+		return new Export\Model\Post\Comments( $this );
 	}
 
 }

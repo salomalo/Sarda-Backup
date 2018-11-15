@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_CommentCount extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class CommentCount extends Model {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );

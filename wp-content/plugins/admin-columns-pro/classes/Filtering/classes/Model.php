@@ -1,10 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
-abstract class ACP_Filtering_Model extends ACP_Model {
+use ACP;
+
+abstract class Model extends ACP\Model {
+
+	/**
+	 * @var Strategy\Comment | Strategy\Post | Strategy\User;
+	 */
+	protected $strategy;
 
 	/**
 	 * @var bool
@@ -28,6 +33,20 @@ abstract class ACP_Filtering_Model extends ACP_Model {
 	abstract public function get_filtering_data();
 
 	/**
+	 * @param Strategy $strategy
+	 */
+	public function set_strategy( Strategy $strategy ) {
+		$this->strategy = $strategy;
+	}
+
+	/**
+	 * @return Strategy
+	 */
+	public function get_strategy() {
+		return $this->strategy;
+	}
+
+	/**
 	 * @param bool $is_ranged
 	 */
 	public function set_ranged( $is_ranged ) {
@@ -40,7 +59,7 @@ abstract class ACP_Filtering_Model extends ACP_Model {
 	public function is_ranged() {
 		if ( null === $this->ranged ) {
 			$setting = $this->column->get_setting( 'filter' );
-			$is_ranged = $setting instanceof ACP_Filtering_Settings_Ranged && $setting->is_ranged();
+			$is_ranged = $setting instanceof Settings\Ranged && $setting->is_ranged();
 
 			$this->set_ranged( $is_ranged );
 		}
@@ -54,7 +73,7 @@ abstract class ACP_Filtering_Model extends ACP_Model {
 	public function is_active() {
 		$setting = $this->column->get_setting( 'filter' );
 
-		if ( ! $setting instanceof ACP_Filtering_Settings ) {
+		if ( ! $setting instanceof Settings ) {
 			return false;
 		}
 
@@ -65,7 +84,7 @@ abstract class ACP_Filtering_Model extends ACP_Model {
 	 * Register column settings
 	 */
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Filtering_Settings( $this->column ) );
+		$this->column->add_setting( new Settings( $this->column ) );
 	}
 
 	/**

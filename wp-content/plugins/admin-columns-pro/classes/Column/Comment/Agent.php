@@ -1,24 +1,26 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Sorting;
+use ACP\Filtering;
 
 /**
  * @since 2.0
  */
-class ACP_Column_Comment_Agent extends AC_Column_Comment_Agent
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class Agent extends AC\Column\Comment\Agent
+	implements Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'comment_agent' );
 
 		return $model;
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_Agent( $this );
+		return new Filtering\Model\Comment\Agent( $this );
 	}
 
 }

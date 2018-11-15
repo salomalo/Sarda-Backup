@@ -1,15 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Post;
+
+use AC;
+use ACP\Export\Model;
 
 /**
  * Taxonomy (default column) exportability model
- * @property AC_Column_Taxonomy $column
+ *
+ * @property AC\Column\Taxonomy $column
  * @since 4.1
  */
-class ACP_Export_Model_Post_Taxonomy extends ACP_Export_Model {
+class Taxonomy extends Model {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );

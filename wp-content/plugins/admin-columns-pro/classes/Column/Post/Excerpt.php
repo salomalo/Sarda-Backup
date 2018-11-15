@@ -1,26 +1,30 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
 
-class ACP_Column_Post_Excerpt extends AC_Column_Post_Excerpt
-	implements ACP_Column_SortingInterface, ACP_Column_EditingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class Excerpt extends AC\Column\Post\Excerpt
+	implements Sorting\Sortable, Editing\Editable, Filtering\Filterable, Export\Exportable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Value( $this );
+		return new Sorting\Model\Value( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Excerpt( $this );
+		return new Filtering\Model\Post\Excerpt( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Excerpt( $this );
+		return new Editing\Model\Post\Excerpt( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedRawValue( $this );
+		return new Export\Model\StrippedRawValue( $this );
 	}
 
 }

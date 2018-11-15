@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Admin Columns Pro
-Version: 4.2.8
+Version: 4.3.5
 Description: Customize columns on the administration screens for post(types), users and other content. Filter and sort content, and edit posts directly from the posts overview. All via an intuitive, easy-to-use drag-and-drop interface.
 Author: Admin Columns
 Author URI: https://www.admincolumns.com
@@ -14,100 +14,72 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! is_admin() ) {
+	return;
+}
+
 define( 'ACP_FILE', __FILE__ );
 
-// Only run plugin in the admin interface
-if ( ! is_admin() ) {
-	return false;
-}
+/**
+ * Deactivate Admin Columns
+ */
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+deactivate_plugins( 'codepress-admin-columns/codepress-admin-columns.php' );
 
 /**
- * Loads Admin Columns and Admin Columns Pro
- *
- * @since 3.0.6
+ * Load integrated Admin Columns
  */
-final class ACP_Full {
-
-	public function __construct() {
-		// Can not be auto loaded this early
-		require_once plugin_dir_path( __FILE__ ) . 'classes/PluginActions.php';
-
-		// Only load Admin Columns if it hasn't been loaded already (in which case it is automatically deactivated by maybe_deactivate_admincolumns())
-		if ( ! $this->maybe_deactivate_admincolumns() ) {
-			require_once dirname( __FILE__ ) . '/admin-columns/codepress-admin-columns.php';
-			require_once dirname( __FILE__ ) . '/acp.php';
-
-			// Non compatible add-ons will be deactivated
-			$this->deactivate_incompatible_addons();
-
-			// Set capabilities
-			register_activation_hook( __FILE__, array( AC(), 'set_capabilities' ) );
-		}
-	}
-
-	/**
-	 * Disable the Admin Columns base plugin if it is active
-	 *
-	 * @since 3.0
-	 *
-	 * @return bool Whether the base plugin was deactivated
-	 */
-	public function maybe_deactivate_admincolumns() {
-		$deactivated = false;
-
-		$actions = new ACP_PluginActions( 'codepress-admin-columns/codepress-admin-columns.php' );
-
-		if ( $actions->deactivate() ) {
-			$deactivated = true;
-		}
-
-		$actions = new ACP_PluginActions( 'cac-addon-pro/cac-addon-pro.php' );
-
-		if ( $actions->deactivate() ) {
-			$deactivated = true;
-		}
-
-		return $deactivated;
-	}
-
-	/**
-	 * Non compatible add-ons will be deactivated
-	 */
-	public function deactivate_incompatible_addons() {
-		$addons = array(
-			'ac-addon-acf/ac-addon-acf.php'                         => '2.2.2',
-			'ac-addon-buddypress/ac-addon-buddypress.php'           => '1.2',
-			'ac-addon-events-calendar/ac-addon-events-calendar.php' => '1.1',
-			'ac-addon-ninjaforms/ac-addon-ninjaforms.php'           => '1.1',
-			'ac-addon-pods/ac-addon-pods.php'                       => '1.1',
-			'ac-addon-types/ac-addon-types.php'                     => '1.2',
-			'ac-addon-woocommerce/ac-addon-woocommerce.php'         => '3.0.3',
-
-			// Deprecated
-			'cac-addon-acf/cac-addon-acf.php'                       => '2.2.2',
-			'cac-addon-woocommerce/cac-addon-woocommerce.php'       => '3.0.3',
-		);
-
-		foreach ( $addons as $file => $version ) {
-			$this->deactivate_incompatible_plugin( $file, $version );
-		}
-	}
-
-	/**
-	 * @param string $file
-	 * @param string $required_version
-	 */
-	private function deactivate_incompatible_plugin( $file, $version ) {
-		$plugin = new ACP_PluginActions( $file );
-
-		$plugin->set_required_version( $version );
-
-		if ( ! $plugin->is_compatible() ) {
-			$plugin->deactivate();
-			$plugin->notice();
-		}
-	}
-
+function acp_ac_init() {
+	require_once 'admin-columns/codepress-admin-columns.php';
 }
 
-new ACP_Full();
+add_action( 'plugins_loaded', 'acp_ac_init' );
+
+/**
+ * Load Admin Columns Pro
+ */
+function acp_init() {
+	$dependencies = new AC_Dependencies( plugin_basename( ACP_FILE ) );
+	$dependencies->check_php_version( '5.3' );
+
+	if ( $dependencies->has_missing() ) {
+		return;
+	}
+
+	require_once 'bootstrap.php';
+}
+
+add_action( 'after_setup_theme', 'acp_init', 5 );
+
+/**
+ * Force an addon to adhere to a certain version of Admin Columns Pro
+ *
+ * @param string $version
+ * @param string $basename
+ *
+ * @return string
+ */
+function acp_dependencies_version_gte( $version, $basename ) {
+	$versions = array(
+		'ac-addon-acf/ac-addon-acf.php'                         => '4.3',
+		'ac-addon-buddypress/ac-addon-buddypress.php'           => '4.3',
+		'ac-addon-events-calendar/ac-addon-events-calendar.php' => '4.3',
+		'ac-addon-ninjaforms/ac-addon-ninjaforms.php'           => '4.3',
+		'ac-addon-pods/ac-addon-pods.php'                       => '4.3',
+		'ac-addon-types/ac-addon-types.php'                     => '4.3',
+		'ac-addon-woocommerce/ac-addon-woocommerce.php'         => '4.3',
+	);
+
+	// Deprecated basenames since 4.2
+	$versions['cac-addon-acf/cac-addon-acf.php'] = $versions['ac-addon-acf/ac-addon-acf.php'];
+	$versions['cac-addon-woocommerce/cac-addon-woocommerce.php'] = $versions['ac-addon-woocommerce/ac-addon-woocommerce.php'];
+
+	if ( isset( $versions[ $basename ] ) && -1 === version_compare( $version, $versions[ $basename ] ) ) {
+		$version = $versions[ $basename ];
+	}
+
+	return $version;
+}
+
+add_filter( 'ac/dependencies/acp_version_gte', 'acp_dependencies_version_gte', 10, 2 );

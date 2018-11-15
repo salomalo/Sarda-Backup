@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Strategy;
 
-class ACP_Editing_Strategy_Taxonomy extends ACP_Editing_Strategy {
+use ACP\Editing\Strategy;
+
+class Taxonomy extends Strategy {
 
 	public function get_rows() {
 		return $this->get_editable_rows( $this->get_term_ids_from_dom() );
@@ -14,13 +14,13 @@ class ACP_Editing_Strategy_Taxonomy extends ACP_Editing_Strategy {
 	 * @return int[]|false
 	 */
 	private function get_term_ids_from_dom() {
-		if ( ! class_exists( 'DOMDocument' ) ) {
+		if ( ! class_exists( '\DOMDocument' ) ) {
 			return array();
 		}
 
 		global $wp_list_table;
 
-		/* @var WP_Terms_List_Table $wp_list_table */
+		/* @var \WP_Terms_List_Table $wp_list_table */
 
 		ob_start();
 		$wp_list_table->display_rows_or_placeholder();
@@ -31,10 +31,14 @@ class ACP_Editing_Strategy_Taxonomy extends ACP_Editing_Strategy {
 		// All the logic is in display_rows_or_placeholder().
 		// By fetching the rows HTML we can parse out the needed term ID's with DOMDocument
 
-		$doc = new DOMDocument();
+		if ( ! $html ) {
+			return false;
+		}
+
+		$doc = new \DOMDocument();
 
 		$doc->loadHTML( $html );
-		$xpath = new DOMXPath( $doc );
+		$xpath = new \DOMXPath( $doc );
 
 		$query = "//input[@type='checkbox']";
 
@@ -45,7 +49,7 @@ class ACP_Editing_Strategy_Taxonomy extends ACP_Editing_Strategy {
 		if ( $node_list->length > 0 ) {
 			foreach ( $node_list as $dom_element ) {
 
-				/* @var DOMElement $dom_element */
+				/* @var \DOMElement $dom_element */
 				$term_ids[] = $dom_element->getAttribute( "value" );
 			}
 		}
@@ -54,7 +58,7 @@ class ACP_Editing_Strategy_Taxonomy extends ACP_Editing_Strategy {
 	}
 
 	/**
-	 * @param WP_Term|int $term
+	 * @param \WP_Term|int $term
 	 *
 	 * @return bool|int
 	 */

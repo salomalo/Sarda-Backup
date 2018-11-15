@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
+
+use ACP\License\Request;
 
 /**
  * @since 4.2.4
  */
-final class ACP_License {
+final class License {
 
 	const OPTION_KEY = 'cpupdate_cac-pro';
 
@@ -22,7 +22,7 @@ final class ACP_License {
 	private $status;
 
 	/**
-	 * @var string
+	 * @var int Timestamp
 	 */
 	private $expiry_date;
 
@@ -31,15 +31,12 @@ final class ACP_License {
 	 */
 	private $renewal_discount;
 
-	/**
-	 * @param string $key
-	 */
 	public function __construct() {
 		$this->load();
 	}
 
 	/**
-	 * Populates all vars
+	 * Populate all vars
 	 */
 	public function load() {
 		$this->set_key( defined( 'ACP_LICENCE' ) && ACP_LICENCE ? ACP_LICENCE : $this->get_option( self::OPTION_KEY ) );
@@ -113,7 +110,23 @@ final class ACP_License {
 	}
 
 	/**
-	 * @param string|int $date
+	 * @param string $format days|seconds
+	 *
+	 * @return int
+	 */
+	public function get_time_remaining( $format = 'seconds' ) {
+		$remaining = $this->get_expiry_date() - strtotime( 'midnight' );
+
+		switch ( $format ) {
+			case 'days':
+				$remaining = floor( $remaining / DAY_IN_SECONDS );
+		}
+
+		return intval( $remaining );
+	}
+
+	/**
+	 * @param int $date
 	 *
 	 * @return $this
 	 */
@@ -122,7 +135,7 @@ final class ACP_License {
 			$date = strtotime( $date );
 		}
 
-		$this->expiry_date = absint( $date );
+		$this->expiry_date = $date;
 
 		return $this;
 	}
@@ -140,7 +153,15 @@ final class ACP_License {
 	 * @return $this
 	 */
 	public function set_status( $status ) {
-		$this->status = 'active' === $status || '1' === $status || true === $status ? 'active' : false;
+		if ( '1' === $status || true === $status ) {
+			$status = 'active';
+		}
+
+		if ( $status !== 'active' ) {
+			$status = false;
+		}
+
+		$this->status = $status;
 
 		return $this;
 	}
@@ -150,6 +171,28 @@ final class ACP_License {
 	 */
 	public function get_renewal_discount() {
 		return $this->renewal_discount;
+	}
+
+	/**
+	 * Update expiry date & renewal discount
+	 */
+	public function update_by_remote_api() {
+		$request = new Request( array(
+			'request'     => 'licensedetails',
+			'license_key' => $this->get_key(),
+		) );
+
+		$response = ACP()->get_api()->request( $request );
+
+		if ( $response->get( 'expiry_date' ) ) {
+			$this->set_expiry_date( $response->get( 'expiry_date' ) );
+		}
+
+		if ( $response->get( 'renewal_discount' ) ) {
+			$this->set_renewal_discount( $response->get( 'renewal_discount' ) );
+		}
+
+		$this->save();
 	}
 
 	/**
@@ -164,31 +207,10 @@ final class ACP_License {
 	}
 
 	/**
-	 * Number of days until license expires
-	 *
-	 * @return int|false
-	 */
-	public function get_days_to_expiry() {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		$expiry_date = $this->get_expiry_date();
-
-		if ( ! $expiry_date ) {
-			return false;
-		}
-
-		return floor( ( $expiry_date - time() ) / DAY_IN_SECONDS );
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function is_expired() {
-		$days = $this->get_days_to_expiry();
-
-		return false !== $days && $days <= 0;
+		return 0 >= $this->get_time_remaining();
 	}
 
 	/**

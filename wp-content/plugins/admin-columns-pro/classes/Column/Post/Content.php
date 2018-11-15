@@ -1,32 +1,36 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
 
 /**
  * @since 2.4
  */
-class ACP_Column_Post_Content extends AC_Column_Post_Content
-	implements ACP_Column_EditingInterface, ACP_Column_SortingInterface, ACP_Column_FilteringInterface, ACP_Export_Column {
+class Content extends AC\Column\Post\Content
+	implements Editing\Editable, Sorting\Sortable, Filtering\Filterable, Export\Exportable {
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Content( $this );
+		return new Editing\Model\Post\Content( $this );
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Content( $this );
+		return new Filtering\Model\Post\Content( $this );
 	}
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model_Post_Field( $this );
+		$model = new Sorting\Model\Post\Field( $this );
 		$model->set_field( 'post_content' );
 
 		return $model;
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

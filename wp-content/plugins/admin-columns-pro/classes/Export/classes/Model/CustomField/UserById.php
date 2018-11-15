@@ -1,11 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\CustomField;
 
-class ACP_Export_Model_CustomField_UserById extends ACP_Export_Model_StrippedValue {
+use ACP\Export\Model;
 
-	// @see ACP_Export_Model_Value
+class UserById extends Model\StrippedValue {
+
+	// @see Export\Model\Value
 
 }

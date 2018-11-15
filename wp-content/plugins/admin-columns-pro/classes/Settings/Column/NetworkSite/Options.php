@@ -1,12 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Settings\Column\NetworkSite;
 
-class ACP_Settings_Column_NetworkSite_Options extends AC_Settings_Column_Meta {
+use AC\Settings\Column;
+use ACP\Column\NetworkSite;
 
-	public function __construct( ACP_Column_NetworkSite_Options $column ) {
+class Options extends Column\Meta {
+
+	public function __construct( NetworkSite\Options $column ) {
 		parent::__construct( $column );
 	}
 

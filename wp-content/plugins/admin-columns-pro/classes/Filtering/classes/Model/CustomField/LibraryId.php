@@ -1,11 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\CustomField;
 
-class ACP_Filtering_Model_CustomField_LibraryId extends ACP_Filtering_Model_CustomField_Image {
+use ACP\Filtering\Model;
 
-	// @see ACP_Filtering_Model_CustomField_Image
+class LibraryId extends Model\CustomField\Image {
+
+	// @see Model_CustomField_Image
 
 }

@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model;
 
 /**
  * Exportability model for outputting the column's output value
  *
  * @since 4.1
  */
-class ACP_Export_Model_StrippedValue extends ACP_Export_Model_Value {
+class StrippedValue extends Value {
 
 	/**
 	 * Strips all HTML from content. Also, replace <br> with a space for readability.

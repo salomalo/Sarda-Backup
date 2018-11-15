@@ -7,46 +7,30 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
 
 		const ID = "mailerlite";
 		const NAME = "MailerLite";
-
-		protected $id = self::ID;
-
-
-		/**
-		 * @return Opt_In_Provider_Interface|Opt_In_Provider_Abstract class
-		 */
-		public static function instance(){
-			return new self();
-		}
-
-		/**
-		 * Get Provider Details
-		 * General function to get provider details from database based on key
-		 *
-		 * @param Hustle_Module_Model $module
-		 * @param String $field - the field name
-		 *
-		 * @return String
-		 */
-		protected static function _get_provider_details( Hustle_Module_Model $module, $field ) {
-			$details = '';
-			$name = self::ID;
-			if ( isset( $module->content->email_services[$name][$field] ) ) {
-				 $details = $module->content->email_services[$name][$field];
-			}
-			return $details;
-		}
 		
-		public static function api( $api_key ) {
+		static function instance() {
+			return new self;
+		}
+
+		static function api( $api_key ) {
             $api = new Opt_In_MailerLite_Api( $api_key );
 
             return $api;
 		}
 
-		public function is_authorized() {
+		function is_authorized() {
 			return true;
 		}
 
-		public function subscribe( Hustle_Module_Model $module, array $data ) {
+		function update_option($option_key, $option_value){
+			return update_site_option( self::ID . "_" . $option_key, $option_value);
+		}
+
+		function get_option($option_key, $default){
+			return get_site_option( self::ID . "_" . $option_key, $default );
+		}
+
+		function subscribe( Hustle_Module_Model $module, array $data ) {
 
 			$api_key 	= self::_get_api_key( $module );
 			$list_id 	= self::_get_list_id( $module );
@@ -62,13 +46,13 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
             } elseif ( isset( $data['f_name'] ) ) {
                 $merge_vals['name'] = $data['f_name']; // Legacy
 			}
-
+			
             if ( isset( $data['last_name'] ) ) {
                 $merge_vals['last_name'] = $data['last_name'];
             } elseif ( isset( $data['l_name'] ) ) {
                 $merge_vals['last_name'] = $data['l_name']; // Legacy
 			}
-
+			
 			// Add extra fields
             $merge_data = array_diff_key( $data, array(
                 'email' => '',
@@ -126,7 +110,7 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
             } else {
                 if ( !isset( $member_groups['error'] ) ) {
 					foreach( $member_groups as $member_group => $group ){
-						if ( (string)$group['id'] === (string)$group_id ) {
+						if ( $group['id'] == $group_id ) {
 							return true;
 						}
 					}
@@ -137,7 +121,7 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
             return false;
         }
 
-		public function get_options(){
+		function get_options( $module_id ){
 			$api 	= self::api( $this->api_key );
 			$lists 	= array();
 			$value 	= '';
@@ -157,7 +141,7 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
 					}
                 }
 			}
-
+			
 
 			return  array(
 				"label" => array(
@@ -182,7 +166,7 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
 			);
 		}
 
-		public function get_account_options( $module_id ) {
+		function get_account_options( $module_id ) {
 			$api_key = '';
 
 			if ( $module_id  ) {
@@ -230,39 +214,55 @@ if ( ! class_exists( 'Opt_In_MailerLite' ) ) :
 			);
 		}
 
+		/**
+		* Get Provider Details
+		* General function to get provider details from database based on key
+		*
+		* @param Hustle_Module_Model $module
+		* @param String $field - the field name
+		*
+		* @return String
+		*/
+		private static function _get_provider_details( Hustle_Module_Model $module, $field ) {
+			$details = '';
+			$name = self::ID;
+			if ( !is_null( $module->content->email_services ) 
+				&& isset( $module->content->email_services[$name] ) 
+				&& isset( $module->content->email_services[$name][$field] ) ) {
+					
+				$details = $module->content->email_services[$name][$field];
+			}
+			return $details;
+		}
+
 		private static function _get_api_key( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'api_key' );
 		}
-
+		
 		private static function _get_list_id( Hustle_Module_Model $module ) {
 			return self::_get_provider_details( $module, 'list_id' );
 		}
 
-		public static function add_custom_field( $fields, $module_id ) {
+		static function add_custom_field( $fields, $module_id ) {
 			$module 	= Hustle_Module_Model::instance()->get( $module_id );
 			$api_key 	= self::_get_api_key( $module );
 
 			$api = self::api( $api_key );
 
 			foreach ( $fields as $field ) {
-				$api->add_custom_field( array(
+				$api->add_custom_field( array( 
                     "title" => strtoupper( $field['label'] ),
                     "type"  => strtoupper( $field['type'] )
                 ) );
 			}
 
 			if ( $exist ) {
-				return array(
-					'success' => true,
-					'field' => $fields,
-				);
+				return array( 'success' => true, 'field' => $fields );
 			}
 
-			return array(
-				'error' => true,
-				'code' => '',
-			);
+			return array( 'error' => true, 'code' => '' );
 		}
 	}
 
 endif;
+?>

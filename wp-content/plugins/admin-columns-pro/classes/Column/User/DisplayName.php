@@ -1,17 +1,18 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\User;
+
+use AC;
+use ACP\Sorting;
 
 /**
  * @since 2.0
  */
-class ACP_Column_User_DisplayName extends AC_Column_User_DisplayName
-	implements ACP_Column_SortingInterface {
+class DisplayName extends AC\Column\User\DisplayName
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		return new ACP_Sorting_Model( $this );
+		return new Sorting\Model( $this );
 	}
 
 }

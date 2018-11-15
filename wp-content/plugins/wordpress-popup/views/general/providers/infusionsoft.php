@@ -1,1 +1,2 @@
-<script id="optin-infusionsoft-args" type="text/template"></script>
+<script id="optin-infusionsoft-args" type="text/template">
+</script>

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Comment;
 
-class ACP_Filtering_Model_Comment_ReplyTo extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class ReplyTo extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		$vars['parent'] = $this->get_filter_value();

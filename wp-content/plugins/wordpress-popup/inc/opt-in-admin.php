@@ -10,7 +10,7 @@ class Opt_In_Admin{
     private $_hustle;
     private $_email_services;
 
-    public function __construct( Opt_In $hustle, Hustle_Email_Services $email_services ){
+    function __construct( Opt_In $hustle, Hustle_Email_Services $email_services ){
 
         $this->_hustle = $hustle;
         $this->_email_services = $email_services;
@@ -33,15 +33,15 @@ class Opt_In_Admin{
             add_filter("teeny_mce_plugins", array( $this, 'remove_despised_editor_plugins' ));
 
         }
-
+        
 		add_filter( 'w3tc_save_options', array( $this, 'filter_w3tc_save_options' ), 10, 1 );
         add_filter('plugin_action_links', array( $this, 'add_plugin_action_links' ), 10, 5 );
-
+		
     }
-
+    
     // force reject minify for hustle js and css
-    public function filter_w3tc_save_options( $config ) {
-
+    function filter_w3tc_save_options( $config ) { 
+	
 		// reject js
 		$defined_rejected_js = $config['new_config']->get("minify.reject.files.js");
 		$reject_js = array(
@@ -50,12 +50,12 @@ class Opt_In_Admin{
 			$this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/front.min.js'
 		);
 		foreach( $reject_js as $r_js ) {
-			if ( !in_array( $r_js, $defined_rejected_js, true ) ) {
+			if ( !in_array( $r_js, $defined_rejected_js ) ) {
 				array_push($defined_rejected_js, $r_js);
 			}
 		}
 		$config['new_config']->set("minify.reject.files.js", $defined_rejected_js);
-
+		
 		// reject css
 		$defined_rejected_css = $config['new_config']->get("minify.reject.files.css");
 		$reject_css = array(
@@ -65,13 +65,13 @@ class Opt_In_Admin{
 			$this->_hustle->get_static_var( "plugin_url" ) . 'assets/css/optin.css',
 		);
 		foreach( $reject_css as $r_css ) {
-			if ( !in_array( $r_css, $defined_rejected_css, true ) ) {
+			if ( !in_array( $r_css, $defined_rejected_css ) ) {
 				array_push($defined_rejected_css, $r_css);
 			}
 		}
 		$config['new_config']->set("minify.reject.files.css", $defined_rejected_css);
-
-		return $config;
+		
+		return $config; 
 	}
 
     /**
@@ -80,9 +80,9 @@ class Opt_In_Admin{
      * @param $plugins
      * @return mixed
      */
-    public function remove_despised_editor_plugins( $plugins ){
-		$k = array_search( "fullscreen", $plugins, true );
-        if( false !== $k ) {
+    function remove_despised_editor_plugins( $plugins ){
+
+        if( ( $k = array_search( "fullscreen", $plugins) ) !== false ){
             unset( $plugins[ $k ] );
         }
         $plugins[] = "paste";
@@ -95,11 +95,11 @@ class Opt_In_Admin{
      * @param $editor_type
      * @return string
      */
-    public function set_editor_to_tinymce( $editor_type ){
+    function set_editor_to_tinymce( $editor_type ){
         return "tinymce";
     }
 
-    public function add_layout_templates(){
+    function add_layout_templates(){
         $optin_id = filter_input(INPUT_GET, "optin", FILTER_VALIDATE_INT);
         $optin = $optin_id ? Opt_In_Model::instance()->get( $optin_id ) : $optin_id;
         $this->_hustle->render("general/layouts", array("optin" => $optin));
@@ -111,12 +111,10 @@ class Opt_In_Admin{
      *
      * @since 1.0
      */
-    public function init(){
-
+    function init(){
+		
 		// auto migrate v1 display conditions to v2
-		if( !$this->has_optin() ) {
-			$optin_id = filter_input( INPUT_GET, "optin", FILTER_VALIDATE_INT );
-		}
+		if( !$this->has_optin( ) ) $optin_id = filter_input( INPUT_GET, "optin", FILTER_VALIDATE_INT );
 		if( !isset( $optin_id ) || !$optin_id ) return;
 
         $optin = Opt_In_Model::instance()->get( $optin_id );
@@ -128,6 +126,7 @@ class Opt_In_Admin{
 			exit;
 		}
 
+		return;
     }
 
     /**
@@ -135,7 +134,7 @@ class Opt_In_Admin{
      *
      * @since 1.0
      */
-    public function register_scripts(){
+    function register_scripts(){
 
         /**
          * Register popup requirements
@@ -151,15 +150,13 @@ class Opt_In_Admin{
         wp_register_script( 'optin_admin_ace', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/ace/ace.js', array(), $this->_hustle->get_const_var( "VERSION" ), true );
         wp_register_script( 'optin_admin_fitie', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/fitie/fitie.js', array(), $this->_hustle->get_const_var( "VERSION" ), true );
         // Only load chartjs in the dashboard for now due an incompatibility with Iris (color pickers)
-        if( isset( $_GET['page'] ) && 'inc_optins' === $_GET['page'] ) {
-			wp_register_script( 'optin_chartjs', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/chartjs/Chart.bundle.min.js', array(), $this->_hustle->get_const_var( "VERSION" ), true );
-		}
+        if(isset( $_GET['page'] ) && $_GET['page'] == 'inc_optins') wp_register_script( 'optin_chartjs', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/chartjs/Chart.bundle.min.js', array(), $this->_hustle->get_const_var( "VERSION" ), true );
 
         wp_enqueue_script(  'optin_admin_ace' );
         wp_enqueue_script(  'optin_chartjs' );
         wp_enqueue_script(  'optin_admin_popup' );
         wp_enqueue_script(  'optin_admin_select2' );
-
+        
         wp_enqueue_script(  'optin_admin_fitie' );
         add_filter( 'script_loader_tag', array($this, "handle_specific_script"), 10, 2 );
 
@@ -196,7 +193,7 @@ class Opt_In_Admin{
         $allPages->id = "all";
         $allPages->text = __("ALL PAGES", Opt_In::TEXT_DOMAIN);
         array_unshift($pages, $allPages);
-
+        
         /**
          * Add all custom post types
          */
@@ -217,29 +214,29 @@ class Opt_In_Admin{
 			$allCPTPosts->id = "all";
 			$allCPTPosts->text = __("ALL ", Opt_In::TEXT_DOMAIN) . $cpt->label;
 			array_unshift($cpt_array['data'], $allCPTPosts);
-
+			
 			$post_types[$cpt->name] = $cpt_array;
 		}
 
         $optin_vars = array(
             'messages' => array(
-				'dont_navigate_away' => __("Changes are not saved, are you sure you want to navigate away?", Opt_In::TEXT_DOMAIN),
-				'undefined_name_service_provider' => __("Please define proper Opt-in name and service provider", Opt_In::TEXT_DOMAIN),
-				'undefined_name' => __("Please define proper Opt-in name", Opt_In::TEXT_DOMAIN),
-				'unselected_provider' => __("Please select service provider", Opt_In::TEXT_DOMAIN),
-				'error' => __("Error", Opt_In::TEXT_DOMAIN),
-				'ok' => __("Ok", Opt_In::TEXT_DOMAIN),
-				'sure_to_delete' => __("Are you sure you want to delete this optin?", Opt_In::TEXT_DOMAIN ),
-				'something_went_wrong' => '<label class="wph-label--notice"><span>' . __("Something went wrong. Please try again.", Opt_In::TEXT_DOMAIN ) . '</span></label>',
-				'positions' => array(
-					'top_left' => __("Top Left", Opt_In::TEXT_DOMAIN ),
-					'top_center' => __("Top Center", Opt_In::TEXT_DOMAIN ),
-					'top_right' => __("Top Right", Opt_In::TEXT_DOMAIN ),
-					'center_left' => __("Center Left", Opt_In::TEXT_DOMAIN ),
-					'center_right' => __("Center Right", Opt_In::TEXT_DOMAIN ),
-					'bottom_left' => __("Bottom Left", Opt_In::TEXT_DOMAIN ),
-					'bottom_center' => __("Bottom Center", Opt_In::TEXT_DOMAIN ),
-					'bottom_right' => __("Bottom Right", Opt_In::TEXT_DOMAIN ),
+              'dont_navigate_away' => __("Changes are not saved, are you sure you want to navigate away?", Opt_In::TEXT_DOMAIN),
+              'undefined_name_service_provider' => __("Please define proper Opt-in name and service provider", Opt_In::TEXT_DOMAIN),
+              'undefined_name' => __("Please define proper Opt-in name", Opt_In::TEXT_DOMAIN),
+              'unselected_provider' => __("Please select service provider", Opt_In::TEXT_DOMAIN),
+              'error' => __("Error", Opt_In::TEXT_DOMAIN),
+              'ok' => __("Ok", Opt_In::TEXT_DOMAIN),
+              'sure_to_delete' => __("Are you sure you want to delete this optin?", Opt_In::TEXT_DOMAIN ),
+              'something_went_wrong' => '<label class="wph-label--notice"><span>' . __("Something went wrong. Please try again.", Opt_In::TEXT_DOMAIN ) . '</span></label>',
+              'positions' => array(
+                  'top_left' => __("Top Left", Opt_In::TEXT_DOMAIN ),
+                  'top_center' => __("Top Center", Opt_In::TEXT_DOMAIN ),
+                  'top_right' => __("Top Right", Opt_In::TEXT_DOMAIN ),
+                  'center_left' => __("Center Left", Opt_In::TEXT_DOMAIN ),
+                  'center_right' => __("Center Right", Opt_In::TEXT_DOMAIN ),
+                  'bottom_left' => __("Bottom Left", Opt_In::TEXT_DOMAIN ),
+                  'bottom_center' => __("Bottom Center", Opt_In::TEXT_DOMAIN ),
+                  'bottom_right' => __("Bottom Right", Opt_In::TEXT_DOMAIN ),
                 ),
                 'settings' => array(
                     'popup' => __("Pop-up", Opt_In::TEXT_DOMAIN ),
@@ -439,12 +436,10 @@ class Opt_In_Admin{
 		$total_optins = count(Opt_In_Collection::instance()->get_all_optins( null ));
 		$optin_vars['is_limited'] = (int) ( Opt_In_Utils::_is_free( 'opt-ins' ) && ! $this->_is_edit() && $total_optins >= 1 );
 
-		if( isset($_GET['page'] ) && 'inc_optins' === $_GET['page'] ) {
+		if( isset($_GET['page'] ) && 'inc_optins' == $_GET['page'] ) {
 			wp_enqueue_script( 'jquery-sortable' );
 		}
-        if( isset( $_GET['page'] ) && 'inc_optins' !== $_GET['page'] ) {
-			wp_enqueue_script( 'wp-color-picker-alpha', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), '1.2.2', true );
-		}
+        if(isset( $_GET['page'] ) && $_GET['page'] != 'inc_optins') wp_enqueue_script( 'wp-color-picker-alpha', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/vendor/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), '1.2.2', true );
         wp_register_script( 'optin_admin_scripts', $this->_hustle->get_static_var( "plugin_url" ) . 'assets/js/admin.min.js', array( 'jquery', 'backbone', 'jquery-effects-core' ), $this->_hustle->get_const_var( "VERSION" ), true );
         wp_localize_script( 'optin_admin_scripts', 'optin_vars', $optin_vars );
         wp_localize_script( 'optin_admin_scripts', 'hustle_vars', $optin_vars );
@@ -462,13 +457,13 @@ class Opt_In_Admin{
     private function _is_edit(){
         return  (bool) filter_input(INPUT_GET, "optin", FILTER_VALIDATE_INT);
     }
-
+    
     /**
      * Handling specific scripts for each scenario
      *
      */
-	public function handle_specific_script( $tag, $handle ) {
-		if ( 'optin_admin_fitie' === $handle ) {
+	function handle_specific_script( $tag, $handle ) {
+		if ( $handle === 'optin_admin_fitie' ) {
 			$tag = "<!--[if IE]>$tag<![endif]-->";
 		}
 		return $tag;
@@ -479,27 +474,27 @@ class Opt_In_Admin{
      *
      * @since 1.0
      */
-	 public function register_admin_menu(){
+	 function register_admin_menu(){
 
 		// Optins
 		add_submenu_page( 'inc_optins', __("Opt-ins", Opt_In::TEXT_DOMAIN) , __("Email Opt-ins", Opt_In::TEXT_DOMAIN) , "manage_options", 'inc_optin_listing',  array( $this, "render_optins_listing" )  );
 		add_submenu_page( 'inc_optins', __("New Opt-in", Opt_In::TEXT_DOMAIN) , __("New Opt-in", Opt_In::TEXT_DOMAIN) , "manage_options", 'inc_optin',  array( $this, "render_optin_settings_page" )  );
-
+        	
 	}
-
-    public function set_proper_current_screen( $current ){
+    
+    function set_proper_current_screen( $current ){
         global $current_screen;
         if ( !Opt_In_Utils::_is_free() ) {
             $current_screen->id = Opt_In_Utils::clean_current_screen($current_screen->id);
         }
     }
-
+	
 	/**
      * Removes the submenu entries for content creation
      *
      * @since 2.0
      */
-    public function hide_unwanted_submenus(){
+    function hide_unwanted_submenus(){
         remove_submenu_page( 'inc_optins', 'inc_optin' );
         remove_submenu_page( 'inc_optins', 'inc_hustle_new_social_group' );
         remove_submenu_page( 'inc_optins', 'inc_hustle_new_social_restriction' );
@@ -510,11 +505,9 @@ class Opt_In_Admin{
      *
     * @since 1.0
      */
-    public function render_optin_settings_page() {
+    function render_optin_settings_page( ) {
 
-        if( !$this->has_optin() ) {
-			$optin_id = filter_input( INPUT_GET, "optin", FILTER_VALIDATE_INT );
-		}
+        if( !$this->has_optin( ) ) $optin_id = filter_input( INPUT_GET, "optin", FILTER_VALIDATE_INT );
 
         $provider = filter_input( INPUT_GET, "provider" );
 		$total_optins = count(Opt_In_Collection::instance()->get_all_optins( null ));
@@ -543,7 +536,7 @@ class Opt_In_Admin{
      *
      * @since 2.0
      */
-    public function render_optins_listing(){
+    function render_optins_listing(){
         $current_user = wp_get_current_user();
         $new_optin = isset( $_GET['optin'] ) ? Opt_In_Model::instance()->get( intval($_GET['optin'] ) ) : null;
         $updated_optin = isset( $_GET['optin_updated'] ) ? Opt_In_Model::instance()->get( intval($_GET['optin_updated'] ) ) : null;
@@ -569,7 +562,7 @@ class Opt_In_Admin{
      *
      *
      */
-    public function register_styles(){
+    function register_styles(){
 
         wp_enqueue_style('thickbox');
 
@@ -587,7 +580,7 @@ class Opt_In_Admin{
 
     }
 
-    public function has_optin(){
+    function has_optin(){
         return false;
     }
 
@@ -596,7 +589,7 @@ class Opt_In_Admin{
      * @param $term Term
      * @return stdClass
      */
-    public function terms_to_select2_data( $term ){
+    function terms_to_select2_data( $term ){
         $obj = new stdClass();
         $obj->id = $term->term_id;
         $obj->text = $term->name;
@@ -609,7 +602,7 @@ class Opt_In_Admin{
      * @param $post WP_Post
      * @return stdClass
      */
-    public function posts_to_select2_data($post){
+    function posts_to_select2_data($post){
         $obj = new stdClass();
         $obj->id = $post->ID;
         $obj->text = $post->post_title;
@@ -623,10 +616,10 @@ class Opt_In_Admin{
      * @return bool
      */
     private function _is_support_html(){
-        return isset( $_GET['page'] ) &&  in_array( $_GET['page'], array(
+        return isset( $_GET['page'] ) &&  ( in_array($_GET['page'], array(
 			'inc_hustle_custom_content',
 			'inc_hustle_new_custom_content',
-		), true );
+		) ) );
     }
 
 
@@ -636,16 +629,15 @@ class Opt_In_Admin{
      * @return bool
      */
     private function _is_optin_admin(){
-        return isset( $_GET['page'] ) &&  in_array( $_GET['page'], array(
-			'inc_hustle_dashboard',
-			'inc_optins',
-			'inc_optin_listing',
-			'inc_optin',
-			'inc_hustle_social_sharing',
-			'inc_hustle_custom_content',
-			'inc_hustle_new_custom_content',
-			'inc_hustle_settings',
-		), true );
+        return isset( $_GET['page'] ) &&  ( in_array($_GET['page'], array(
+        'inc_hustle_dashboard',
+        'inc_optins',
+        'inc_optin_listing',
+        'inc_optin',
+        'inc_hustle_social_sharing',
+        'inc_hustle_custom_content',
+        'inc_hustle_new_custom_content',
+        'inc_hustle_settings') ) );
     }
 
     /**
@@ -712,7 +704,7 @@ class Opt_In_Admin{
      * @param $classes
      * @return mixed
      */
-    public function admin_body_class( $classes ){
+    function admin_body_class( $classes ){
         return str_replace(array("wpmud ", "wpmud"), "", $classes);
     }
 
@@ -721,48 +713,48 @@ class Opt_In_Admin{
      *
      * @param $settings
      */
-    public function set_tinymce_settings( $settings ) {
+    function set_tinymce_settings( $settings ) {
         $settings['paste_as_text'] = 'true';
         return $settings;
     }
-
+	
 	/**
      * Convert current v1 display condition data into v2 data structure
      *
      * @param $optin_id
      */
-    public function convert_old_display_condition_data( $optin_id ) {
+    function convert_old_display_condition_data( $optin_id ) {
 		$optin = $optin_id ? Opt_In_Model::instance()->get( $optin_id ) : false;
        if( $optin ){
-		   $types = array('after_content', 'popup', 'slide_in');
+		   $types = array('after_content','popup','slide_in');
 		   $settings_condition = $optin->settings->to_array();
 		   foreach( $types as $type ){
 			   $_conditions = wp_parse_args($optin->settings->{$type}->conditions, $this->_append_old_display_condition_data($type, $optin));
 			   $settings_condition[$type]['conditions'] = $_conditions;
 		   }
-		   $optin->update_meta( Opt_In_Model::KEY_SETTINGS,  wp_json_encode( $settings_condition ) );
+		   $optin->update_meta( Opt_In_Model::KEY_SETTINGS,  json_encode( $settings_condition ) );
 	   }
     }
-
+    
     /**
      * Adds custom links on plugin page
      *
      */
-    public function add_plugin_action_links( $actions, $plugin_file ) {
+    function add_plugin_action_links( $actions, $plugin_file ) {
         static $plugin;
 
         if (!isset($plugin))
             $plugin = Opt_In::$plugin_base_file;
-
-        if ($plugin === $plugin_file) {
+        
+        if ($plugin == $plugin_file) {
             $dashboard_url = 'admin.php?page=inc_optins';
             $settings = array('settings' => '<a href="'. $dashboard_url .'">' . __('Settings', Opt_In::TEXT_DOMAIN) . '</a>');
             $actions = array_merge($settings, $actions);
         }
-
+		
 		return $actions;
     }
-
+	
 	/**
      * Append current v1 display condition data into v2 data structure
      *
@@ -770,50 +762,40 @@ class Opt_In_Admin{
      */
 	private function _append_old_display_condition_data( $type, $optin ){
 		$conditions = array();
-
+		
 		// convert v1 data into v2 for posts
 		$excluded_posts = $optin->settings->{$type}->excluded_posts;
 		$selected_posts = $optin->settings->{$type}->selected_posts;
 		if ( !empty($excluded_posts) && is_array($excluded_posts) ) {
-			if ( !isset($conditions['posts']) ) {
-				$conditions['posts'] = array();
-			}
+			if ( !isset($conditions['posts']) ) $conditions['posts'] = array(); 
 			$conditions['posts']['filter_type'] = "except";
 			$conditions['posts']['posts'] = $excluded_posts;
 		}
 		if ( !empty($selected_posts) && is_array($selected_posts) ) {
-			if ( !isset($conditions['posts']) ) {
-				$conditions['posts'] = array();
-			}
+			if ( !isset($conditions['posts']) ) $conditions['posts'] = array(); 
 			$conditions['posts']['filter_type'] = "only";
 			$conditions['posts']['posts'] = $selected_posts;
 		}
-
+		
 		// convert v1 data into v2 for pages
 		$excluded_pages = $optin->settings->{$type}->excluded_pages;
 		$selected_pages = $optin->settings->{$type}->selected_pages;
 		if ( !empty($excluded_pages) && is_array($excluded_pages) ) {
-			if ( !isset($conditions['pages']) ) {
-				$conditions['pages'] = array();
-			}
+			if ( !isset($conditions['pages']) ) $conditions['pages'] = array(); 
 			$conditions['pages']['filter_type'] = "except";
 			$conditions['pages']['pages'] = $excluded_pages;
 		}
 		if ( !empty($selected_pages) && is_array($selected_pages) ) {
-			if ( !isset($conditions['pages']) ) {
-				$conditions['pages'] = array();
-			}
+			if ( !isset($conditions['pages']) ) $conditions['pages'] = array(); 
 			$conditions['pages']['filter_type'] = "only";
 			$conditions['pages']['pages'] = $selected_pages;
 		}
-
+		
 		// convert v1 data into v2 for categories
 		$show_on_all_cats = (bool) $optin->settings->{$type}->show_on_all_cats;
 		$show_on_these_cats = $optin->settings->{$type}->show_on_these_cats;
 		if ( !is_null($show_on_these_cats) && !empty($show_on_these_cats) ) {
-			if ( !isset($conditions['categories']) ) {
-				$conditions['categories'] = array();
-			}
+			if ( !isset($conditions['categories']) ) $conditions['categories'] = array(); 
 			$conditions['categories']['categories'] = $show_on_these_cats;
 			if ( $show_on_all_cats ) {
 				$conditions['categories']['filter_type'] = "except";
@@ -821,14 +803,12 @@ class Opt_In_Admin{
 				$conditions['categories']['filter_type'] = "only";
 			}
 		}
-
+		
 		// convert v1 data into v2 for tags
 		$show_on_all_tags = (bool) $optin->settings->{$type}->show_on_all_tags;
 		$show_on_these_tags = $optin->settings->{$type}->show_on_these_tags;
 		if ( !is_null($show_on_these_tags) && !empty($show_on_these_tags) ) {
-			if ( !isset($conditions['tags']) ) {
-				$conditions['tags'] = array();
-			}
+			if ( !isset($conditions['tags']) ) $conditions['tags'] = array();
 			$conditions['tags']['tags'] = $show_on_these_tags;
 			if ( $show_on_all_tags ) {
 				$conditions['tags']['filter_type'] = "except";
@@ -836,7 +816,7 @@ class Opt_In_Admin{
 				$conditions['tags']['filter_type'] = "only";
 			}
 		}
-
+		
 		return $conditions;
 	}
 }

@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Strategy;
 
-class ACP_Editing_Strategy_Post extends ACP_Editing_Strategy {
+use ACP\Editing\Strategy;
+
+class Post extends Strategy {
 
 	/**
 	 * @return int[]
@@ -16,7 +16,7 @@ class ACP_Editing_Strategy_Post extends ACP_Editing_Strategy {
 	}
 
 	/**
-	 * @param int|WP_Post $post
+	 * @param int|\WP_Post $post
 	 *
 	 * @return bool|int
 	 */

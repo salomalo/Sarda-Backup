@@ -1,17 +1,17 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Cache;
 
-class ACP_Filtering_Cache_Model extends ACP_Filtering_Cache {
+use ACP\Filtering;
+
+class Model extends Filtering\Cache {
 
 	/**
-	 * @var ACP_Filtering_Model
+	 * @var Model
 	 */
 	protected $model;
 
-	public function __construct( ACP_Filtering_Model $model ) {
+	public function __construct( Filtering\Model $model ) {
 		$this->model = $model;
 
 		parent::__construct( $this->get_key() );

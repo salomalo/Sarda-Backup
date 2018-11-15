@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_FeaturedImage extends ACP_Filtering_Model_Meta {
+use ACP\Filtering\Model;
+
+class FeaturedImage extends Model\Meta {
 
 	public function get_filtering_data() {
 		$options = array();

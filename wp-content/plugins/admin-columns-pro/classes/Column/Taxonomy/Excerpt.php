@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Taxonomy;
+
+use AC;
+use ACP\Editing;
 
 /**
  * @since 2.0.0
  */
-class ACP_Column_Taxonomy_Excerpt extends AC_Column
-	implements ACP_Column_EditingInterface {
+class Excerpt extends AC\Column
+	implements Editing\Editable {
 
 	public function __construct() {
 		$this->set_type( 'column-excerpt' );
@@ -20,11 +21,11 @@ class ACP_Column_Taxonomy_Excerpt extends AC_Column
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Taxonomy_Description( $this );
+		return new Editing\Model\Taxonomy\Description( $this );
 	}
 
 	public function register_settings() {
-		$this->add_setting( new AC_Settings_Column_WordLimit( $this ) );
+		$this->add_setting( new AC\Settings\Column\WordLimit( $this ) );
 	}
 
 }

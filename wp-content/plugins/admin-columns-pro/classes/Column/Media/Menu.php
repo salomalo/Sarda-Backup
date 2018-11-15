@@ -1,9 +1,9 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_Menu extends ACP_Column_Post_Menu {
+use ACP;
+
+class Menu extends ACP\Column\Post\Menu {
 
 }

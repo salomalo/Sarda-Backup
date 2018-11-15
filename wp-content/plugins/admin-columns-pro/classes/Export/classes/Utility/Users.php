@@ -1,15 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Utility;
 
 /**
  * Utility functions for users
  *
  * @since 1.0
  */
-class ACP_Export_Utility_Users {
+class Users {
 
 	/**
 	 * Retrieve the encryption key belonging to a user. Creates a new key if no key exist yet for the user
@@ -25,7 +23,7 @@ class ACP_Export_Utility_Users {
 		$encryption_key = get_user_meta( $use_user_id, '_acp_export_ek', true );
 
 		if ( ! $encryption_key ) {
-			$encryption_key = ACP_Export_Utility_Encryption::generate_key();
+			$encryption_key = Encryption::generate_key();
 			update_user_meta( $use_user_id, '_acp_export_ek', $encryption_key );
 		}
 

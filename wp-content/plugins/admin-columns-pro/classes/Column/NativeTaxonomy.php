@@ -1,11 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column;
 
-class ACP_Column_NativeTaxonomy extends AC_Column
-	implements ACP_Column_FilteringInterface, ACP_Column_EditingInterface, ACP_Column_SortingInterface, ACP_Export_Column {
+use AC;
+use ACP\Editing;
+use ACP\Export;
+use ACP\Filtering;
+use ACP\Sorting;
+
+class NativeTaxonomy extends AC\Column
+	implements Filtering\Filterable, Editing\Editable, Sorting\Sortable, Export\Exportable {
 
 	public function __construct() {
 		$this->set_original( true );
@@ -16,19 +20,19 @@ class ACP_Column_NativeTaxonomy extends AC_Column
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Post_Taxonomy( $this );
+		return new Filtering\Model\Post\Taxonomy( $this );
 	}
 
 	public function editing() {
-		return new ACP_Editing_Model_Post_Taxonomy( $this );
+		return new Editing\Model\Post\Taxonomy( $this );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Post_Taxonomy( $this );
+		return new Sorting\Model\Post\Taxonomy( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_Post_Taxonomy( $this );
+		return new Export\Model\Post\Taxonomy( $this );
 	}
 
 }

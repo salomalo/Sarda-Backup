@@ -1,24 +1,26 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Comment;
+
+use AC;
+use ACP\Sorting;
+use ACP\Filtering;
 
 /**
  * @since 4.0
  */
-class ACP_Column_Comment_AuthorIP extends AC_Column_Comment_AuthorIP
-	implements ACP_Column_FilteringInterface, ACP_Column_SortingInterface {
+class AuthorIP extends AC\Column\Comment\AuthorIP
+	implements Filtering\Filterable, Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'comment_author_IP' );
 
 		return $model;
 	}
 
 	public function filtering() {
-		return new ACP_Filtering_Model_Comment_AuthorIP( $this );
+		return new Filtering\Model\Comment\AuthorIP( $this );
 	}
 
 }

@@ -1,11 +1,12 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering;
 
-class ACP_Filtering_Settings extends AC_Settings_Column
-	implements AC_Settings_HeaderInterface {
+use AC;
+use AC\View;
+
+class Settings extends AC\Settings\Column
+	implements AC\Settings\Header {
 
 	/**
 	 * @var string 'On' or 'Off'
@@ -31,7 +32,7 @@ class ACP_Filtering_Settings extends AC_Settings_Column
 	public function create_header_view() {
 		$filter = $this->get_filter();
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'title'    => __( 'Enable Filtering', 'codepress-admin-columns' ),
 			'dashicon' => 'dashicons-filter',
 			'state'    => $filter,
@@ -50,7 +51,7 @@ class ACP_Filtering_Settings extends AC_Settings_Column
 		               ) );
 
 		// Main settings
-		$view = new AC_View();
+		$view = new View();
 		$view->set( 'label', __( 'Filtering', 'codepress-admin-columns' ) )
 		     ->set( 'tooltip', __( 'This will make the column support filtering.', 'codepress-admin-columns' ) )
 		     ->set( 'setting', $filter );
@@ -59,7 +60,7 @@ class ACP_Filtering_Settings extends AC_Settings_Column
 		                     ->set_attribute( 'placeholder', $this->get_filter_label_default() );
 
 		// Sub settings
-		$label_view = new AC_View();
+		$label_view = new View();
 		$label_view->set( 'label', __( 'Top label', 'codepress-admin-columns' ) )
 		           ->set( 'tooltip', __( "Set the name of the label in the filter menu", 'codepress-admin-columns' ) )
 		           ->set( 'setting', $filter_label )
@@ -93,7 +94,7 @@ class ACP_Filtering_Settings extends AC_Settings_Column
 			$label = $this->sanitize_label( $this->column->get_label() );
 		}
 
-		if ( $this->column instanceof ACP_Column_FilteringInterface && ! $this->column->filtering()->is_ranged() ) {
+		if ( $this->column instanceof Filterable && ! $this->column->filtering()->is_ranged() ) {
 			$label = sprintf( __( "Any %s", 'codepress-admin-columns' ), $label );
 		}
 

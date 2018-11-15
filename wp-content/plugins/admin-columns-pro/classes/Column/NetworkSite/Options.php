@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\NetworkSite;
 
-class ACP_Column_NetworkSite_Options extends ACP_Column_NetworkSite_Option {
+use AC;
+use ACP\Settings;
+
+class Options extends Option {
 
 	public function __construct() {
 		$this->set_type( 'column-msite_options' );
@@ -30,8 +31,8 @@ class ACP_Column_NetworkSite_Options extends ACP_Column_NetworkSite_Option {
 	// Settings
 
 	public function register_settings() {
-		$this->add_setting( new ACP_Settings_Column_NetworkSite_Options( $this ) );
-		$this->add_setting( new AC_Settings_Column_BeforeAfter( $this ) );
+		$this->add_setting( new Settings\Column\NetworkSite\Options( $this ) );
+		$this->add_setting( new AC\Settings\Column\BeforeAfter( $this ) );
 	}
 
 }

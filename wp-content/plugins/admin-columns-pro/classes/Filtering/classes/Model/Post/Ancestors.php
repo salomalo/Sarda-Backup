@@ -1,13 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-/**
- * @since 4.2
- */
-class ACP_Filtering_Model_Post_Ancestors extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Ancestors extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		switch ( $this->get_filter_value() ) {

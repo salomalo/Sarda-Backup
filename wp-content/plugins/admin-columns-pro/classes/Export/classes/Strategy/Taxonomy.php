@@ -1,20 +1,21 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Strategy;
+
+use ACP;
+use ACP\Export\Strategy;
 
 /**
  * Exportability class for terms list screen
  *
  * @since 1.0
  */
-class ACP_Export_Strategy_Taxonomy extends ACP_Export_Strategy {
+class Taxonomy extends Strategy {
 
 	/**
-	 * @param ACP_ListScreen_Taxonomy $list_screen
+	 * @param ACP\ListScreen\Taxonomy $list_screen
 	 */
-	public function __construct( ACP_ListScreen_Taxonomy $list_screen ) {
+	public function __construct( ACP\ListScreen\Taxonomy $list_screen ) {
 		parent::__construct( $list_screen );
 	}
 
@@ -44,7 +45,7 @@ class ACP_Export_Strategy_Taxonomy extends ACP_Export_Strategy {
 
 			remove_action( 'parse_term_query', array( $this, __FUNCTION__ ), PHP_INT_MAX - 100 );
 
-			$modified_query = new WP_Term_Query( $query->query_vars );
+			$modified_query = new \WP_Term_Query( $query->query_vars );
 			$terms = $modified_query->get_terms();
 			$this->export( $terms );
 		}

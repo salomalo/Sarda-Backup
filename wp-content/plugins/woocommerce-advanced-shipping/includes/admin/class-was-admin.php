@@ -2,12 +2,14 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
- * Admin class.
+ * Class WAS_Admin.
  *
- * Handle all admin related functions.
+ * WAS_Admin class handles stuff for admin.
  *
+ * @class       WAS_Admin
  * @author     	Jeroen Sormani
- * @version		1.0.0
+ * @package		WooCommerce Advanced Shipping
+ * @version		1.0.5
  */
 class WAS_Admin {
 
@@ -35,7 +37,7 @@ class WAS_Admin {
 		global $pagenow;
 
 		// Add to WC Screen IDs to load scripts.
-		add_filter( 'woocommerce_screen_ids', array( $this, 'add_screen_ids' ) );
+		add_filter( 'woocommerce_screen_ids', array( $this, 'add_was_screen_ids' ) );
 
 		// Enqueue scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -61,7 +63,7 @@ class WAS_Admin {
 	 * @param  array $screen_ids List of existing screen IDs.
 	 * @return array             List of modified screen IDs.
 	 */
-	public function add_screen_ids( $screen_ids ) {
+	public function add_was_screen_ids( $screen_ids ) {
 
 		$screen_ids[] = 'was';
 
@@ -79,24 +81,21 @@ class WAS_Admin {
 	 */
 	public function admin_enqueue_scripts() {
 
-		// Only load scripts on relevant pages
+		// Only load scripts on relvant pages
 		if (
 			( isset( $_REQUEST['post'] ) && 'was' == get_post_type( $_REQUEST['post'] ) ) ||
 			( isset( $_REQUEST['post_type'] ) && 'was' == $_REQUEST['post_type'] ) ||
-			( isset( $_REQUEST['section'] ) && in_array( $_REQUEST['section'], array( 'was_advanced_shipping_method', 'advanced_shipping' ) ) )
+			( isset( $_REQUEST['section'] ) && 'was_advanced_shipping_method' == $_REQUEST['section'] )
 		) :
 
 			// Style script
-			wp_enqueue_style( 'woocommerce-advanced-shipping', plugins_url( 'assets/admin/css/woocommerce-advanced-shipping.min.css', WooCommerce_Advanced_Shipping()->file ), array(), WooCommerce_Advanced_Shipping()->version );
+			wp_enqueue_style( 'woocommerce-advanced-shipping-css', plugins_url( 'assets/admin/css/woocommerce-advanced-shipping.css', WooCommerce_Advanced_Shipping()->file ), array(), WooCommerce_Advanced_Shipping()->version );
 
 			// Javascript
-			wp_enqueue_script( 'woocommerce-advanced-shipping', plugins_url( 'assets/admin/js/woocommerce-advanced-shipping.min.js', WooCommerce_Advanced_Shipping()->file ), array( 'jquery', 'jquery-ui-sortable', 'jquery-blockui', 'jquery-tiptip' ), WooCommerce_Advanced_Shipping()->version, true );
-			wp_enqueue_script( 'select2' );
+			wp_enqueue_script( 'woocommerce-advanced-shipping-js', plugins_url( 'assets/admin/js/woocommerce-advanced-shipping.js', WooCommerce_Advanced_Shipping()->file ), array( 'jquery', 'jquery-ui-sortable', 'jquery-blockui' ), WooCommerce_Advanced_Shipping()->version, true );
 
-			wp_localize_script( 'woocommerce-advanced-shipping', 'wpc', array(
-				'nonce'         => wp_create_nonce( 'wpc-ajax-nonce' ),
-				'action_prefix' => 'was_',
-				'asset_url'     => plugins_url( 'assets/', WooCommerce_Advanced_Shipping()->file ),
+			wp_localize_script( 'woocommerce-advanced-shipping-js', 'was', array(
+				'nonce' => wp_create_nonce( 'was-ajax-nonce' ),
 			) );
 
 		endif;

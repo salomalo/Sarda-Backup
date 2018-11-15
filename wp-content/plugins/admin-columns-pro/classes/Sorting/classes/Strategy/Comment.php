@@ -1,13 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Strategy;
 
-final class ACP_Sorting_Strategy_Comment extends ACP_Sorting_Strategy {
+use ACP\Sorting\Strategy;
+
+final class Comment extends Strategy {
 
 	/**
-	 * @var WP_Comment_Query
+	 * @var \WP_Comment_Query
 	 */
 	protected $query;
 
@@ -15,7 +15,7 @@ final class ACP_Sorting_Strategy_Comment extends ACP_Sorting_Strategy {
 		add_action( 'pre_get_comments', array( $this, 'handle_sorting_request' ) );
 	}
 
-	private function set_comment_query( WP_Comment_Query $query ) {
+	private function set_comment_query( \WP_Comment_Query $query ) {
 		$this->query = $query;
 
 		return $this;
@@ -30,7 +30,7 @@ final class ACP_Sorting_Strategy_Comment extends ACP_Sorting_Strategy {
 	}
 
 	public function get_query_var( $key ) {
-		if ( $this->query instanceof WP_Comment_Query && isset( $this->query->query_vars[ $key ] ) ) {
+		if ( $this->query instanceof \WP_Comment_Query && isset( $this->query->query_vars[ $key ] ) ) {
 			return $this->query->query_vars[ $key ];
 		}
 
@@ -42,16 +42,16 @@ final class ACP_Sorting_Strategy_Comment extends ACP_Sorting_Strategy {
 			'fields' => 'ids',
 		);
 
-		$query = new WP_Comment_Query( array_merge( $defaults, $args ) );
+		$query = new \WP_Comment_Query( array_merge( $defaults, $args ) );
 
 		return $query->get_comments();
 	}
 
 	/**
-	 * @param WP_Comment_Query $query
+	 * @param \WP_Comment_Query $query
 	 *
 	 */
-	public function handle_sorting_request( WP_Comment_Query $query ) {
+	public function handle_sorting_request( \WP_Comment_Query $query ) {
 		$this->set_comment_query( $query );
 
 		// check query conditions

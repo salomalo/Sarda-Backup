@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Model\Post;
 
-class ACP_Sorting_Model_Post_EstimateReadingTime extends ACP_Sorting_Model {
+use ACP\Sorting\Model;
+
+class EstimateReadingTime extends Model {
 
 	public function __construct( $column ) {
 		parent::__construct( $column );

@@ -300,7 +300,7 @@ return apply_filters( 'ninja_forms_field_settings', array(
                 'options' => array(
                     array(
                         'label' => __( 'Character(s)', 'ninja-forms' ),
-                        'value' => 'characters'
+                        'value' => 'char'
                     ),
                     array(
                         'label' => __( 'Word(s)', 'ninja-forms' ),

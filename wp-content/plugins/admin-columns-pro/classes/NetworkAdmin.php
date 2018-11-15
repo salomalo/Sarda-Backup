@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
 
-class ACP_NetworkAdmin {
+use AC;
+
+class NetworkAdmin {
 
 	/**
 	 * Hook suffix
@@ -27,7 +27,7 @@ class ACP_NetworkAdmin {
 	 * @since 3.6
 	 */
 	public function admin_menu() {
-		$this->hook_suffix = add_submenu_page( $this->get_parent_slug(), __( 'Admin Columns Settings', 'codepress-admin-columns' ), __( 'Admin Columns', 'codepress-admin-columns' ), 'manage_admin_columns', AC_Admin::MENU_SLUG, array( $this, 'display' ) );
+		$this->hook_suffix = add_submenu_page( $this->get_parent_slug(), __( 'Admin Columns Settings', 'codepress-admin-columns' ), __( 'Admin Columns', 'codepress-admin-columns' ), 'manage_admin_columns', AC\Admin::MENU_SLUG, array( $this, 'display' ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class ACP_NetworkAdmin {
 	 * @return string
 	 */
 	public function get_link() {
-		return network_admin_url( add_query_arg( array( 'page' => AC_Admin::MENU_SLUG ), $this->get_parent_slug() ) );
+		return network_admin_url( add_query_arg( array( 'page' => AC\Admin::MENU_SLUG ), $this->get_parent_slug() ) );
 	}
 
 	/**

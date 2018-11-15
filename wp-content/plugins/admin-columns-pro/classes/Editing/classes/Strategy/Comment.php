@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Strategy;
 
-class ACP_Editing_Strategy_Comment extends ACP_Editing_Strategy {
+use ACP\Editing\Strategy;
+
+class Comment extends Strategy {
 
 	public function get_rows() {
 		global $wp_list_table;
@@ -14,7 +14,9 @@ class ACP_Editing_Strategy_Comment extends ACP_Editing_Strategy {
 
 	/**
 	 * @since 4.0
-	 * @param int|WP_Comment $comment
+	 *
+	 * @param int|\WP_Comment $comment
+	 *
 	 * @return int|false
 	 */
 	public function user_has_write_permission( $comment ) {

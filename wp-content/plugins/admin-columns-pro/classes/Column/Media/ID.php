@@ -1,14 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Media;
 
-class ACP_Column_Media_ID extends AC_Column_Media_ID
-	implements ACP_Column_SortingInterface {
+use AC;
+use ACP\Sorting;
+
+class ID extends AC\Column\Media\ID
+	implements Sorting\Sortable {
 
 	public function sorting() {
-		$model = new ACP_Sorting_Model( $this );
+		$model = new Sorting\Model( $this );
 		$model->set_orderby( 'ID' );
 
 		return $model;

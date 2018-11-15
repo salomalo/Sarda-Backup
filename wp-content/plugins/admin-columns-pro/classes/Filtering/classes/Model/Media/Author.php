@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Media;
 
-class ACP_Filtering_Model_Media_Author extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Author extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		$vars['author'] = $this->get_filter_value();

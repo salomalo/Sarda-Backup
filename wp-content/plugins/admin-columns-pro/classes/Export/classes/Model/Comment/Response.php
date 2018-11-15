@@ -1,15 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Export\Model\Comment;
+
+use ACP\Export\Model;
 
 /**
  * Response (default column) exportability model
  *
  * @since 4.1
  */
-class ACP_Export_Model_Comment_Response extends ACP_Export_Model {
+class Response extends Model {
 
 	public function get_value( $id ) {
 		$comment = get_comment( $id );

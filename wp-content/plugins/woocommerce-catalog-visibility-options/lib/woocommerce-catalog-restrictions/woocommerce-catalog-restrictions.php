@@ -25,30 +25,30 @@ if ( !class_exists( 'WC_Catalog_Restrictions' ) ) {
 
 			if ( is_admin() ) {
 
-				require 'includes/class-wc-catalog-restrictions-product-admin.php';
-				require 'includes/class-wc-catalog-restrictions-category-admin.php';
+				require 'classes/class-wc-catalog-restrictions-product-admin.php';
+				require 'classes/class-wc-catalog-restrictions-category-admin.php';
 
 
 				WC_Catalog_Restrictions_Product_Admin::instance();
 				WC_Catalog_Restrictions_Category_Admin::instance();
 
 				if ( $this->get_setting( '_wc_restrictions_locations_enabled', 'no' ) == 'yes' ) {
-					require 'includes/class-wc-catalog-restrictions-user-admin.php';
+					require 'classes/class-wc-catalog-restrictions-user-admin.php';
 					WC_Catalog_Restrictions_User_Admin::instance();
 				}
 			} else {
 				if ( !defined( 'DOING_CRON' ) ) {
 					add_action( 'woocommerce_init', array($this, 'on_init') );
 
-					require 'includes/class-wc-catalog-restrictions-query.php';
-					require 'includes/class-wc-catalog-restrictions-filters.php';
+					require 'classes/class-wc-catalog-restrictions-query.php';
+					require 'classes/class-wc-catalog-restrictions-filters.php';
 
 					WC_Catalog_Restrictions_Query::instance();
 					WC_Catalog_Restrictions_Filters::instance();
 					//load after woocommerce
 
 					if ( $this->get_setting( '_wc_restrictions_locations_enabled', 'no' ) == 'yes' ) {
-						add_filter( 'template_redirect', array($this, 'template_redirect'), 999 );
+						add_filter( 'template_redirect', array(&$this, 'template_redirect'), 999 );
 					}
 				}
 			}
@@ -61,15 +61,15 @@ if ( !class_exists( 'WC_Catalog_Restrictions' ) ) {
 			}
 
 			//Setup Hooks to clear transients when a post is saved, a category is saved, a user changes their location, a user is updated, a user logs on / out. 
-			add_action( 'save_post', array($this, 'clear_transients') );
-			add_action( 'created_term', array($this, 'clear_transients') );
-			add_action( 'edit_term', array($this, 'clear_transients') );
-			add_action( 'edit_user_profile_update', array($this, 'clear_transients') );
+			add_action( 'save_post', array(&$this, 'clear_transients') );
+			add_action( 'created_term', array(&$this, 'clear_transients') );
+			add_action( 'edit_term', array(&$this, 'clear_transients') );
+			add_action( 'edit_user_profile_update', array(&$this, 'clear_transients') );
 
-			add_action( 'user_register', array($this, 'clear_session_transients') );
-			add_action( 'wp_login', array($this, 'clear_session_transients') );
-			add_action( 'wp_logout', array($this, 'clear_session_transients') );
-			add_action( 'wc_restrictions_location_updated', array($this, 'clear_session_transients') );
+			add_action( 'user_register', array(&$this, 'clear_session_transients') );
+			add_action( 'wp_login', array(&$this, 'clear_session_transients') );
+			add_action( 'wp_logout', array(&$this, 'clear_session_transients') );
+			add_action( 'wc_restrictions_location_updated', array(&$this, 'clear_session_transients') );
 			add_action( 'wc_restrictions_location_updated', array($this, 'maybe_clear_cart') );
 		}
 
@@ -190,7 +190,7 @@ if ( !class_exists( 'WC_Catalog_Restrictions' ) ) {
 			$can_change = get_user_meta( get_current_user_id(), '_wc_location_user_changeable', true );
 
 			if ( empty( $location ) && $this->get_setting( '_wc_restrictions_locations_required', 'no' ) == 'yes' && (empty( $can_change ) || $can_change == 'yes') ) {
-				$location_page_id = wc_get_page_id( 'choose_location' );
+				$location_page_id = woocommerce_get_page_id( 'choose_location' );
 				if ( $location_page_id && !is_page( $location_page_id ) ) {
 					$woocommerce->session->wc_catalog_restrictions_return_url = esc_url_raw( add_query_arg( array('locationset' => '1') ) );
 					$location_url = get_permalink( $location_page_id );

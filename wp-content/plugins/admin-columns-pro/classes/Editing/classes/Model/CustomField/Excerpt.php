@@ -1,13 +1,14 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\CustomField;
 
-class ACP_Editing_Model_CustomField_Excerpt extends ACP_Editing_Model_CustomField {
+use ACP\Editing\Model;
+use ACP\Editing\Settings;
+
+class Excerpt extends Model\CustomField {
 
 	public function get_view_settings() {
-		/* @var ACP_Editing_Settings_Excerpt $setting */
+		/* @var Settings\Excerpt $setting */
 		$setting = $this->column->get_setting( 'edit' );
 
 		return array(
@@ -16,7 +17,7 @@ class ACP_Editing_Model_CustomField_Excerpt extends ACP_Editing_Model_CustomFiel
 	}
 
 	public function register_settings() {
-		$this->column->add_setting( new ACP_Editing_Settings_Excerpt( $this->column ) );
+		$this->column->add_setting( new Settings\Excerpt( $this->column ) );
 	}
 
 }

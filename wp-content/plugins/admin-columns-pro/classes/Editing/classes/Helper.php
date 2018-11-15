@@ -1,13 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing;
 
 /**
  * @since 4.0
  */
-class ACP_Editing_Helper {
+class Helper {
 
 	/**
 	 * Format options for posts selection
@@ -122,7 +120,7 @@ class ACP_Editing_Helper {
 			$args['paged'] = 1;
 		}
 
-		$users_query = new WP_User_Query( $args );
+		$users_query = new \WP_User_Query( $args );
 
 		$user_ids = $users_query->get_results();
 
@@ -225,7 +223,7 @@ class ACP_Editing_Helper {
 	}
 
 	/**
-	 * @param WP_Term $term
+	 * @param \WP_Term $term
 	 *
 	 * @return bool
 	 */
@@ -247,7 +245,7 @@ class ACP_Editing_Helper {
 
 	/**
 	 * @param int       $term_id
-	 * @param WP_Term[] $terms
+	 * @param \WP_Term[] $terms
 	 */
 	private function get_term_field_by_id( $term_id, $field, array $terms ) {
 		foreach ( $terms as $term ) {

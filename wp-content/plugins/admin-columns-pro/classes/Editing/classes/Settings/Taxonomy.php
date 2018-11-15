@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Settings;
 
-class ACP_Editing_Settings_Taxonomy extends ACP_Editing_Settings {
+use AC\View;
+use ACP\Editing\Settings;
+
+class Taxonomy extends Settings {
 
 	/**
 	 * @var string
@@ -38,7 +39,7 @@ class ACP_Editing_Settings_Taxonomy extends ACP_Editing_Settings {
 						)
 					);
 
-				$new_term = new AC_View();
+				$new_term = new View();
 				$new_term->set( 'label', sprintf( __( 'Allow new %s?', 'codepress-admin-columns' ), strtolower( $taxonomy->labels->name ) ) )
 				         ->set( 'tooltip', sprintf( __( 'Allow new %s to be created whilst editing', 'codepress-admin-columns' ), strtolower( $taxonomy->labels->name ) ) )
 				         ->set( 'setting', $enable_term );

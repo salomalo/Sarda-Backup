@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Filtering\Model\Post;
 
-class ACP_Filtering_Model_Post_Roles extends ACP_Filtering_Model {
+use ACP\Filtering\Model;
+
+class Roles extends Model {
 
 	public function get_filtering_vars( $vars ) {
 		$vars['author'] = implode( ',', get_users( array( 'role' => $this->get_filter_value(), 'fields' => 'id' ) ) );

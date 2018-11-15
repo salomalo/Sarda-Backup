@@ -1,38 +1,44 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ListScreen;
 
-class ACP_ListScreen_MSSite extends AC_ListScreenWP
-	implements ACP_Editing_ListScreen {
+use AC;
+use ACP\Column;
+use ACP\Editing;
+
+class MSSite extends AC\ListScreenWP
+	implements Editing\ListScreen {
 
 	public function __construct() {
-		$this->set_label( __( 'Network Sites' ) );
-		$this->set_singular_label( __( 'Network Site' ) );
-		$this->set_key( 'wp-ms_sites' );
-		$this->set_screen_id( 'sites-network' );
-		$this->set_screen_base( 'sites-network' );
-		$this->set_meta_type( 'site' );
-		$this->set_group( 'network' );
-		$this->set_network_only( true );
+
+		$this->set_label( __( 'Network Sites' ) )
+		     ->set_singular_label( __( 'Network Site' ) )
+		     ->set_key( 'wp-ms_sites' )
+		     ->set_screen_id( 'sites-network' )
+		     ->set_screen_base( 'sites-network' )
+		     ->set_meta_type( 'site' )
+		     ->set_group( 'network' )
+		     ->set_network_only( true );
 	}
 
 	/**
 	 * @since 4.0
-	 * @return WP_Site Site object
+	 *
+	 * @param int $site_id
+	 *
+	 * @return \WP_Site Site object
 	 */
 	protected function get_object( $site_id ) {
 		return get_site( $site_id );
 	}
 
 	/**
-	 * @return WP_MS_Sites_List_Table
+	 * @return \WP_MS_Sites_List_Table
 	 */
 	public function get_list_table() {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-ms-sites-list-table.php' );
 
-		return new WP_MS_Sites_List_Table( array( 'screen' => $this->get_screen_id() ) );
+		return new \WP_MS_Sites_List_Table( array( 'screen' => $this->get_screen_id() ) );
 	}
 
 	public function set_manage_value_callback() {
@@ -61,13 +67,12 @@ class ACP_ListScreen_MSSite extends AC_ListScreenWP
 	 * Register custom columns
 	 */
 	protected function register_column_types() {
-		$this->register_column_type( new ACP_Column_Actions() );
-
-		$this->register_column_types_from_dir( ACP()->get_plugin_dir() . 'classes/Column/NetworkSite', ACP()->get_prefix() );
+		$this->register_column_type( new Column\Actions() );
+		$this->register_column_types_from_dir( 'ACP\Column\NetworkSite' );
 	}
 
 	public function editing( $model ) {
-		return new ACP_Editing_Strategy_Site( $model );
+		return new Editing\Strategy\Site( $model );
 	}
 
 }

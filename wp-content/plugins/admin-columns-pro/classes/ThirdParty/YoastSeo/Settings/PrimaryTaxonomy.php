@@ -1,10 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Settings;
 
-class ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy extends AC_Settings_Column {
+use AC;
+use AC\View;
+
+class PrimaryTaxonomy extends AC\Settings\Column {
 
 	/**
 	 * @var string
@@ -18,9 +19,9 @@ class ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy extends AC_Settings_Colum
 	public function create_view() {
 		$setting = $this->create_element( 'select' )
 		                ->set_attribute( 'data-label', 'update' )
-		                ->set_options( $this->get_taxonies() );
+		                ->set_options( $this->get_taxonomies() );
 
-		$view = new AC_View( array(
+		$view = new View( array(
 			'label'   => __( 'Taxonomy' ),
 			'setting' => $setting,
 		) );
@@ -31,7 +32,7 @@ class ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy extends AC_Settings_Colum
 	/**
 	 * @return array
 	 */
-	private function get_taxonies() {
+	private function get_taxonomies() {
 		$taxonomies = get_object_taxonomies( $this->column->get_post_type(), 'objects' );
 		$options = array();
 
@@ -55,6 +56,8 @@ class ACP_ThirdParty_YoastSeo_Settings_PrimaryTaxonomy extends AC_Settings_Colum
 
 	/**
 	 * @param string $primary_taxonomy
+	 *
+	 * @return bool
 	 */
 	public function set_primary_taxonomy( $primary_taxonomy ) {
 		$this->primary_taxonomy = $primary_taxonomy;

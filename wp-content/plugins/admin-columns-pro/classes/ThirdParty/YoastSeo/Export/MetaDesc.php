@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\ThirdParty\YoastSeo\Export;
 
-class ACP_ThirdParty_YoastSeo_Export_MetaDesc extends ACP_Export_Model {
+use ACP\Export;
+
+class MetaDesc extends Export\Model {
 
 	public function get_value( $id ) {
 		return get_post_meta( $id, '_yoast_wpseo_metadesc', true );

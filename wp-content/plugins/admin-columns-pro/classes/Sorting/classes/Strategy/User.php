@@ -1,18 +1,13 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Sorting\Strategy;
 
-/**
- * Addon class
- *
- * @since 1.0
- */
-final class ACP_Sorting_Strategy_User extends ACP_Sorting_Strategy {
+use ACP\Sorting\Strategy;
+
+final class User extends Strategy {
 
 	/**
-	 * @var WP_User_Query
+	 * @var \WP_User_Query
 	 */
 	private $user_query;
 
@@ -41,23 +36,22 @@ final class ACP_Sorting_Strategy_User extends ACP_Sorting_Strategy {
 
 		$args = array_merge( $defaults, $args );
 
-		$query = new WP_User_Query( $args );
+		$query = new \WP_User_Query( $args );
 
 		return (array) $query->get_results();
 	}
 
 	/**
-	 * @return WP_User_Query
+	 * @return string
 	 */
-	public function get_user_query() {
-		return $this->user_query;
-	}
-
 	public function get_order() {
 		return $this->user_query->get( 'order' );
 	}
 
-	public function set_user_query( $user_query ) {
+	/**
+	 * @param \WP_User_Query $user_query
+	 */
+	private function set_user_query( \WP_User_Query $user_query ) {
 		$this->user_query = $user_query;
 	}
 
@@ -66,11 +60,11 @@ final class ACP_Sorting_Strategy_User extends ACP_Sorting_Strategy {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WP_User_Query $user_query
+	 * @param \WP_User_Query $query
 	 *
 	 * @return void
 	 */
-	public function handle_sorting_request( WP_User_Query $query ) {
+	public function handle_sorting_request( \WP_User_Query $query ) {
 		// check query conditions
 		if ( ! $query->get( 'orderby' ) ) {
 			return;

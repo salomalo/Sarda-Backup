@@ -1,10 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Editing\Model\User;
 
-class ACP_Editing_Model_User_Email extends ACP_Editing_Model {
+use ACP\Editing\Model;
+
+class Email extends Model {
 
 	public function get_edit_value( $id ) {
 		return ac_helper()->user->get_user_field( 'user_email', $id );

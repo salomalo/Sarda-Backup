@@ -1,14 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP\Column\Post;
+
+use AC;
+use ACP\Export;
+use ACP\Sorting;
 
 /**
  * @since 4.2
  */
-class ACP_Column_Post_LatestComment extends AC_Column
-	implements ACP_Export_Column, ACP_Column_SortingInterface {
+class LatestComment extends AC\Column
+	implements Export\Exportable, Sorting\Sortable {
 
 	public function __construct() {
 		$this->set_type( 'column-latest_comment' );
@@ -34,15 +36,15 @@ class ACP_Column_Post_LatestComment extends AC_Column
 	}
 
 	public function register_settings() {
-		$this->add_setting( new AC_Settings_Column_Comment( $this ) );
+		$this->add_setting( new AC\Settings\Column\Comment( $this ) );
 	}
 
 	public function sorting() {
-		return new ACP_Sorting_Model_Value( $this );
+		return new Sorting\Model\Value( $this );
 	}
 
 	public function export() {
-		return new ACP_Export_Model_StrippedValue( $this );
+		return new Export\Model\StrippedValue( $this );
 	}
 
 }

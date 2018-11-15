@@ -1,40 +1,41 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ACP;
+
+use AC;
+use AC\ListScreen;
 
 /**
  * Layouts
  * @since 3.8
  */
-final class ACP_Layouts {
+final class Layouts {
 
 	const LAYOUT_KEY = 'cpac_layouts';
 
 	/**
-	 * @var ACP_Layout[]
+	 * @var Layout[]
 	 */
 	private $layouts;
 
 	/**
-	 * @var AC_ListScreen
+	 * @var ListScreen
 	 */
 	private $list_screen;
 
-	public function __construct( AC_ListScreen $list_screen ) {
+	public function __construct( ListScreen $list_screen ) {
 		$this->list_screen = $list_screen;
 	}
 
 	/**
-	 * @return AC_ListScreen
+	 * @return ListScreen
 	 */
 	public function get_list_screen() {
 		return $this->list_screen;
 	}
 
 	/**
-	 * @return ACP_Layout|false
+	 * @return Layout|false
 	 */
 	public function get_current_layout() {
 		return $this->get_layout_by_id( $this->list_screen->get_layout_id() );
@@ -56,7 +57,7 @@ final class ACP_Layouts {
 	/**
 	 * @param string $layout_id
 	 *
-	 * @return false|ACP_Layout
+	 * @return false|Layout
 	 */
 	public function get_layout_by_id( $layout_id ) {
 		foreach ( $this->get_layouts() as $layout ) {
@@ -69,7 +70,7 @@ final class ACP_Layouts {
 	}
 
 	/**
-	 * @return ACP_Layout[] Layouts
+	 * @return Layout[] Layouts
 	 */
 	public function get_layouts_for_current_user() {
 		$layouts = array();
@@ -96,18 +97,18 @@ final class ACP_Layouts {
 	 * @param int   $layout_id
 	 * @param array $args
 	 *
-	 * @return ACP_Layout|WP_Error
+	 * @return Layout|\WP_Error
 	 */
 	public function update( $layout_id, $args ) {
 
 		if ( empty( $args['name'] ) ) {
-			return new WP_Error( 'empty-name' );
+			return new \WP_Error( 'empty-name' );
 		}
 
-		$layout = new ACP_Layout( $args );
+		$layout = new Layout( $args );
 
 		if ( ! $layout->get_name() ) {
-			return new WP_Error( 'empty-name' );
+			return new \WP_Error( 'empty-name' );
 		}
 
 		update_option( $this->get_storage_key( $layout_id ), (object) array(
@@ -126,7 +127,7 @@ final class ACP_Layouts {
 	/**
 	 * @param string $layout_id
 	 *
-	 * @return ACP_Layout|false
+	 * @return Layout|false
 	 */
 	public function delete( $layout_id ) {
 		$this->list_screen->set_layout_id( $layout_id );
@@ -164,7 +165,7 @@ final class ACP_Layouts {
 	}
 
 	/**
-	 * @return ACP_Layout|false
+	 * @return Layout|false
 	 */
 	public function get_first_layout() {
 		$layouts = $this->get_layouts();
@@ -190,7 +191,7 @@ final class ACP_Layouts {
 	}
 
 	/**
-	 * @return ACP_Layout|false
+	 * @return Layout|false
 	 */
 	public function get_first_layout_for_current_user() {
 		$layouts = $this->get_layouts_for_current_user();
@@ -206,7 +207,7 @@ final class ACP_Layouts {
 	 * @param array $args
 	 * @param bool  $is_default
 	 *
-	 * @return ACP_Layout
+	 * @return Layout
 	 */
 	public function create( $args, $is_default = false ) {
 		// The default layout has an empty ID, that way it stays compatible when layouts is disabled.
@@ -216,9 +217,9 @@ final class ACP_Layouts {
 	}
 
 	/**
-	 * @param ACP_Layout $layout
+	 * @param Layout $layout
 	 */
-	public function register_layout( ACP_Layout $layout ) {
+	public function register_layout( Layout $layout ) {
 		$this->layouts[ $layout->get_id() ] = $layout;
 	}
 
@@ -260,7 +261,7 @@ final class ACP_Layouts {
 					continue;
 				}
 
-				$layout = new ACP_Layout( maybe_unserialize( $result->option_value ) );
+				$layout = new Layout( maybe_unserialize( $result->option_value ) );
 
 				$this->register_layout( $layout );
 			}
@@ -269,7 +270,7 @@ final class ACP_Layouts {
 		// Load from API
 		if ( $layouts_settings = AC()->api()->get_layouts_settings( $this->get_list_screen() ) ) {
 			foreach ( $layouts_settings as $settings ) {
-				$layout = new ACP_Layout( $settings );
+				$layout = new Layout( $settings );
 
 				$this->deregister_layout( $layout->get_id() );
 				$this->register_layout( $layout );
@@ -280,7 +281,7 @@ final class ACP_Layouts {
 	/**
 	 * @param string $list_screen_key
 	 *
-	 * @return array|ACP_Layout[]
+	 * @return array|Layout[]
 	 */
 	public function get_layouts() {
 		if ( null === $this->layouts ) {
@@ -292,14 +293,14 @@ final class ACP_Layouts {
 
 	/**
 	 * @since 4.0.12
-	 * @return AC_Preferences
+	 * @return AC\Preferences
 	 */
 	public function preferences() {
-		return new AC_Preferences_Site( 'layout_table' );
+		return new AC\Preferences\Site( 'layout_table' );
 	}
 
 	/**
-	 * @return false|ACP_Layout
+	 * @return false|Layout
 	 */
 	public function get_user_preference() {
 		$layout_id = $this->preferences()->get( $this->list_screen->get_key() );
@@ -318,7 +319,7 @@ final class ACP_Layouts {
 	}
 
 	/**
-	 * @param ACP_Layout $layout
+	 * @param Layout $layout
 	 */
 	public function set_user_preference( $layout ) {
 		$this->preferences()->set( $this->list_screen->get_key(), $layout->get_id() );
